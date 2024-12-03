@@ -17,8 +17,7 @@ console.log(document.querySelector('.guess').value); // get the value this way
 let score = 20;
 let secretNumber = 1 + Math.floor(20 * Math.random());
 
-document.querySelector('.number').textContent = secretNumber;
-
+// click on 'check' button
 document.querySelector('.check').addEventListener('click', function () {
   const guess = Number(document.querySelector('.guess').value);
   if (!guess) {
@@ -32,7 +31,9 @@ document.querySelector('.check').addEventListener('click', function () {
   if (guess === secretNumber) {
     message.textContent = 'Correct number!';
     document.querySelector('body').style.backgroundColor = '#60b347';
-    document.querySelector('.number').style.width = '30rem';
+    const numberContainer = document.querySelector('.number');
+    numberContainer.style.width = '30rem';
+    numberContainer.textContent = secretNumber;
     return;
   }
 
@@ -44,11 +45,28 @@ document.querySelector('.check').addEventListener('click', function () {
   }
 
   // decrease score and game over
-  score--;
   if (score > 0) {
+    score--;
     document.querySelector('.score').textContent = score;
   } else {
     document.querySelector('.score').textContent = 0;
     message.textContent = 'You lost!';
   }
+});
+
+// click on 'again' button
+document.querySelector('.again').addEventListener('click', function () {
+  // restore score
+  score = 20;
+  document.querySelector('.score').textContent = score;
+
+  // reroll secret number
+  secretNumber = 1 + Math.floor(20 * Math.random());
+
+  // restore body color and number
+  document.querySelector('.message').textContent = 'Start guessing...';
+  document.querySelector('body').style.backgroundColor = '#222';
+  const numberContainer = document.querySelector('.number');
+  numberContainer.style.width = '15rem';
+  numberContainer.textContent = '?';
 });
