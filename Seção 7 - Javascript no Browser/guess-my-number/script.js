@@ -1,19 +1,6 @@
 'use strict';
 
-/*
-console.log(document.querySelector('.message'));
-
-document.querySelector('.message').textContent = 'HEH';
-
-document.querySelector('.number').textContent = '10';
-
-document.querySelector('.score').textContent = '9999';
-
-document.querySelector('.guess').value = 99; // set the value this way
-
-console.log(document.querySelector('.guess').value); // get the value this way
-*/
-
+let highscore = 0;
 let score = 20;
 let secretNumber = 1 + Math.floor(20 * Math.random());
 
@@ -34,6 +21,11 @@ document.querySelector('.check').addEventListener('click', function () {
     const numberContainer = document.querySelector('.number');
     numberContainer.style.width = '30rem';
     numberContainer.textContent = secretNumber;
+
+    if (score > highscore) {
+      highscore = score;
+      document.querySelector('.highscore').textContent = highscore;
+    }
     return;
   }
 
