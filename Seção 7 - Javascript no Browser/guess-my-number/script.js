@@ -28,9 +28,11 @@ document.querySelector('.check').addEventListener('click', function () {
 
   const message = document.querySelector('.message');
 
-  // right guess, reload game
+  // right guess, won!
   if (guess === secretNumber) {
     message.textContent = 'Correct number!';
+    document.querySelector('body').style.backgroundColor = '#60b347';
+    document.querySelector('.number').style.width = '30rem';
     return;
   }
 
