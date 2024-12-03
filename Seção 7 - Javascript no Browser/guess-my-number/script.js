@@ -1,8 +1,24 @@
 'use strict';
 
+/**
+ * Changes the value of the message box
+ * @param {string} value the new value
+ */
+function setMessage(value) {
+  document.querySelector('.message').textContent = value;
+}
+
+/**
+ * Chooses a secret number
+ * @returns A random number between 1 and 20
+ */
+function rerollNumber() {
+  return 1 + Math.floor(20 * Math.random());
+}
+
 let highscore = 0;
 let score = 20;
-let secretNumber = 1 + Math.floor(20 * Math.random());
+let secretNumber = rerollNumber();
 
 // click on 'check' button
 document.querySelector('.check').addEventListener('click', function () {
@@ -12,16 +28,15 @@ document.querySelector('.check').addEventListener('click', function () {
     return; // do nothing
   }
 
-  const message = document.querySelector('.message');
-
   // right guess, won!
   if (guess === secretNumber) {
-    message.textContent = 'Correct number!';
+    setMessage('Correct number!');
     document.querySelector('body').style.backgroundColor = '#60b347';
     const numberContainer = document.querySelector('.number');
     numberContainer.style.width = '30rem';
     numberContainer.textContent = secretNumber;
 
+    // register new highscore
     if (score > highscore) {
       highscore = score;
       document.querySelector('.highscore').textContent = highscore;
@@ -30,11 +45,7 @@ document.querySelector('.check').addEventListener('click', function () {
   }
 
   // wrong guess, show hint
-  if (guess < secretNumber) {
-    message.textContent = 'Too low!';
-  } else if (guess > secretNumber) {
-    message.textContent = 'Too high!';
-  }
+  setMessage(guess < secretNumber ? 'Too low!' : 'Too high!');
 
   // decrease score and game over
   if (score > 0) {
@@ -42,7 +53,7 @@ document.querySelector('.check').addEventListener('click', function () {
     document.querySelector('.score').textContent = score;
   } else {
     document.querySelector('.score').textContent = 0;
-    message.textContent = 'You lost!';
+    setMessage('You lost!');
   }
 });
 
@@ -53,10 +64,10 @@ document.querySelector('.again').addEventListener('click', function () {
   document.querySelector('.score').textContent = score;
 
   // reroll secret number
-  secretNumber = 1 + Math.floor(20 * Math.random());
+  secretNumber = rerollNumber();
 
   // restore body color and number
-  document.querySelector('.message').textContent = 'Start guessing...';
+  setMessage('Start guessing...');
   document.querySelector('body').style.backgroundColor = '#222';
   const numberContainer = document.querySelector('.number');
   numberContainer.style.width = '15rem';
