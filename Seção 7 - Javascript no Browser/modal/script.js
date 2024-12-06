@@ -9,14 +9,34 @@ const btnCloseModal = document.querySelector('.close-modal');
 // todos botões que abrem o modal
 const btnsOpenModal = document.querySelectorAll('.show-modal');
 
-console.log(btnsOpenModal); // nodelist que contém os botões
+/**
+ * Fecha o diálogo modal
+ */
+function closeModal() {
+  modal.classList.add('hidden');
+  overlay.classList.add('hidden');
+}
+
+/**
+ * Abre os diálogos modais
+ */
+function openModal() {
+  modal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
+}
 
 // itera pelos elementos
-for (let i = 0; i < btnsOpenModal.length; i++) {
-  console.log(btnsOpenModal[i].textContent);
-}
+// for (let i = 0; i < btnsOpenModal.length; i++) {
+//   console.log(btnsOpenModal[i].textContent);
+// }
 
-// outra maneira mais simples de iterar, porém menos flexível
-for (let btn of btnsOpenModal) {
-  console.log(btn.textContent);
-}
+// outra maneira mais simples de iterar
+// for (let btn of btnsOpenModal) {
+//   console.log(btn.textContent);
+// }
+
+// ainda outra maneira, desta vez com uma função foreach
+btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+
+btnCloseModal.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
