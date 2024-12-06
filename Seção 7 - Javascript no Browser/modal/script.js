@@ -1,11 +1,10 @@
 'use strict';
 
+const ESCAPE_KEYCODE = 27;
+
 const modal = document.querySelector('.modal');
-
 const overlay = document.querySelector('.overlay');
-
 const btnCloseModal = document.querySelector('.close-modal');
-
 // todos botões que abrem o modal
 const btnsOpenModal = document.querySelectorAll('.show-modal');
 
@@ -18,7 +17,7 @@ function closeModal() {
 }
 
 /**
- * Abre os diálogos modais
+ * Abre o diálogo modal
  */
 function openModal() {
   modal.classList.remove('hidden');
@@ -40,3 +39,10 @@ btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
 
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape') {
+    // não precisa checar se contém classe, o remove faz isso
+    closeModal();
+  }
+});
