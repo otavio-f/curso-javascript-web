@@ -148,4 +148,44 @@ matilda.calcAgeObj(); // usa this de <matilda>, que chamou a função
 const f = jonas.calcAgeObj; // extraindo método de jonas
 f(); // agora this é undefined porque virou uma função regular
 
+/*
+ * 100. Funções regulares vs. *arrow functions*
+ */
 
+const jonas2 = { // Atenção: Isso não é um bloco de código! É um objeto literal.
+  year: 1991,
+  calcAgeObj: function() {
+    console.log(this); // função regular: this do objeto que chamar
+
+    const isMillenial = function() { // função regular dentro de método. This é undefined para funções regulares.
+      console.log(this.year >= 1981 && this.year <= 1996); // isso dá erro. (undefined).year não existe.
+      // Solução 1: Adicione uma variável 'self' antes de chamar a função. Na função use 'self', não 'this'
+      // Solução 2: Use arrow function. O this vai ser "herdado" do escopo pai, ou seja, do objeto.
+    };
+    isMillenial();
+  },
+  greet: () => console.log(this.year); // arrow function: vai usar o this do escopo pai, ou seja, o escopo global
+};
+
+jonas2.greet(); // this é o mesmo que window, window.year é undefined
+
+// Outra razão pra evitar o uso de var
+var year = 9999; // efeito secundário de criar uma propriedade no objeto global. window.year agora existe
+jonas2.greet(); // this é o mesmo que window, window.year é 9999
+
+// Conclusão: NÃO USE VAR E NÃO USE ARROW FUNCTION COMO MÉTODO DE CLASSE!!!
+
+// Palavra chave arguments
+const addExprArgs = function(a, b) {
+  console.log(arguments); // lista de argumentos da função, similar a *args de python
+  return a+b;
+}
+
+addExprArgs(2, 5);
+
+const addExprArgsArrow = (a, b) => {
+  console.log(arguments); // não é definida para arrow functions
+  return a+b;
+}
+
+addExprArgsArrow(2, 5); // Erro: arguments não foi definido
