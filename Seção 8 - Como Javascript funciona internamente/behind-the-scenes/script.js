@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * 95. Scoping
+ */
+
 // function calcAge(birthYear) {
 //   const age = 2037 - birthYear;
 //   console.log(firstName); // Não tem problema se a função é criada antes
@@ -46,7 +50,7 @@ calcAge(1991);
 // printAge(); // Escopo global não tem acesso a escopo interno de calcAge(). ReferenceError de novo.
 
 /*
- * Hoisting
+ * 98. Hoisting
  */
 
 // Hoisting de variáveis
@@ -106,4 +110,42 @@ console.log(y === window.y); // falso
 console.log(z === window.z); // falso
 
 // Além disso variáveis var adicionam uma propriedade no objeto global window, enquanto que let e const não fazem isso
+
+/*
+ * 99. A palavra chave this
+ */
+
+console.log(this); // this é o objeto global window
+
+const calcAgeExp = function(birthYear) {
+  console.log(2037 - birthYear);
+  console.log(this); // função regular
+}
+calcAgeExp(1993); // this vai ser undefined
+
+const calcAgeArrow => (birthYear) {
+  console.log(2037 - birthYear);
+  console.log(this); // função arrow puxa this do contexto de fora, (função pai)
+}
+calcAgeArrow(1993); // vai usar this do escopo global
+
+const jonas = {
+  year: 1991,
+  calcAgeObj: function() {
+    console.log(this); // função regular: this do objeto que chamar
+  }
+};
+
+jonas.calcAgeObj(); // usa this de <jonas>, que chamou a função
+
+const matilda = {
+  year: 2007,
+};
+
+matilda.calcAgeObj = jonas.calcAgeObj; // pegando o método emprestado de jonas
+matilda.calcAgeObj(); // usa this de <matilda>, que chamou a função
+
+const f = jonas.calcAgeObj; // extraindo método de jonas
+f(); // agora this é undefined porque virou uma função regular
+
 
