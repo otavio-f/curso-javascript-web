@@ -45,7 +45,7 @@ console.log(x, y, z); // variaveis criadas a partir do array
 console.log(arr); // array original não é modificado
 
 // destruturando ignorando elementos
-let [main, ,secondary] = restaurant.categories; // categories tem 4 elementos, destruturar só usa 2 e ignora o resto
+let [main, , secondary] = restaurant.categories; // categories tem 4 elementos, destruturar só usa 2 e ignora o resto
 console.log(main, secondary);
 
 // trocando elementos da maneira tradicional
@@ -60,7 +60,7 @@ console.log(main, secondary);
 
 // destruturando retorno de função
 function order(starterIndex, mainIndex) {
-  return [this.starterMenu[starterIndex], [this.mainMenu[mainIndex]];
+  return [this.starterMenu[starterIndex], [this.mainMenu[mainIndex]]];
 }
 
 restaurant.order = order; // agora restaurant tem o método
@@ -79,3 +79,69 @@ const unknown = [8, 9]; // como eu destruturo sem ter certeza que todos os argum
 const [p = 1, q = 1, r = 0] = unknown; // r vai ser preenchido com valor padrão
 console.log(p, q, r);
 
+/**
+ * Destruturando objetos
+ */
+
+// para destruturar objetos faça desse jeito
+// escreva os nomes das propriedades a serem extraídas **exatamente como no objeto!**
+// a ordem não precisa ser a mesma
+
+const { name, openingHours, categories } = restaurant;
+console.log(name, openingHours, categories);
+
+// É possível renomear as variáveis, só especificar desse jeito:
+const {
+  name: restaurantName,
+  openingHours: hours,
+  categories: tags,
+} = restaurant; // Atenção: Parece com literal de objeto, mas não é!!!
+console.log(restaurantName, hours, tags);
+
+// Valores padrão
+const { menu = [], starterMenu: starters = [] } = restaurant;
+console.log(menu, starters);
+
+// Mutação de variáveis enquanto destrutura objetos
+let aa = 111;
+let bb = 999;
+const oobj = { aa: 23, bb: 7, cc: 14 };
+// Problema: quero destruturar um objeto em variáveis já existentes
+
+//{aa, bb} = oobj; // não funciona desse jeito. js pensa que está tentando atribuir um bloco de código
+({ aa, bb } = oobj); // coloque entre parênteses pra funcionar
+console.log(aa, bb);
+
+// Objetos aninhados
+const {
+  fri: { open: oh, close: ch }, // confuso
+} = openingHours;
+
+console.log(oc, cc);
+
+// Destruturação em argumentos de funções
+function orderDelivery({
+  starterIndex = 1,
+  mainIndex = 0,
+  time = '20:00',
+  address,
+}) {
+  // destruturando objeto antes de entrar na função
+  console.log(
+    `Order received!\n ${this.starterMenu[starterIndex]}, ${this.mainMenu[mainIndex]}, will be delivered to ${address} at ${time} hours.`
+  );
+}
+
+restaurant.orderDelivery = orderDelivery;
+
+restaurant.orderDelivery({
+  time: '22:30',
+  address: 'Grove Street, 1',
+  mainIndex: 2,
+  starterIndex: 1,
+});
+
+restaurant.orderDelivery({
+  mainIndex: 1,
+  address: 'Rainbow Road, 90',
+}); // agora usa os valores padrão
