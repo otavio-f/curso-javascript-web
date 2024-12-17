@@ -286,7 +286,7 @@ console.log(undefined || null); // retorna o segundo valor se ambos forem falsos
 console.log(undefined || 0 || '' || null || 'Hello' || 23); // operador curto circuito para e retorna no primeiro valor não-falso ('Hello')
 
 // Exemplo
-const guestsTernary = restaurant.numGuests ? restaurant.numGuests : 10; // se restaurant.numGuests existir é ele, senão é 10
+const guestsTernary = restaurant.numGuests ? restaurant.numGuests : 10; // se restaurant.numGuests não for falso é ele, senão é 10
 console.log(guestsTernary);
 
 const guestsCircuit = restaurant.numGuests || 10; // se restaurant.numGuests não for falso, é ele, senão é 10
@@ -308,3 +308,10 @@ restaurant.orderPizza && restaurant.orderPizza('mushrooms');
 
 // Atenção: Use operadores curto-circuito com cautela.
 //          O uso excessivo pode tornar o código difícil de ler!
+
+/**
+ * Operador nullish coalescing (??)
+ */
+
+// retorna o primeiro elemento que não é null ou undefined
+const guestsNullish = restaurant.numGuests ?? 10; // se restaurant.numGuests existe é ele, senão é 10
