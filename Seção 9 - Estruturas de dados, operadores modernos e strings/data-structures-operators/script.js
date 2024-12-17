@@ -145,3 +145,75 @@ restaurant.orderDelivery({
   mainIndex: 1,
   address: 'Rainbow Road, 90',
 }); // agora usa os valores padrão
+
+/**
+ * Operator spread
+ */
+
+const arr2 = [7, 8, 9]; // Como eu crio um novo array com os elementos de arr2 no final?
+
+const newArr2 = [1, 2, arr2[0], arr2[1], arr2[2]]; // resposta mais trabalhosa, fica impossível caso arr2 tenha 1000 elementos.
+console.log(newArr2);
+
+// resposta igualmente trabalhosa: loop for
+// resposta correta: operador spread
+const goodArr2 = [1, 2, ...arr2]; // igual a escrever todos os elementos de arr2, elemento por elemento
+console.log(goodArr2);
+
+//também é útil pra passar argumentos pra funções
+console.log(1, 2, 7, 8, 9);
+console.log(...goodArr2);
+
+// E se eu quiser adicionar um elemento no menu (exemplo acima)
+const newMenu = [...restaurant.mainMenu, 'Gnocci']; // nhoque?
+console.log(newMenu);
+
+// Atenção: sempre é criado um novo array, o array original não é modificado
+// também é útil pra criar cópias rasas de arrays
+const mainMenuCopy = [...restaurant.mainMenu];
+
+// ou fazer a união de dois (ou mais) arrays
+const menuAll = [...restaurant.starterMenu, ...restaurant.mainMenu];
+console.log(menuAll);
+
+// o operador spread funciona em todos os iterables (for..of)
+// ex.: arrays, strings, sets, maps, etc.
+// Atenção: objetos NÃO são iterables!!!
+const text = 'Jonas';
+const letters = [...str, ' ', 'S.'];
+console.log(letters);
+
+// função que aceita múltiplos argumentos
+// Exemplo: função de encomenda de macarrão
+/**
+ * Encomenda macarrão com três ingredientes
+ * @param {*} ingredient1 O primeiro ingrediente
+ * @param {*} ingredient2 O segundo ingredinente
+ * @param {*} ingredient3 O terceiro ingregiente
+ */
+function orderPasta(ingredient1, ingredient2, ingredient3) {
+  console.log(
+    `Here is your delicious pasta with ${ingredient1}, ${ingredient2} and ${ingredient3}.`
+  );
+}
+restaurant.orderPasta = orderPasta; // a função está no objeto agora
+
+const ingredients = [
+  prompt('Ingredient 1:'),
+  prompt('Ingredient 2:'),
+  prompt('Ingredient 3:'),
+];
+
+console.log(ingredients);
+
+restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
+restaurant.orderPasta(...ingredients); // mesma coisa do acima
+
+// Spread em objetos
+const newRestaurant = { foundedIn: 1998, ...restaurant, founder: 'Guiseppe' }; // novo restaurante inclui todas as propriedades
+console.log(newRestaurant);
+
+// cópia rasa de objeto
+const restaurantCopy = { ...newRestaurant };
+restaurantCopy.name = 'Ristorante Roma';
+console.log(restaurant.name, restaurantCopy.name); // alterações na cópia não afetam o original
