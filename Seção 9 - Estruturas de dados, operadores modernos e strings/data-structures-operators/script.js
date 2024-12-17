@@ -271,3 +271,40 @@ restaurant.orderPizza = orderPizza;
 
 restaurant.orderPizza('mushrooms', 'onion', 'olives', 'spinach'); //is this a salad?
 restaurant.orderPizza('mushrooms');
+
+/**
+ * Operator de curto circuito (&& ||)
+ */
+
+// Operadores lógicos também podem ser usados em outros tipos de dados
+// Se o primeiro operador for "truthy", ele é retornado imediatamente (o segundo não é visto)
+console.log(3 || 'Jonas'); // ambos são verdadeiros, então retorna o primeiro
+console.log('' || 'Jonas'); // String vazia é um valor falso
+console.log(true || 0); // 0 (zero) é um valor falso
+console.log(undefined || null); // retorna o segundo valor se ambos forem falsos
+
+console.log(undefined || 0 || '' || null || 'Hello' || 23); // operador curto circuito para e retorna no primeiro valor não-falso ('Hello')
+
+// Exemplo
+const guestsTernary = restaurant.numGuests ? restaurant.numGuests : 10; // se restaurant.numGuests existir é ele, senão é 10
+console.log(guestsTernary);
+
+const guestsCircuit = restaurant.numGuests || 10; // se restaurant.numGuests não for falso, é ele, senão é 10
+console.log(guestsCircuit);
+
+// Operador &&
+// Praticamente o oposto de ||, retorna o primeiro elemento falso
+console.log(0 && 'Jonas'); // retorna 0, primeiro elemento falso
+console.log(7 && 'Jonas'); // se todos os elementos são não-falsos, retorna o último;
+console.log('Hello' && 'Jonas' && 223 && 1 && true && null && 400); // para no primeiro valor falso (null) e retorna ele
+
+// Exemplo: chamar um método se ele existe
+if (restaurant.orderPizza) {
+  restaurant.orderPizza('mushrooms');
+}
+
+// mesma coisa do bloco acima
+restaurant.orderPizza && restaurant.orderPizza('mushrooms');
+
+// Atenção: Use operadores curto-circuito com cautela.
+//          O uso excessivo pode tornar o código difícil de ler!
