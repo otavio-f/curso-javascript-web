@@ -217,3 +217,57 @@ console.log(newRestaurant);
 const restaurantCopy = { ...newRestaurant };
 restaurantCopy.name = 'Ristorante Roma';
 console.log(restaurant.name, restaurantCopy.name); // alterações na cópia não afetam o original
+
+/**
+ * Padrão rest (restante)
+ */
+
+// condensa elementos em um array
+const [xa, xb, ...rest] = [1, 2, 3, 4, 5]; //rest = [3, 4, 5];
+console.log(xa, xb, rest);
+
+// rest não coleta elementos pulados
+const [pizza, , risotto, ...otherFood] = [
+  ...restaurant.mainMenu,
+  ...restaurant.starterMenu,
+];
+
+// rest só pode ser o último elemento de uma destruturação
+// const [...invalid, risotto2] = [...restaurant.mainMenu];
+
+// destruturando objetos com rest
+const { sat, ...weekdays } = restaurant.openingHours;
+console.log(weekdays);
+
+// quando aplicado a funções, empacota vários argumentos em um único objeto
+// técnica conhecida como rest parameters (varargs de js)
+function add(...numbers) {
+  //...numbers == *args de python
+  let accumulator = 0;
+  numbers.forEach(num => (accumulator += num));
+  console.log(accumulator);
+}
+
+add(2, 3, 5); // agora a função aceita um número variável de argumentos
+
+// a função também aceita um array se usarmos o operador spread
+const numbers = [12, 2, -1];
+add(...numbers);
+
+// Exemplo
+/**
+ * Ordena uma pizza
+ * @param {*} mainIngredient Ingrediente principal
+ * @param  {...any} otherIngredients Ingredinetes opcionais
+ */
+function orderPizza(mainIngredient, ...otherIngredients) {
+  if (otherIngredients.length > 0)
+    // quando não há argumentos extras, otherIngredients vai ser um array vazio
+    console.log(`Making a ${mainIngredient} pizza with `, ...otherIngredients);
+  else console.log(`Making a ${mainIngredient} pizza.`);
+}
+
+restaurant.orderPizza = orderPizza;
+
+restaurant.orderPizza('mushrooms', 'onion', 'olives', 'spinach'); //is this a salad?
+restaurant.orderPizza('mushrooms');
