@@ -368,3 +368,28 @@ restaurant2.owner = restaurant2.owner && '<ANONYMOUS>';
 // Alternativa 2: Atribuição lógica AND
 restaurant1.owner &&= '<ANONYMOUS>';
 restaurant2.owner &&= '<ANONYMOUS>';
+
+// NÃO VOU FAZER O DESAFIO #1
+
+/*
+ * Loop for-of
+ */
+
+// Como iterar por todos os elementos do menu
+// const menuAll = [...restaurant.starterMenu, ...restaurant.mainMenu]; // definido mais acima
+
+// Maneira 1: loop tradicional
+for (let i = 0; i < menuAll.length; i++) {
+  console.log(menuAll[i]);
+}
+
+// Maneira 2: loop for..of
+for (let item of menuAll) {
+  console.log(item);
+}
+
+// Pra obter o índice, itere sobre o resultado do método .entries()
+for (let entry of menuAll.entries()) {
+  let [index, item] = entry; // cada entrada é uma lista com índice e o item, então posso desempacotar em variáveis
+  console.log(`${index} - ${item}`);
+}
