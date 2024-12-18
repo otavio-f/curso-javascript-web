@@ -315,3 +315,56 @@ restaurant.orderPizza && restaurant.orderPizza('mushrooms');
 
 // retorna o primeiro elemento que não é null ou undefined
 const guestsNullish = restaurant.numGuests ?? 10; // se restaurant.numGuests existe é ele, senão é 10
+
+/**
+ * Operadores de atribuição lógico
+ */
+
+// Atenção: Código novo, ES2021
+
+// Exemplo: Aplicar propriedade a objetos que não a possuem
+const restaurant1 = {
+  name: 'Capri',
+  numGuests: 20,
+};
+
+const restaurant2 = {
+  name: 'La Piazza',
+  owner: 'Giovanni',
+  masterChef: 'Nidoqueen',
+};
+
+// Objetivo: aplicar numGuests a objetos que não possuírem
+
+// Alternativa 1: Curto circuito OR
+/*
+restaurant1.numGuests = restaurant1.numGuests || 10;
+restaurant2.numGuests = restaurant2.numGuests || 10;
+console.log(restaurant1);
+console.log(restaurant2);
+*/
+
+// Alternativa 2: Atribuição lógica
+// Operador ||= atribui se o argumento for falso
+restaurant1.numGuests ||= 10;
+restaurant2.numGuests ||= 10; // se numGuests não existe, vai passar a ser 10
+console.log(restaurant1);
+console.log(restaurant2);
+
+// Atenção: 0(zero) é um valor falso, então não use atribuição lógica se zero for válido!
+//          Nesse caso use o operador de atribuição nullish ??=, que atribui se a variável for null ou undefined
+restaurant1.masterChef ??= 'unknown'; // se não há cozinheiro chefe, vai ser desconhecido
+restaurant2.masterChef ??= 'unknown';
+console.log(restaurant1);
+console.log(restaurant2);
+
+// Objetivo: Anonimizar o nome do dono do restaurante
+// Alternativa 1: Curto circuito AND
+/*
+restaurant1.owner = restaurant1.owner && '<ANONYMOUS>';
+restaurant2.owner = restaurant2.owner && '<ANONYMOUS>';
+*/
+
+// Alternativa 2: Atribuição lógica AND
+restaurant1.owner &&= '<ANONYMOUS>';
+restaurant2.owner &&= '<ANONYMOUS>';
