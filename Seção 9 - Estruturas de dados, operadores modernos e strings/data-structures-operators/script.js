@@ -533,3 +533,33 @@ console.log(
 
 // Optional chaining em arrays: use ?. depois dos colchetes
 console.log(weekdays2[9]?.toUpperCase ?? 'DIA NÃO EXISTE!');
+
+/**
+ * 118. Loop em objetos
+ */
+// loop sobre propriedades de objetos
+
+// Object.keys(objeto) retorna uma lista com as chaves (nomes das propriedades) do objeto.
+const properties = Object.keys(openingHours);
+console.log(properties);
+
+let openAnnounce = `We are open ${propreties.length} days a week:`;
+
+for (const day of properties) {
+  openAnnounce += `${day}, `;
+}
+
+console.log(openAnnounce);
+
+// Object.values(objeto) retorna uma lista com os valores das propriedades do objeto.
+const values = Object.values(openingHours);
+console.log(values);
+
+// Object.entries(objeto) retorna uma lista. Cada elemento da lista contém uma sublista com o nome de uma propriedade e o valor
+const entries = Object.entries(openingHours);
+console.log(entries);
+
+for (const [day, { open, close }] of entries) {
+  // destruturando objeto
+  console.log(`On ${day} we open at ${open} and close at ${close}.`);
+}
