@@ -492,3 +492,44 @@ console.log(foodTruck2);
 
 // Nota: Prefiro repetir a propriedade
 //       A maneira curta me parece mais propensa a bugs
+
+/**
+ * 117. Chaining Opcional
+ */
+
+// Problema: Como acessar objetos de uma propriedade que pode não existir?
+
+// Maneira errada: deixa dar erro
+console.log(restaurant.openingHours.mon.open); // quero o horário de abertura
+// vai dar erro porque o restaurante não abre na segunda (não tem propriedade mon)
+
+// Maneira tradicional: com if
+if (restaurant.openingHours.mon) {
+  //não sabe se o restaurante abre na segunda. Se não abre, a propriedade não existe
+  console.log(restaurant.openingHours.mon.open); // se existir, quero o horário de abertura
+}
+
+// Maneira melhorada: Chaning opcional
+// (?.) retorna o objeto ou undefined se a propriedade não existe (null ou undefined)
+console.log(restaurant.openingHours.mon?.open); // se o restaurante abre na segunda, quero o horário, senão undefined
+
+// E se openingHours fosse opcional?
+// Só usar chaining opcional na propriedade
+console.log(restaurant.openingHours?.mon?.open); // se o restaurante abre, e se abre na segunda, quero o horário, senão undefined
+
+// Outro exemplo: Indicar que hora restaurante abre em cada dia da semana
+const weekdays2 = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+for (const day of weekdays2) {
+  const openHour = restaurant.openingHours[day]?.open ?? 'no time';
+  console.log(`On ${day} we open at ${openHour}.`); //computando propriedade
+}
+
+// Optional chaining em métodos: Use ?. antes dos parênteses
+console.log(
+  restaurant.bulkOrder?.(1, 2, 100) ??
+    'Não aceitamos pedidos em grandes quantidades.'
+);
+
+// Optional chaining em arrays: use ?. depois dos colchetes
+console.log(weekdays2[9]?.toUpperCase ?? 'DIA NÃO EXISTE!');
