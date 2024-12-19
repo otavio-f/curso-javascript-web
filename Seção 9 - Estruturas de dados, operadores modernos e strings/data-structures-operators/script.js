@@ -393,3 +393,102 @@ for (let entry of menuAll.entries()) {
   let [index, item] = entry; // cada entrada é uma lista com índice e o item, então posso desempacotar em variáveis
   console.log(`${index} - ${item}`);
 }
+
+/**
+ * 116. Literais de objeto melhorados
+ */
+// ES6 possui três maneiras de escrever literais de objeto
+
+// Exemplo: incluir openHours no objeto foodTruckX
+const openHours = {
+  thu: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
+const openHours2 = openHours; // clone para ilustração
+
+// Como incluir openHours no objeto foodTruck?
+const foodTruck = {
+  name: 'Burgers Ahoy',
+  location: 'Pepper Avn. 2333, NY, United States',
+  categories: ['Burgers', 'Hotdogs', 'Beverages', 'Vegetarian', 'Other'],
+  beverages: [
+    'Strawberry Drink',
+    'Lemonade',
+    'Grape Drink',
+    'Soda',
+    'Beer',
+    'Smoothie',
+  ],
+  dressings: ['Cheesy', 'Tomato', 'Mayo', 'Ranch', 'Inferno'],
+  side: ['French Fries', 'Ice Cream'],
+  mainMenu: [
+    'Cheese Burger',
+    'Fat Dog',
+    'Obese Dog',
+    'Mountain of Potato Salad',
+    'Bucket of Fried Chicken, Fries and Sausage',
+  ],
+  // Maneira Tradicional: incluir diretamente no objeto
+  openHours: openHours, //repetição
+
+  // Maneira melhorada: incluir somente o nome da propriedade.
+  openHours2, // O nome da variável externa tem que ser o mesmo!
+
+  // Propriedade computada: use colchetes
+  ['serial']: 9121, // permite especificar o nome com uma string
+  [`parkId${3 + 1}`]: 9999, // também permite calcular o nome da propriedade
+  //
+};
+console.log(foodTruck);
+
+// Objetivo: Escrever uma função
+const foodTruck2 = {
+  name: 'Burgers Ahoy',
+  location: 'Bell Street 100, NY, United States',
+  categories: ['Burgers', 'Hotdogs', 'Beverages', 'Vegetarian', 'Other'],
+  beverages: [
+    'Strawberry Drink',
+    'Lemonade',
+    'Grape Drink',
+    'Soda',
+    'Beer',
+    'Smoothie',
+  ],
+  dressings: ['Cheesy', 'Tomato', 'Mayo', 'Ranch', 'Inferno'],
+  side: ['French Fries', 'Ice Cream'],
+  mainMenu: [
+    'Cheese Burger',
+    'Fat Dog',
+    'Obese Dog',
+    'Mountain of Potato Salad',
+    'Bucket of Fried Chicken, Fries and Sausage',
+  ],
+
+  // Maneira tradicional: atribuir uma função à uma propriedade
+  order: function (beverageIndex, mainMenuIndex) {
+    return [this.beverages[beverageIndex], this.mainMenu[mainMenuIndex]];
+  },
+
+  // Maneira melhorada: fazer atribuição e declaração no mesmo passo
+  orderComplete(beverageIndex, mainMenuIndex, dressingIndex, sideIndex) {
+    // orderComplete: function(...)
+    return [this.beverages[beverageIndex], this.mainMenu[mainMenuIndex]];
+  },
+};
+console.log(foodTruck2);
+
+// Nota: Ainda prefiro deixar explícito com a palavra chave function
+//       Fica mais claro a função do trecho de código
+
+// Nota: Prefiro repetir a propriedade
+//       A maneira curta me parece mais propensa a bugs
