@@ -727,3 +727,59 @@ console.log(...question);
 console.log(question.entries());
 console.log(question.keys());
 console.log(question.values());
+
+// NÃO VOU FAZER O CODING CHALLENGE #3
+
+/**
+ * 126. Trabalhando com strings parte 1
+ */
+
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+
+// Para obter um caractere em uma posição específica, faça como um array
+console.log(plane[0]); // T
+console.log(plane[1]); // A
+console.log(plane[2]); // P
+
+// Para saber a quantidade de caracteres, use a propriedade .length
+console.log(airline.length);
+console.log(plane.length);
+
+// Para saber a primeira posição de um caractere, use o método .indexOf()
+console.log(airline.indexOf('r')); // 6, começando por 0
+
+// Para saber a última posição de um caractere, use o método .lastIndexOf()
+console.log(airline.lastIndexOf('r')); // 6, começando por 0
+
+// O método slice(início, fim) pode cortar uma string
+console.log(airline.slice(4)); // 'Air Portugal'
+console.log(airline.slice(4, 7)); // 'Air' - o valor final não é incluído
+
+// Exemplo: Extrair a primeira palavra sem usar valores
+console.log(airline.slice(0, airline.indexOf(' '))); // 'TAP'
+
+// Exemplo: Extrair a última palavra
+console.log(airline.slice(airline.lastIndexOf(' ') + 1)); // 'Portugal'
+
+// Também é possível indicar índices negativos
+// Nesse caso, o método conta a partir do final
+console.log(airline.slice(-2)); // pega as duas últimas letras: 'al'
+console.log(airline.slice(1, -1)); // tudo a partir do segundo caractere até o último caractere: 'AP Air Portuga'
+
+/**
+ * Checa se o assento é o assento do meio
+ * @param {*} seatCode
+ */
+function isMiddleSeat(seatCode) {
+  const seat = seatCode.slice(-1); // pega o último caractere
+  if (s === 'B' || s === 'E') {
+    console.log('You got the middle seat. >:(');
+  } else {
+    console.log('You got lucky! :D');
+  }
+}
+
+isMiddleSeat('11B');
+isMiddleSeat('23C');
+isMiddleSeat('3E');
