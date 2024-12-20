@@ -594,3 +594,53 @@ const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
 // Como saber quantos cargos existem?
 const uniqueStaff = [...new Set(staff)]; //lista -> set -> lista
 console.log(uniqueStaff);
+
+/**
+ * 121. Operações novas em sets
+ */
+
+// Atenção: Funcionalidade MUITO NOVA (ES2025?)
+const italianFoods = new Set([
+  'pasta',
+  'gnocci',
+  'tomatoes',
+  'olive oil',
+  'garlic',
+  'basil',
+]);
+
+const mexicanFoods = new Set([
+  'tortillas',
+  'beans',
+  'rice',
+  'tomatoes',
+  'avocado',
+  'garlic',
+]);
+
+// Como achar elementos em comum entre comidas italianas e mexicanas: .intersection()
+const commonFoods = italianFoods.intersection(mexicanFoods); // retorna novo set com elementos em comum
+console.log('Ingredients in common:', commonFoods);
+
+// Como achar todos os elementos: .union()
+const allFoods = italianFoods.union(mexicanFoods); // retorna novo set com todos os elementos
+console.log('All ingredients:', allFoods);
+
+// ou pode usar spread and criar um novo set
+const allFoods2 = new Set([...italianFoods, ...mexicanFoods]);
+console.log('All ingredients:', allFoods);
+
+// Como saber quais elementos não são comuns: .difference()
+// Atenção: O resultado não é comutativo. Vai retornar os elementos do primeiro set que não fazem parte do segundo
+const uniqueItalianFoods = italianFoods.difference(mexicanFoods);
+console.log('Unique italian ingredients:', uniqueItalianFoods);
+
+const uniqueMexicanFoods = mexicanFoods.difference(italianFoods);
+console.log('Unique mexican ingredients:', uniqueMexicanFoods);
+
+// Como saber quais elementos não são comuns: .symmetricDifference()
+const uniqueFoods = italianFoods.symmetricDifference(mexicanFoods);
+console.log('Unique ingredients:', uniqueFoods);
+
+// Como saber se um conjunto é diferente de outro: isDisjointFrom()
+console.log(italianFoods.isDisjointFrom(mexicanFoods));
