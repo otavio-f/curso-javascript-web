@@ -687,3 +687,43 @@ const arrKey = [1, 2];
 restaurantMap.set(arrKey, 'No');
 console.log(restaurantMap.get([1, 2])); // vai retornar undefined
 console.log(restaurantMap.get(arrKey)); // agora funciona
+
+/**
+ * 123. Maps, iteração
+ */
+// Outra forma de criar um map, com uma lista
+const question = new Map([
+  ['question', 'What are thoooose?!'],
+  [1, 'Green leather shoes'],
+  [2, 'Red crocs'],
+  [3, 'Organic papaya slippers'],
+  [4, 'Transparent silicone work boots'],
+  [5, 'Hoof high heels'],
+  ['correct', 3],
+  [true, 'Correct!'],
+  [false, 'Wrong!'],
+]); // cada elemento contém um par chave-valor
+console.log(question);
+
+// Convertendo objeto para map com Object.entries
+console.log(Object.entries(openingHours));
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap);
+
+// Iterando sobre maps: loop of retorna par [chave, valor]
+console.log(question.get('question'));
+for (const [key, value] of question) {
+  if (typeof key === 'number') {
+    console.log(`Alternative ${key}: ${value}`);
+  }
+}
+
+console.log(question.get(answer === Number(prompt('Your answer:'))));
+
+// Convertendo map pra array: use oprador spread
+console.log(...question);
+
+// Métodos extras comuns a Object
+console.log(question.entries());
+console.log(question.keys());
+console.log(question.values());
