@@ -644,3 +644,46 @@ console.log('Unique ingredients:', uniqueFoods);
 
 // Como saber se um conjunto é diferente de outro: isDisjointFrom()
 console.log(italianFoods.isDisjointFrom(mexicanFoods));
+
+/**
+ * 122. Maps
+ */
+// Estrutura de dados que mapeia chaves a valores
+// Diferença principal de maps vs objetos é que as chaves em maps podem ser de qualquer tipo,
+//        enquanto que em objetos as chaves só podem ser strings.
+
+const restaurantMap = new Map();
+
+// Pra adicionar elementos em maps use o método .set(chave, valor)
+restaurantMap.set('name', 'ClassicoItaliano');
+restaurantMap.set(1, 'Firenze, Italy');
+console.log(restaurantMap.set(2, 'Lisbon, Portugal')); // método .set() retorna o map
+
+restaurantMap
+  .set('categories', ['Italian', 'Pizzeria'])
+  .set('open', 11)
+  .set('close', 23); // é possível encadear métodos .set()
+
+// Pra recuperar o valor, use o método .get(chave)
+console.log(restaurantMap.get('name'));
+console.log(restaurantMap.get(99)); // retorna undefined se não consegue achar a chave
+
+// Pra checar se o map contém uma chave use o método .has(chave)
+console.log(restaurantMap.has('ratings'));
+
+// Pra deletar uma chave e valor do map use o método .delete(chave)
+console.log(restaurantMap.delete(2));
+
+// Pra saber a quantidade de elementos, use a propriedade .size
+console.log(restaurantMap.size);
+
+// Pra remover todos os elementos use o método .clear()
+restaurantMap.clear();
+
+// Atenção: Quando forem usados objetos como chaves, use o mesmo objeto pra recuperar o valor
+//          Maps só recupera o valor se houver uma chave igual, o que significa mesma instância para objetos
+//          Instâncias diferentes de objetos equivalentes são chaves diferentes.
+const arrKey = [1, 2];
+restaurantMap.set(arrKey, 'No');
+console.log(restaurantMap.get([1, 2])); // vai retornar undefined
+console.log(restaurantMap.get(arrKey)); // agora funciona
