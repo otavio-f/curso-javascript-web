@@ -563,3 +563,34 @@ for (const [day, { open, close }] of entries) {
   // destruturando objeto
   console.log(`On ${day} we open at ${open} and close at ${close}.`);
 }
+
+// NÃO VOU FAZER O CHALLENGE #2
+
+/**
+ * 120. Sets
+ */
+
+// É uma coleção de valores únicos
+const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta']);
+console.log(orderSet); // set não permite duplicatas
+// Set não tem ordem
+
+// Métodos e propriedades
+console.log(orderSet.size);
+console.log(orderSet.has('Pizza'));
+orderSet.add('Garlic Bread'); // retorna true se adicionou
+orderSet.delete('Risotto'); // retorna true se deletou
+orderSet.clear();
+// console.log(orderSet[0]); // sets não tem índices
+
+// Iteração
+for (const item of orderSet) {
+  console.log(item);
+}
+
+// Exemplo
+
+const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
+// Como saber quantos cargos existem?
+const uniqueStaff = [...new Set(staff)]; //lista -> set -> lista
+console.log(uniqueStaff);
