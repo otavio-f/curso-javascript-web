@@ -783,3 +783,66 @@ function isMiddleSeat(seatCode) {
 isMiddleSeat('11B');
 isMiddleSeat('23C');
 isMiddleSeat('3E');
+
+/*
+ * 127. Trabalhando com strings parte 2
+ */
+
+// .toLowerCase() muda letras para caixa baixa
+console.log(airline.toLowerCase());
+
+// .toUpperCase() muda letras para caixa alta
+console.log(airline.toUpperCase());
+
+// Exemplo: Corrigir capital em nome
+const passenger = 'jOnaS';
+
+const passengerCorrect =
+  passenger[0].toUpperCase + passenger.toLowerCase().slice(1);
+
+console.log(passengerCorrect);
+
+// Para remover espaços no começo e final, use o método .trim()
+const email = ' hi@jonas.io\n';
+
+const emailFix = email.trim();
+console.log(emailFix);
+
+// Método .replace(src, dst) substitui trechos de uma string
+const priceGB = '288,97£';
+const priceUS = priceGB.replace('£', '$').replace(',', '.'); // '288.97$'
+console.log(priceUS);
+
+// .replace() só substitui a primeria ocorrência.
+// para substituir todas as ocorrências, use replaceAll()
+const boardingAnnoucement =
+  'Attention: The flight appointed to 23:15 will be delayed to 23:15. Sorry for the inconvenience. Any further questions, please consult the main desk.';
+
+// O correto seria o voo das 22:00 estar atrasado, não o de 23:15
+const boardingAnnouncementFix = boardingAnnoucement.replace('23:15', '22:00'); // substitui somente a primeira instância
+console.log(boardingAnnouncementFix);
+
+// Ops! O correto seria o voo das 19:30, não o das 23:15, atrasado para as 19:30 do proximo dia
+const boardingAnnouncementFixFix = boardingAnnouncement.replaceAll(
+  '23:15',
+  '19:30'
+);
+console.log(boardingAnnouncementFixFix);
+
+// Atenção: .replaceAll é um método muito novo, então pode não estar disponível
+
+// Substituindo com expressões regulares
+const boardingAnnouncementFixRegex = boardingAnnoucement.replace(
+  /23:15/g,
+  '19:30'
+); // /23:15/ é a expressão regular /g indica modificador global, todas as ocorrências
+
+// .includes() verifica se a string contém outro trecho
+console.log(boardingAnnoucement.includes('delay'));
+
+// .startsWith() verifica se a string começa com outro trecho
+console.log(boardingAnnoucement.startsWith('Attention'));
+
+// .endsWith() verifica se a string termina com outro trecho
+console.log(boardingAnnoucement.endsWith('main desk.'));
+console.log(boardingAnnouncement.endsWith('site.'));
