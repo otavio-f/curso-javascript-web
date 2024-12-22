@@ -846,3 +846,39 @@ console.log(boardingAnnoucement.startsWith('Attention'));
 // .endsWith() verifica se a string termina com outro trecho
 console.log(boardingAnnoucement.endsWith('main desk.'));
 console.log(boardingAnnouncement.endsWith('site.'));
+
+/**
+ * 128. Trabando com strings parte 3
+ */
+
+// .split(): parte uma string em várias partes de acordo com uma string divisora
+console.log('a+very+nice+string'.split('+'));
+const [firstName, surname] = 'Jonas Schmedtmann'.split(' ');
+
+// .join(): Une strings de uma lista com um divisor entre elas
+console.log(['Mr.', firstName, surname].join(' '));
+
+function capitalize(name) {
+  const names = name.split(' ');
+  const result = [];
+  for (const word of names) {
+    result.push(word[0].toUpperCase() + word.slice(1));
+  }
+
+  return result.join(' ');
+}
+
+const passengers = 'jessica ann smith davis';
+console.log(capitalize(passengers));
+
+// .padStart() adiciona o mesmo caractere antes da string até que ela tenha o tamanho desejado
+const message = 'Go to gate 23.';
+console.log(message.padStart(25, '<'));
+
+// .padStart() adiciona o mesmo caractere depois da string até que ela tenha o tamanho desejado
+console.log(message.padEnd(25, '>'));
+
+// .repeat() repete a string um número de vezes
+console.log('hip'.repeat(2) + ' hurray!'); //'hiphip hurray!'
+
+// TODO: FALTA OS EXERCÌCIOS
