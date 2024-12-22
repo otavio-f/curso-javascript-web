@@ -908,3 +908,28 @@ document.querySelector('button').addEventListener('click', function () {
     convertCase(v, i + 1);
   }
 });
+
+/**
+ * 130. Prática dos métodos de string
+ */
+
+// const flights =
+//   '_Delayed_Departure;fao93766109;txl2133758440;11:25
+//   +_Arrival;bru0943384722;fao93766109;11:45
+//   +_Delayed_Arrival;hel7439299980;fao93766109;12:05
+//   +_Departure;fao93766109;lis2323639855;12:30';
+
+for (flight of flights.split('+')) {
+  let [type, from, to, time] = flight.split(';');
+
+  type = type.replaceAll('_', ' ').trim();
+  if (type.startsWith('Delayed')) {
+    type = '<!> ' + type; // troca bolinha por <!>
+  }
+
+  from = from.slice(0, 3).toUpperCase();
+  to = to.slice(0, 3).toUpperCase();
+
+  time = time.replace(':', 'h');
+  console.log(`${type} from ${from} to ${to} (${time})`.padStart(50, ' '));
+}
