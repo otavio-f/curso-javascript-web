@@ -881,4 +881,30 @@ console.log(message.padEnd(25, '>'));
 // .repeat() repete a string um número de vezes
 console.log('hip'.repeat(2) + ' hurray!'); //'hiphip hurray!'
 
-// TODO: FALTA OS EXERCÌCIOS
+/**
+ * 129. Desafio #4
+ */
+
+function convertCase(variable, amount) {
+  if (!variable.includes('_')) {
+    return;
+  }
+
+  const words = variable.trim().toLowerCase().split('_');
+  for (let i = 1; i < words.length; i++) {
+    const word = words[i];
+    words[i] = word[0].toUpperCase() + word.slice(1);
+  }
+  console.log(words.join('').padEnd(20, ' '), '[V]'.repeat(amount)); // No lugar do emoji, coloquei '[V]'
+}
+
+document.body.append(document.createElement('textarea'));
+document.body.append(document.createElement('button'));
+
+// Quando o botão for clicado, processe as variáveis
+document.querySelector('button').addEventListener('click', function () {
+  const text = document.querySelector('textarea').value;
+  for (const [i, v] of text.split('\n').entries()) {
+    convertCase(v, i + 1);
+  }
+});
