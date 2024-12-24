@@ -39,3 +39,33 @@ createBooking('LH123', 3, 150);
 // Atenção: Não é possível pular parâmetros!!
 // Para usar um parâmetro padrão, defina-o como undefined
 createBooking('LH234', undefined, 250);
+
+/*
+ * 134. Passando argumentos: valor vs. referência
+ */
+
+const flight = 'LH209';
+const jonas = {
+  name: 'Jonas Schmedtmann',
+  passport: '10938130594385',
+};
+
+function checkIn(flightNum, passenger) {
+  flightNum = 'LH910'; // NÃO ALTERE PARÂMETROS PFVR
+  passenger.name = 'Mr. ' + passenger.name;
+
+  if (passenger.passport.startsWith('10')) {
+    alert('Checked in!');
+  } else {
+    alert('Wrong passport!');
+  }
+}
+
+checkIn(flight, jonas);
+console.log(flight); // Não foi alterado, primitivos são copiados para a função (passado por valor).
+// Alterações nos valores não afetam a variável original.
+
+console.log(jonas); // Foi alterado, referência de objetos são passados para a função.
+// Alterações modficam o objeto original.
+
+// Atenção: JS somente passa por valor. Até em objetos o valor da referência é passado para a função
