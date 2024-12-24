@@ -69,3 +69,36 @@ console.log(jonas); // Foi alterado, referência de objetos são passados para a
 // Alterações modficam o objeto original.
 
 // Atenção: JS somente passa por valor. Até em objetos o valor da referência é passado para a função
+
+/**
+ * 136. Funções aceitando funções de callback
+ */
+
+function oneWord(str) {
+  return str.replace(/ /g, '').toLowerCase();
+}
+
+function upperFirstWord(str) {
+  const [first, ...others] = str.split(' ');
+  return [first.toUpperCase(), ...others].join(' ');
+}
+
+function transformer(str, fn) {
+  console.log(`Original string: ${str}`);
+  console.log(`Transformed string: ${fn(str)}`);
+
+  console.log(`Transformed by: ${fn.name}`); // todas funções tem a propriedade .name
+}
+
+transformer('Javascript is the best!', upperFirstWord); // passe o nome da função, mas não a chame
+transformer('Javascript is the best!', oneWord); // passe o nome da função, mas não a chame
+
+// transformer() é a função de ordem superior, enquanto a função passada como argumento é a função de callback
+
+// callbacks são usadas frequentemente
+function hello() {
+  console.log("Hello!. I'm a callback function!");
+}
+
+['Say what', 'again!'].forEach(hello); // aplica a função de callback a cada elemento do array
+document.body.addEventListener('load', hello);
