@@ -238,3 +238,64 @@ const addVAT2 = value => addTax(0.23, value);
 
 console.log(addVAT2(100).toFixed(2));
 console.log(addVAT2(50).toFixed(2));
+
+/**
+ * 140. Desafio #1
+ */
+
+// VOU FAZER O DESAFIO NO FINAL DA UNIDADE, ANTES DO DESAFIO #2
+
+const poll = {
+  question: 'What is your favorite programming language?',
+  options: ['0: Javascript', '1: Python', '2: Java', '3: C++'],
+  answers: new Array(4).fill(0),
+};
+
+// 1 - Criar a função
+function registerNewAnswer() {
+  // 1.1 Mostrar um prompt
+  const text = `${this.question}\n${this.options.join(
+    '\n'
+  )}\n(Write option number)`;
+  const answer = Number(prompt(text));
+  // 1.2 Atualizar o array de respostas baseado na resposta
+  !Number.isNaN(answer) &&
+    answer < this.answers.length &&
+    answer >= 0 &&
+    this.answers[answer]++; // curto circuito: se tudo for verdadeiro, incrementa
+  displayResults.call(this, 'string');
+}
+
+const ask = registerNewAnswer.bind(poll);
+
+// 2 - Chame o método quando o usuário clicar no botão "Answer Poll?!"
+document.querySelector('.poll').addEventListener('click', ask);
+
+// 3 - Método que mostra o resultado
+function displayResults(type = 'array') {
+  if (type === 'array') {
+    console.log(this.answers);
+  } else if (type === 'string') {
+    const values = this.answers.join(', ');
+    console.log(`Poll results are ${values}.`);
+  }
+}
+
+// 4 - Rode o método 'displayResults' no final do método 'registerNewAnswer'
+
+// Bonus: Usar o método 'displayResults' para mostrar os seguintes arrays dos dados de teste
+// TEST DATA1: [5, 2, 3]
+// TEST DATA2: [1, 5, 3, 9, 6, 1]
+const testData1 = {
+  answers: [5, 2, 3],
+};
+
+displayResults.call(testData1, 'array');
+displayResults.call(testData1, 'string');
+
+const testData2 = {
+  answers: [1, 5, 3, 9, 6, 1],
+};
+
+displayResults.call(testData2, 'array');
+displayResults.call(testData2, 'string');
