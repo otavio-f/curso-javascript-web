@@ -133,3 +133,62 @@ goodbye('Brock');
 goodbye('Philip');
 
 farewell('See you')('Lily');
+
+/**
+ * 138. Métodos call e apply
+ */
+
+const lufthansa = {
+  airline: 'Lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  book: function (flightNum, name) {
+    const flightCode = `${this.iataCode}${flightNum}`;
+    console.log(
+      `${name} booked a seat on ${this.airline}, flight ${flightCode}.`
+    );
+    this.bookings.push({ flight: flightCode, name: name });
+  },
+};
+
+lufthansa.book(239, 'Jonas');
+lufthansa.book(635, 'John');
+
+const eurowings = {
+  airline: 'EuroWings',
+  iataCode: 'EW',
+  bookings: [],
+  // copiar book de lufthansa e colar aqui é feio
+};
+
+const book = lufthansa.book; // copia a função da classe lufthansa. Agora é uma função normal
+// book(23, 'Sarah Williams'); // vai dar erro pq this é undefined em funções normais
+
+// Objetivo: adicionar a o método book() ao objeto eurowings
+// como fazer javascript mudar o this da função book para o objeto eurowings?
+
+// Alternativa 1: usando o método .call() da função
+// Método .call() recebe o this como primeiro argumento
+book.call(eurowings, 23, 'Sarah Williams');
+console.log(eurowings);
+
+book.call(lufthansa, 41, 'Laura');
+console.log(lufthansa);
+
+// Alternativa 2
+// Método .apply() recebe o this como primeiro argumento e o restante dos argumentos como uma lista
+// Não é utilizado no desenvolvimento javascript atualmente, mas é importante conhecer
+const martinFlight = [333, 'Martin'];
+book.apply(lufthansa, martinFlight);
+book.apply(eurowings, [333, 'Shane']);
+
+// Alternativa 3
+// Método .call() com o operador spread
+// Preferido usar esse ao invés de .apply()
+book.call(eurowings, ...martinFlight);
+book.call(eurowings, ...[99, 'Chris']);
+
+// Alternativa 4
+// Atribuir o método a uma propriedade
+eurowings.bookFlight = book;
+eurowings.bookFlight(441, 'Lorra Dmitri');
