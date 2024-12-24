@@ -243,8 +243,6 @@ console.log(addVAT2(50).toFixed(2));
  * 140. Desafio #1
  */
 
-// VOU FAZER O DESAFIO NO FINAL DA UNIDADE, ANTES DO DESAFIO #2
-
 const poll = {
   question: 'What is your favorite programming language?',
   options: ['0: Javascript', '1: Python', '2: Java', '3: C++'],
@@ -299,3 +297,31 @@ const testData2 = {
 
 displayResults.call(testData2, 'array');
 displayResults.call(testData2, 'string');
+
+/**
+ * 141. Immediately Invoked Function Expressions - IIFE
+ */
+
+// São funções que são criadas e executadas uma única vez
+// Mas como criar uma função desse tipo??
+
+// Passo 1: Defina uma função anônima
+// function() { console.log('Running only once.');} // vai dar erro. JS espera que a função tenha um nome
+
+// Passo 2: Transforme essa função em expressão de função
+(function () {
+  console.log('Running only once.');
+}); // Repare nos parênteses. Agora essa função é uma expressão
+
+// Passo 3: Chame essa função.
+(function () {
+  console.log('Running only once.');
+})(); // E ela nunca mais poderá ser chamada
+
+// Daí vem o nome Immediately Invoked Function Expression
+// Ou Expressão de Função Imediatamente Invocada
+
+// arrow functions também podem ser IIFE
+(() => console.log('Never running again.'))();
+
+// Todo dado definido dentro de um escopo é privado
