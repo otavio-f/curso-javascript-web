@@ -192,3 +192,49 @@ book.call(eurowings, ...[99, 'Chris']);
 // Atribuir o método a uma propriedade
 eurowings.bookFlight = book;
 eurowings.bookFlight(441, 'Lorra Dmitri');
+
+/**
+ * Método .bind()
+ */
+// .bind() cria uma função com o this alterado para o objeto e opcionalmente com os primeiros argumentos fixos
+const ewBook = book.bind(eurowings);
+
+ewBook(233, 'Amanda Walker');
+ewBook(555, 'Orlando Pirulito');
+
+// especificando um voo
+const lufFlightBook = book.bind(lufthansa, 101); // somente o voo 101 da Lufthansa
+lufFlightBook('Martha Shore');
+// Padrão conhecido como aplicação parcial (partial application)
+
+// Com event listener
+lufthansa.planes = 300;
+lufthansa.buyPlane = function () {
+  lufthansa.planes++;
+  console.log(this.planes);
+};
+
+// não vai funcionar como esperado
+// em funções event handler, o this aponta para o elemento DOM no qual a função está atrelada
+// document.querySelector('.buy').addEventListener('click', lufthansa.buyPlane);
+// Alternativa é usar o método .bind()
+document
+  .querySelector('.buy')
+  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+
+// Partial application
+const addTax = (rate, value) => value * (1 + rate);
+
+console.log(addTax(0.1, 200).toFixed(2)); // 200 + 10%
+
+// taxa fixa de 23%
+const addVAT = addTax.bind(null, 0.23); // para ignorar this, use null
+
+console.log(addVAT(100).toFixed(2));
+console.log(addVAT(50).toFixed(2));
+
+// DESAFIO: Reescrever como função retornando função
+const addVAT2 = value => addTax(0.23, value);
+
+console.log(addVAT2(100).toFixed(2));
+console.log(addVAT2(50).toFixed(2));
