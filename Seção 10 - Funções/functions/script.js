@@ -102,3 +102,34 @@ function hello() {
 
 ['Say what', 'again!'].forEach(hello); // aplica a função de callback a cada elemento do array
 document.body.addEventListener('load', hello);
+
+/*
+ * 137. Funções retornando funções
+ */
+
+/**
+ * Cria um cumprimento personalizado
+ * @param {String} greeting O cumprimento
+ * @returns Uma função de cumprimento
+ */
+function greet(greeting) {
+  // Função anônima não é visível fora desse bloco, por causa de -closure-
+  return function (name) {
+    console.log(`${greeting}, ${name}!`);
+  };
+}
+
+const greeterHello = greet('Hello'); // Cria a função
+greeterHello('Jonas'); // Chama a função criada
+greeterHello('Sadie');
+
+greet('Hi')('Joe'); // Chamar diretamente também é possível e parece esquisito
+
+// DESAFIO: Reescrever somente usando arrow functions
+const farewell = message => name => console.log(`${message}, ${name}!`); // futuro eu: tenta adivinhar o que isso faz
+
+const goodbye = farewell('Goodbye');
+goodbye('Brock');
+goodbye('Philip');
+
+farewell('See you')('Lily');
