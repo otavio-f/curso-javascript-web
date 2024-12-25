@@ -399,3 +399,17 @@ function boardPassengers(n, wait) {
 
 const perGroup = 0; // variável do closure tem prioridade sobre variáveis globais
 boardPassengers(960, 5);
+
+/**
+ * 146. Desafio de código #2
+ */
+
+(function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+  document.body.addEventListener('click', function () {
+    header.style.color = 'blue';
+  });
+})();
+
+// Mesmo que a IIFE tenha executado, o event listener mantém closure sobre a variável header
