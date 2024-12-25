@@ -325,3 +325,32 @@ displayResults.call(testData2, 'string');
 (() => console.log('Never running again.'))();
 
 // Todo dado definido dentro de um escopo é privado
+
+/**
+ * 142. Closures
+ */
+
+function secureBooking() {
+  let passengerCount = 0; // não pode ser vista fora da função
+
+  return function () {
+    // função tem acesso ao ambiente de variáveis (VE) no contexto de execução (EC) no qual foi criado
+    // nesse caso, essa função tem acesso a todas as variáveis de secureBooking()
+    // !! closure é o ambiente de variável atrelado a função, exatamente igual ao momento no qual foi criado !!
+    passengerCount++;
+    console.log(`${passengerCount} passengers are booked.`);
+  };
+  // contexto de execução de secureBooking() já foi de vasco,
+  // mas o ambiente de variáveis que contém passengerCount ainda está na memória
+}
+
+const doBook = secureBooking();
+
+doBook();
+doBook();
+// doBook() functiona. Como?
+// Closure faz com que a função lembre do contexto no momento que foi criado
+// Por causa da closure, o ambiente de variável de secureBooking ainda é alcançável.
+// -- E foi movido para a heap ao invés de ser destruído junto com o contexto de execução.
+
+console.dir(doBook);
