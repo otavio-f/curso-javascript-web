@@ -353,4 +353,49 @@ doBook();
 // Por causa da closure, o ambiente de variável de secureBooking ainda é alcançável.
 // -- E foi movido para a heap ao invés de ser destruído junto com o contexto de execução.
 
-console.dir(doBook);
+console.dir(doBook); // igual a dir() do python
+
+/**
+ * 143. Mais exemplos de closure
+ */
+
+// Exemplo 1: não é preciso retornar uma função pra usar closure
+let f;
+
+function g() {
+  const a = 23;
+  f = function () {
+    console.log('O dobro de <a> é igual a', 2 * a);
+  };
+}
+
+g();
+f();
+console.dir(f);
+
+function h() {
+  const b = 111;
+  f = function () {
+    console.log('O triplo de <b> é igual a', 3 * b);
+  };
+}
+
+h(); // closure antiga some
+f();
+console.dir(f);
+
+// Exemplo 2: timer
+function boardPassengers(n, wait) {
+  const perGroup = n / 3;
+
+  setTimeout(function () {
+    console.log(
+      `We will board all ${n} passengers.\nThere are 3 groups, each with ${perGroup} passengers each.`
+    );
+  }, wait * 1000); // função de callback cria um closure
+
+  console.log(`Will start boarding in ${wait} seconds.`);
+}
+
+const perGroup = 0; // variável do closure tem prioridade sobre variáveis globais
+boardPassengers(960, 5);
