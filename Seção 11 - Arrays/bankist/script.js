@@ -74,3 +74,36 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+
+// Lembre-se: métodos são funções atreladas a objetos
+
+let arr = ['a', 'b', 'c', 'd', 'e'];
+
+//// Método .slice() é parecido com o de string, e funciona do mesmo jeito
+// não modifica o array
+console.log(arr.slice(2)); // só início
+console.log(arr.slice(2, 4)); // início e final
+console.log(arr.slice(-2)); // índice negativo, contando a partir do final
+console.log(arr.slice(1, -2));
+console.log(arr.slice()); // cria uma cópia
+
+//// Método .splice() parece com .slice, mas modifica o array original
+// remove elementos do array original e retorna os elementos removidos
+const arr2 = [...arr];
+console.log(arr2.splice(-1), arr2); // remove o último elemento
+
+// Atenção: primeiro argumento é o índice, segundo é a quantidade de elementos!!
+console.log(arr2.splice(1, 2), arr2);
+
+//// Método .reverse() inverte o array e modifica o array original
+console.log(arr.reverse(), arr);
+arr.reverse();
+
+//// Método .concat() concatena dois arrays
+// Não modifica nenhum dos arrays originais e retorna a união dos dois
+const arr3 = ['f', 'g', 'h', 'i', 'j'];
+console.log(arr.concat(arr3));
+
+//// Método .join() concatena todos os elementos com um separador entre eles
+console.log(arr.join(', '));
+console.log(arr3.join(' - '));
