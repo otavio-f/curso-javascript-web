@@ -107,3 +107,18 @@ console.log(arr.concat(arr3));
 //// Método .join() concatena todos os elementos com um separador entre eles
 console.log(arr.join(', '));
 console.log(arr3.join(' - '));
+
+/**
+ * 148. O método .at
+ */
+
+// Atenção: esse método é muito novo (ES2022)
+
+const sample = [12, 13, 41];
+console.log(`com brackets: ${sample[0]}, com .at(): ${sample.at(0)}`); // é equivalente a notação de array
+
+// Para pegar o último elemento
+console.log(sample[sample.length - 1]);
+console.log(sample.slice(-1)[0]);
+console.log(sample.at(-1)); // .at() permite índices negativos, que contam a partir do final
+console.log('Jonas'.at(-1)); // também funciona em strings
