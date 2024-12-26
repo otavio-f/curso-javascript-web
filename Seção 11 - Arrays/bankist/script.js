@@ -122,3 +122,54 @@ console.log(sample[sample.length - 1]);
 console.log(sample.slice(-1)[0]);
 console.log(sample.at(-1)); // .at() permite índices negativos, que contam a partir do final
 console.log('Jonas'.at(-1)); // também funciona em strings
+
+/**
+ * 149. Looping arrays com .forEach
+ */
+
+const lastMovements = [200, 450, -400, 3000, 650, -130, 70, 1300];
+
+console.log('=> for..of');
+// Maneira usual de iterar pelos valores de um array com for..of
+for (const amount of lastMovements) {
+  if (amount > 0) {
+    console.log(`You deposited ${amount}.`);
+  } else {
+    console.log(`You withdrew ${amount}.`);
+  }
+}
+
+console.log('=> .forEach()');
+// Iterando com método .forEach()
+lastMovements.forEach(function (amount) {
+  // use um callback que vai ser chamado em cada iteração
+  if (amount > 0) {
+    console.log(`You deposited ${amount}.`);
+  } else {
+    console.log(`You withdrew ${amount}.`);
+  }
+});
+
+console.log('=> for..of .entries()');
+// Maneira usual de iterar pelos valores de um array com for..of
+for (const [index, amount] of lastMovements.entries()) {
+  if (amount > 0) {
+    console.log(`At ${index}, you deposited ${amount}.`);
+  } else {
+    console.log(`At ${index}, you withdrew ${amount}.`);
+  }
+}
+
+console.log('=> .forEach() (value, index, array)');
+// Iterando com método .forEach(), especificando os três argumentos
+lastMovements.forEach(function (amount, index, array) {
+  // use um callback que vai ser chamado em cada iteração
+  if (amount > 0) {
+    console.log(`At ${index}, you deposited ${amount}.`);
+  } else {
+    console.log(`At ${index}, you withdrew ${amount}.`);
+  }
+});
+
+// Atenção: NÃO É POSSÍVEL SAIR DO LOOP .forEach() COM break; OU continue;
+// -------- Se precisar terminar o loop mais cedo, use for..of
