@@ -173,3 +173,29 @@ lastMovements.forEach(function (amount, index, array) {
 
 // Atenção: NÃO É POSSÍVEL SAIR DO LOOP .forEach() COM break; OU continue;
 // -------- Se precisar terminar o loop mais cedo, use for..of
+
+/**
+ * 150. .forEach() com maps e sets
+ */
+
+// em maps, o método .forEach funciona de modo parecido com arrays
+currencies.forEach(function (value, key, map) {
+  console.log(`${key} - ${value}`);
+});
+
+// sets não têm chaves, ou índices
+// no método .forEach() de um set possui três argumentos por questão de compatibilidade, mas o primeiro é igual ao segundo
+const uniqueCurrencies = new Set([
+  'BRL',
+  'USD',
+  'GBP',
+  'EUR',
+  'BRL',
+  'BRL',
+  'BRL',
+]);
+console.log(uniqueCurrencies);
+uniqueCurrencies.forEach(function (value, value2, set) {
+  // value === value2
+  console.log(`${value2} - ${value}`);
+});
