@@ -228,3 +228,43 @@ uniqueCurrencies.forEach(function (value, value2, set) {
   // value === value2
   console.log(`${value2} - ${value}`);
 });
+
+/**
+ * 153. Desafio de código #1
+ */
+
+// Create function
+function checkDogs(juliaDogs, kateDogs) {
+  // 1. Remove cats from julia
+  const juliaDogsCorrected = juliaDogs.slice(); // copia array
+  juliaDogsCorrected.splice(0, 1); // remove o primeiro gato, primeiro elemento
+  juliaDogsCorrected.splice(-2); // remove os outros gatos, último e antepenúltimo elementos
+
+  // 2. Create array with julia and kate's dogs
+  const allDogs = juliaDogsCorrected.concat(kateDogs);
+  // const allDogs = [...juliaDogsCorrected, ...kateDogs]; // equivalente ao acima
+
+  // const allDogs = [...juliaDogs.slice(1, -2), ...kateDogs]; // faz passo 1 e 2
+
+  // 3. For each dog log if it's a puppy or adult
+  allDogs.forEach(function (dogAge, index) {
+    const ageText = dogAge < 3 ? 'a puppy' : 'an adult';
+    const agePlural = dogAge === 1 ? '' : 's';
+    console.log(
+      `Dog number ${
+        index + 1
+      } is ${ageText} and is ${dogAge} year${agePlural} old.`
+    );
+  });
+}
+
+// 4. Run for both datasets
+// Test data 1
+let juliaDogs = [3, 5, 2, 12, 7];
+let kateDogs = [4, 1, 15, 8, 3];
+checkDogs(juliaDogs, kateDogs);
+
+// Test data 2
+juliaDogs = [9, 16, 6, 8, 3];
+kateDogs = [10, 5, 6, 1, 4];
+checkDogs(juliaDogs, kateDogs);
