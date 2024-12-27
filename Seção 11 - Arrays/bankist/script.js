@@ -61,6 +61,35 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+/**
+ * 152. Criando elementos DOM
+ */
+
+/**
+ * Insere a movimentação da conta na página
+ * @param {[Number]} movements A lista com a movimentação da conta do usuário
+ */
+function displayMovements(movements) {
+  // limpa o elemento
+  containerMovements.innerHTML = '';
+  // insere valores
+  movements.forEach(function (amount, i) {
+    const type = amount > 0 ? 'deposit' : 'withdrawal';
+    const html = `<div class="movements__row">
+          <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+          <div class="movements__date">3 days ago</div>
+          <div class="movements__value">${amount}€</div>
+        </div>
+`;
+    // insere elemento dentro do elemento, na primeira posição
+    containerMovements.insertAdjacentHTML('afterBegin', html);
+  });
+}
+
+displayMovements(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
