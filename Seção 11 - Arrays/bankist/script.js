@@ -268,3 +268,45 @@ checkDogs(juliaDogs, kateDogs);
 juliaDogs = [9, 16, 6, 8, 3];
 kateDogs = [10, 5, 6, 1, 4];
 checkDogs(juliaDogs, kateDogs);
+
+/**
+ * 155. O método .map()
+ */
+// Aplica uma função sobre cada elemento do array, retornando um novo array
+// Não modifica o array original
+
+// Exemplo: converter usd para eur
+const eurToUsd = 1.1;
+
+// Com função anônima
+// const movementsUSD = movements.map(function (amount) {
+//   return amount * eurToUsd;
+// });
+
+// Com arrow function
+const movementsUSD = movements.map(amount => amount * eurToUsd);
+
+console.log(movements);
+console.log(movementsUSD);
+
+// Equivalente em um loop for..of
+const movementsUSDfor = [];
+for (const amount of movements) {
+  movementsUSDfor.push(amount * eurToUsd);
+}
+
+console.log(movementsUSDfor);
+
+// De modo similar a .forEach(), a função callback de .map() recebe três argumentos
+const movementDescriptions = movements.map(function (amount, index, arr) {
+  // if (amount > 0) {
+  //   return `Movement ${index}: You deposited ${amount}.`;
+  // } else {
+  //   return `Movement ${index}: You withdrew ${amount}.`;
+  // }
+  return `Movement ${
+    index + 1
+  }: You ${amount > 0 ? 'deposited' : 'withdrew'} \$${Math.abs(amount).toFixed(2)}.`;
+});
+
+console.log(movementDescriptions);
