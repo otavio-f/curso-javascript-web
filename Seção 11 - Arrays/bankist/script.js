@@ -108,6 +108,17 @@ function createUsernames(accounts) {
 createUsernames(accounts);
 console.log(accounts);
 
+/**
+ * 158. Método .reduce() parte 2
+ */
+
+function calcDisplayBalance(movements) {
+  const balance = movements.reduce((acc, amount) => acc + amount, 0); // calcula o balanço
+  labelBalance.textContent = `${balance} EUR`;
+}
+
+calcDisplayBalance(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -328,3 +339,56 @@ const movementDescriptions = movements.map(function (amount, index, arr) {
 });
 
 console.log(movementDescriptions);
+
+/**
+ * 157. O método .filter()
+ */
+
+// Itera pelo array e filtra elementos de acordo com uma condição
+const deposits = movements.filter(amount => amount > 0); // só permite elementos no qual a movimentação é maior que zero
+console.log(movements, deposits);
+
+// Loop Equivalente
+const depositsFor = [];
+for (const amount of movements) {
+  if (amount > 0) depositsFor.push(amount);
+}
+
+const withdrawals = movements.filter(amount => amount < 0);
+console.log(movements, withdrawals);
+
+const withdrawalsFor = [];
+for (const amount of movements) {
+  if (amount < 0) withdrawalsFor.push(amount);
+}
+console.log(movements, withdrawalsFor);
+
+/**
+ * 158. Método .reduce()
+ */
+
+// Condensa todos os valores de um array em um único valor
+// A função recebe dois argumentos: a função de callback e o valor inicial do acumulador
+// A função de callback recebe quatro argumentos: acumulador, valor, índice e o array
+
+const balance = movements.reduce((acc, amount) => acc + amount, 0);
+// const balance = movements.reduce(function (acc, amount, index, arr) {
+//   console.log(`Iteration ${index + 1}: ${amount} + ${acc} = ${acc + amount}`);
+//   return acc + amount;
+// }, 0);
+console.log(balance);
+
+// Loop for equivalente
+let balanceAcc = 0;
+for (const amount of movements) {
+  balanceAcc += amount;
+}
+console.log(balanceAcc);
+
+// Exemplo: valor máximo
+const maxMovement = movements.reduce(
+  (max, amount) => (amount > max ? amount : max),
+  movements[0]
+);
+
+console.log(`Maximum: ${maxMovement}`);
