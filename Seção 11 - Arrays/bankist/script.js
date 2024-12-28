@@ -90,6 +90,24 @@ function displayMovements(movements) {
 
 displayMovements(account1.movements);
 
+/**
+ * 156. Computing Usernames
+ */
+
+/**
+ * Cria um nome de usuário em cada conta
+ * @param {[Object]} accounts
+ */
+function createUsernames(accounts) {
+  accounts.forEach(function (acc, index, arr) {
+    const initials = acc.owner.split(' ').map(name => name[0]); // separa palavras e pega a primeira letra
+    acc.username = initials.join('').toLowerCase(); // junta as letras e coloca em caixa baixa
+  });
+}
+
+createUsernames(accounts);
+console.log(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
