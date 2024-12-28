@@ -392,3 +392,22 @@ const maxMovement = movements.reduce(
 );
 
 console.log(`Maximum: ${maxMovement}`);
+
+/**
+ * 159. Desafio de código #2
+ */
+
+function calcAverageHumanAge(dogsAges) {
+  const asHumanAges = dogsAges.map(dogAge =>
+    dogAge <= 2 ? 2 * dogAge : 16 + dogAge * 4
+  );
+  const adults = asHumanAges.filter(humanAge => humanAge >= 18);
+  const sum = adults.reduce((acc, age) => age + acc, 0);
+  return sum / adults.length;
+}
+
+juliaDogs = [5, 2, 4, 1, 15, 8, 3];
+console.log(calcAverageHumanAge(juliaDogs));
+
+kateDogs = [16, 6, 10, 5, 6, 1, 4];
+console.log(calcAverageHumanAge(kateDogs));
