@@ -466,3 +466,19 @@ const totalwithdrawalsUSD = movements
 
 // Atenção: Encadear muitos métodos pode prejudicar performance!!
 // Atenção: É má prática encadear métodos que modificam o array original, como por exemplo .splice() ou .reverse()
+
+/**
+ * Desafio de código #3
+ */
+
+const calcAverageHumanAge2 = dogsAges =>
+  dogsAges
+    .map(dogAge => (dogAge <= 2 ? 2 * dogAge : 16 + dogAge * 4))
+    .filter(humanAge => humanAge >= 18)
+    .reduce((acc, age, _, arr) => acc + age / arr.length, 0); // acc + (age / arr.length);
+
+console.log(calcAverageHumanAge(juliaDogs));
+console.log(calcAverageHumanAge2(juliaDogs));
+
+console.log(calcAverageHumanAge(kateDogs));
+console.log(calcAverageHumanAge2(kateDogs));
