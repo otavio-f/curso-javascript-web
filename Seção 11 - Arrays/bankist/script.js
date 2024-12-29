@@ -88,7 +88,7 @@ function displayMovements(movements) {
   });
 }
 
-displayMovements(account1.movements);
+// displayMovements(account1.movements); //movido
 
 /**
  * 156. Computing Usernames
@@ -106,7 +106,6 @@ function createUsernames(accounts) {
 }
 
 createUsernames(accounts);
-console.log(accounts);
 
 /**
  * 158. Método .reduce() parte 2
@@ -117,24 +116,24 @@ function calcDisplayBalance(movements) {
   labelBalance.textContent = `${balance}€`;
 }
 
-calcDisplayBalance(account1.movements);
+// calcDisplayBalance(account1.movements);
 
 /**
  * 160. A mágica de encadear métodos parte 2
  */
-function calcDisplaySummary(movements) {
-  const totalIn = movements
+function calcDisplaySummary(account) {
+  const totalIn = account.movements
     .filter(amount => amount > 0) // filtra depósitos
     .reduce((total, amount) => total + amount, 0); // soma tudo
   labelSumIn.textContent = `${totalIn}€`;
 
-  const totalOut = movements
+  const totalOut = account.movements
     .filter(amount => amount < 0) // filtra retiradas
     .reduce((total, amount) => total + amount, 0); // soma tudo
   labelSumOut.textContent = `${Math.abs(totalOut)}€`; // mostra sem o sinal
 
-  const interest = 1.2 / 100;
-  const earnings = movements
+  const interest = account.interestRate / 100;
+  const earnings = account.movements
     .filter(amount => amount > 0) // filtra depósitos
     .map(deposit => deposit * interest) // aplica taxa de juros
     .filter(earning => earning >= 1) // só inclui ganhos maiores que 1
@@ -142,7 +141,54 @@ function calcDisplaySummary(movements) {
   labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
 }
 
-calcDisplaySummary(account1.movements);
+// calcDisplaySummary(account1.movements);
+
+/**
+ * 163. Implementando login
+ */
+
+let currentAccount;
+
+btnLogin.addEventListener('click', function (event) {
+  event.preventDefault(); // impede form de submeter e recarregar a página
+
+  // Confere usuário e pin
+  currentAccount = accounts.find(
+    account =>
+      account.username === inputLoginUsername.value &&
+      account.pin === Number(inputLoginPin.value)
+  );
+  console.log(currentAccount);
+
+  // Limpa os campos de entrada e tira o foco
+  inputLoginUsername.value = '';
+  inputLoginUsername.blur();
+  inputLoginPin.value = '';
+  inputLoginPin.blur();
+
+  // Login falhou, não continue
+  if (!currentAccount) {
+    // if (currentAccount === undefined) {
+    containerApp.style.opacity = 0; // esconde UI
+    return;
+  }
+
+  // Mostra mensagem de boas vindas e UI
+  labelWelcome.textContent = `Welcome back, ${
+    currentAccount.owner.split(' ')[0]
+  }`;
+  containerApp.style.opacity = 100;
+
+  // Mostra movimentação
+  displayMovements(currentAccount.movements);
+
+  // Mostra extrato
+  calcDisplayBalance(currentAccount.movements);
+
+  // Mostra resumo
+  calcDisplaySummary(currentAccount);
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
