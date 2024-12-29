@@ -114,11 +114,35 @@ console.log(accounts);
 
 function calcDisplayBalance(movements) {
   const balance = movements.reduce((acc, amount) => acc + amount, 0); // calcula o balanço
-  labelBalance.textContent = `${balance} EUR`;
+  labelBalance.textContent = `${balance}€`;
 }
 
 calcDisplayBalance(account1.movements);
 
+/**
+ * 160. A mágica de encadear métodos parte 2
+ */
+function calcDisplaySummary(movements) {
+  const totalIn = movements
+    .filter(amount => amount > 0) // filtra depósitos
+    .reduce((total, amount) => total + amount, 0); // soma tudo
+  labelSumIn.textContent = `${totalIn}€`;
+
+  const totalOut = movements
+    .filter(amount => amount < 0) // filtra retiradas
+    .reduce((total, amount) => total + amount, 0); // soma tudo
+  labelSumOut.textContent = `${Math.abs(totalOut)}€`; // mostra sem o sinal
+
+  const interest = 1.2 / 100;
+  const earnings = movements
+    .filter(amount => amount > 0) // filtra depósitos
+    .map(deposit => deposit * interest) // aplica taxa de juros
+    .filter(earning => earning >= 1) // só inclui ganhos maiores que 1
+    .reduce((total, amount) => total + amount, 0); // soma ganhos
+  labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
+}
+
+calcDisplaySummary(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -411,3 +435,34 @@ console.log(calcAverageHumanAge(juliaDogs));
 
 kateDogs = [16, 6, 10, 5, 6, 1, 4];
 console.log(calcAverageHumanAge(kateDogs));
+
+/**
+ * 160. A mágica de encadear métodos
+ */
+// Exemplo: Soma dos depósitos em dólares em uma única linha
+const totalDepositsUSD = movements
+  .filter(amount => amount > 0)
+  .map(amount => amount * eurToUsd)
+  .reduce((total, amount) => total + amount, 0);
+// É possível encadear métodos enquanto um array for retornado
+
+console.log(totalDepositsUSD);
+
+// Para verificar sobre o quê se está iterando use o último argumento do callback
+// Esse argumento contém o array de entrada
+const totalwithdrawalsUSD = movements
+  .filter((amount, index, arr) => {
+    console.log(`Filtro sobre ${arr}`);
+    return amount < 0;
+  })
+  .map((amount, index, arr) => {
+    console.log(`Mapeamento sobre ${arr}`);
+    return amount * eurToUsd;
+  })
+  .reduce((total, amount, index, arr) => {
+    console.log(`Redução sobre ${arr}`);
+    return total + amount;
+  }, 0);
+
+// Atenção: Encadear muitos métodos pode prejudicar performance!!
+// Atenção: É má prática encadear métodos que modificam o array original, como por exemplo .splice() ou .reverse()
