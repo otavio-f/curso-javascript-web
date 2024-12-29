@@ -468,7 +468,7 @@ const totalwithdrawalsUSD = movements
 // Atenção: É má prática encadear métodos que modificam o array original, como por exemplo .splice() ou .reverse()
 
 /**
- * Desafio de código #3
+ * 161. Desafio de código #3
  */
 
 const calcAverageHumanAge2 = dogsAges =>
@@ -482,3 +482,26 @@ console.log(calcAverageHumanAge2(juliaDogs));
 
 console.log(calcAverageHumanAge(kateDogs));
 console.log(calcAverageHumanAge2(kateDogs));
+
+/**
+ * 162. O método .find()
+ */
+
+// Itera sobre o array e encontra um elemento
+// Recebe uma função de callback que filtra cada elemento
+// Retorna o primeiro elemento que satisfaz a condição da callback, principal diferença para .filter()
+// Retorna undefined se nenhum elemento satisfazer a condição
+
+// Exemplo: Achar o primeiro saque
+console.log(movements.find(mov => mov > 0));
+
+// Exemplo: encontrar a conta de "Jessica Davis"
+console.log(accounts.find(acc => acc.owner === 'Jessica Davis'));
+
+// Desafio: implementar a linha acima usando um loop for..of
+for (const acc of accounts) {
+  if (acc.owner === 'Jessica Davis') {
+    console.log(acc);
+    break;
+  }
+}
