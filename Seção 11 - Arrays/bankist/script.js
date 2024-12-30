@@ -272,6 +272,38 @@ btnClose.addEventListener('click', function (event) {
   containerApp.style.opacity = 0;
 });
 
+/**
+ * 167. Métodos .some() e .every() parte 2
+ */
+btnLoan.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  // Obter quantidade
+  const amount = Number(inputLoanAmount.value);
+  inputLoanAmount.value = '';
+  inputLoanAmount.blur();
+
+  // Validar quantidade
+  if (Number.isNaN(amount) || amount <= 0) {
+    console.log('Invalid amount');
+    return;
+  }
+  if (!currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    console.log(
+      'You need to have a deposit with at least 10% of the requested loan.'
+    );
+    return;
+  }
+
+  // Emprestar
+  currentAccount.movements.push(amount);
+
+  // Recarregar a interface com os novos valores
+  displayMovements(currentAccount.movements);
+  calcDisplayBalance(currentAccount.movements);
+  calcDisplaySummary(currentAccount);
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -655,3 +687,23 @@ console.log(
     movements.length - lastLargeMovement
   } movements ago.`
 );
+
+/**
+ * 167. Métodos .some() e .every()
+ */
+
+// .some() recebe um callback e retorna se pelo menos um elemento obedece a condição
+const anyWithdrawals = movements.some(amount => amount < 0);
+console.log(anyWithdrawals);
+
+const anyLargeWithdrawals = movements.some(amount => amount < -1000);
+console.log(anyLargeWithdrawals);
+
+// .every() recebe um callback e retorna se todos os elementos obedecem a condição
+console.log(account1.movements.every(amount => amount > 0)); // confere se só há depósitos
+console.log(account4.movements.every(amount => amount > 0)); // confere se só há depósitos
+
+// Callback separado
+const isDeposit = amount => amount > 0;
+console.log(account1.movements.every(isDeposit)); // confere se só há depósitos
+console.log(account4.movements.every(isDeposit)); // confere se só há depósitos
