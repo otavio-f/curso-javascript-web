@@ -189,6 +189,56 @@ btnLogin.addEventListener('click', function (event) {
   calcDisplaySummary(currentAccount);
 });
 
+/**
+ * 164. Implementando transferências
+ */
+
+btnTransfer.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  // Validar destino
+  const destinationAccount = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  inputTransferTo.value = ''; // limpa campo
+  inputTransferTo.blur();
+
+  // Validar quantidade
+  const amount = Number(inputTransferAmount.value);
+  inputTransferAmount.value = ''; // limpa campo
+  inputTransferAmount.blur();
+
+  // Validação
+  if (destinationAccount === undefined) {
+    // Destino não existe
+    console.log("Account doesn't exist");
+    return;
+  }
+  if (Number.isNaN(amount)) {
+    // Quantidade é inválida
+    console.log('Is not a valid amount.');
+    return;
+  }
+
+  if (
+    amount <= 0 || // quantidade negativa
+    currentAccount.movements.reduce((acc, value) => value + acc, 0) < amount || // saldo insuficiente
+    destinationAccount.username === currentAccount.username // transferência pra mesma conta
+  ) {
+    console.log('Invalid amount, not enough balance or invalid destination.');
+    return;
+  }
+
+  // Transferir
+  currentAccount.movements.push(-amount);
+  destinationAccount.movements.push(amount);
+
+  // Recarregar a interface com os novos valores
+  displayMovements(currentAccount.movements);
+  calcDisplayBalance(currentAccount.movements);
+  calcDisplaySummary(currentAccount);
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
