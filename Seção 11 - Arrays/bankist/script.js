@@ -634,3 +634,24 @@ for (const acc of accounts) {
     break;
   }
 }
+
+/**
+ * 166. Os métodos .findLast() e .findLastIndex()
+ */
+
+// Atenção: São métodos muito novos (ES2023)!
+// Encontram a última ocorrência, contrapartes de .find() e .findIndex()
+
+const lastWithdrawal = movements.findLast(amount => amount < 0);
+
+console.log(`Last withdrawal: ${lastWithdrawal}`);
+
+const lastLargeMovement = movements.findLastIndex(
+  amount => Math.abs(amount) >= 1000
+);
+
+console.log(
+  `Your last large movement was ${
+    movements.length - lastLargeMovement
+  } movements ago.`
+);
