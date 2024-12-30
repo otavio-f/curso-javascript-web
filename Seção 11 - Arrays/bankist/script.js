@@ -707,3 +707,34 @@ console.log(account4.movements.every(amount => amount > 0)); // confere se só h
 const isDeposit = amount => amount > 0;
 console.log(account1.movements.every(isDeposit)); // confere se só há depósitos
 console.log(account4.movements.every(isDeposit)); // confere se só há depósitos
+
+/**
+ * 168. Métodos .flat() e .flatMap()
+ */
+// Transforma arrays de múltiplos níveis em um só
+const countThree = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+console.log(countThree.flat());
+
+// para arrays com mais de um nível, use o argumento, que por padrão é 1
+const countMixed = [1, 2, 3, [4, 5, [6, 7]], [8, 9]];
+console.log(countMixed.flat()); // padrão é um nível
+console.log(countMixed.flat(2));
+
+// Exemplo: encontrar o saldo de todas as contas
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((sum, val) => val + sum, 0);
+
+console.log(`All accounts balance is ${overallBalance.toFixed(2)}\$`);
+
+// Método .flatMap() combina .flat().map() em uma única chamada
+const overallBalanceFlatMap = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((sum, val) => val + sum, 0);
+
+console.log(`All accounts balance is ${overallBalance.toFixed(2)}\$`);
