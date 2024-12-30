@@ -239,6 +239,39 @@ btnTransfer.addEventListener('click', function (event) {
   calcDisplaySummary(currentAccount);
 });
 
+/**
+ * 165. O método .findIndex()
+ */
+
+// Similar ao método .find(), mas retorna o índice do elemento achado
+btnClose.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  const user = inputCloseUsername.value;
+  inputCloseUsername.value = '';
+  inputCloseUsername.blur();
+
+  const pin = Number(inputClosePin.value);
+  inputClosePin.value = '';
+  inputClosePin.blur();
+
+  // Validação de campos de entrada
+  if (currentAccount.username !== user || currentAccount.pin !== pin) {
+    console.log('Invalid account or password!');
+    return;
+  }
+
+  // Deletar conta
+  const index = accounts.findIndex(
+    acc => acc.username === currentAccount.username
+  );
+  accounts.splice(index, 1);
+
+  // Esconde UI
+  currentAccount = null;
+  containerApp.style.opacity = 0;
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
