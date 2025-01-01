@@ -896,3 +896,48 @@ const groupedAccounts = Object.groupBy(accounts, account => {
 });
 
 console.table(groupedAccounts);
+
+/**
+ * 172. Mais maneiras de criar e preencher arrays
+ */
+// Maneiras de criar um array de modo automático
+
+// 1. Array vazio com .fill()
+// O array vai ser preenchido com a quantidade de "elementos vazios"
+const arrEmpty = new Array(7);
+
+console.log(arrEmpty);
+// Arrays criados desta forma só podem ser preenchidos com o método .fill()
+// Nenhum outro método funciona
+
+// O método .fill() preenche o array com o argumento, mutando o array e retornando
+arrEmpty.fill(7);
+console.log(arrEmpty);
+
+// É possível especificar início e final como segundo e terceiro argumentos
+console.log(new Array(10).fill('x', 2)); // preenche a partir do terceiro elemento com 'x'
+console.log(new Array(10).fill('y', 1, 4)); // preenche desde o segundo até o quarto elemento com 'y'
+console.log(new Array(10).fill('z', -2)); // preenche os dois últimos elementos com 'z'
+
+// 2. Array.from()
+// Recebe um objeto com a propriedade .length e uma função callback
+// A função callback recebe três argumentos, similar ao callback da função .map(): elemento, índice e o array
+const sevenOnes = Array.from({ length: 7 }, () => 1); // sete uns
+console.log(sevenOnes);
+
+const countToSeven = Array.from({ length: 7 }, (_, index) => index + 1); // de um a sete
+console.log(countToSeven);
+
+const twoPots = Array.from({ length: 11 }, (_, index) => Math.pow(2, index)); // potências de dois de zero a dez
+console.log(twoPots);
+
+// Exemplo: Calcular a soma das transações de acordo com os valores na tela, quando clicar no balanço total
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'), // Recupera todos os valores na tela
+    elem => Number.parseInt(elem.textContent) // Converte até achar um símbolo que não possa converter
+  );
+  console.log(
+    `The sum of all is ${movementsUI.reduce((sum, value) => sum + value, 0)}.`
+  );
+});
