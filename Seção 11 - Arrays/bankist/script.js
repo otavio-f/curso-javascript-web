@@ -738,3 +738,99 @@ const overallBalanceFlatMap = accounts
   .reduce((sum, val) => val + sum, 0);
 
 console.log(`All accounts balance is ${overallBalance.toFixed(2)}\$`);
+
+/**
+ * 169. Desafio de código #4
+ */
+
+// DADOS
+const breeds = [
+  {
+    breed: 'German Shepherd',
+    averageWeight: 32,
+    activities: ['fetch', 'swimming'],
+  },
+  {
+    breed: 'Dalmatian',
+    averageWeight: 24,
+    activities: ['running', 'fetch', 'agility'],
+  },
+  {
+    breed: 'Labrador',
+    averageWeight: 28,
+    activities: ['swimming', 'fetch'],
+  },
+  {
+    breed: 'Beagle',
+    averageWeight: 12,
+    activities: ['digging', 'fetch'],
+  },
+  {
+    breed: 'Husky',
+    averageWeight: 26,
+    activities: ['running', 'agility', 'swimming'],
+  },
+  {
+    breed: 'Bulldog',
+    averageWeight: 36,
+    activities: ['sleeping'],
+  },
+  {
+    breed: 'Poodle',
+    averageWeight: 18,
+    activities: ['agility', 'fetch'],
+  },
+];
+
+// 1. Armazene o peso médio de um husky em uma variável "huskyWeight"
+const huskyWeight = breeds.find(breed => breed.breed === 'Husky').averageWeight;
+
+console.log(`Average husky weight: ${huskyWeight}`);
+
+// 2. Ache o nome da raça que goste de correr e buscar
+const runFetcher = breeds.find(
+  breed =>
+    breed.activities.includes('running') && breed.activities.includes('fetch')
+);
+
+console.log(`Dog who likes running and fetching: ${runFetcher.breed}`);
+
+// 3. Crie um array com todas as atividades de todos os cachorros
+const allActivities = breeds.map(breed => breed.activities).flat();
+
+console.log(`All activities: ${allActivities}`);
+
+// 4. Crie um array com atividades únicas
+const uniqueActivities = new Set(allActivities);
+
+console.log(`All unique activities: ${[...uniqueActivities]}`);
+
+// 5. Obtenha as outras atividades de cachorros que gostam de nadar
+const swimmingAdjacent = breeds
+  .filter(breed => breed.activities.includes('swimming'))
+  .map(breed => breed.activities)
+  .flat()
+  .filter(activity => activity !== 'swimming');
+
+console.log(`Swimming adjacent activities: ${swimmingAdjacent}`);
+
+// 6. Verifique se todas as raças de cachorro tem um peso médio de pelo menos 10Kg
+const allWeighsAtLeast = breeds.every(breed => breed.averageWeight > 10);
+
+console.log(
+  `Do all breeds weight at least 10kg? ${allWeighsAtLeast ? 'Yes' : 'No'}.`
+);
+
+// 7. Verifique se existe alguma raça de cachorro que seja ativa
+const anyActive = breeds.some(breed => breed.activities.length >= 3);
+console.log(`Is there any breed that is active? ${anyActive ? 'Yes' : 'No'}.`);
+
+// Bonus: Achar o peso da raça mais pesada que goste de buscar
+const heaviestFetcher = breeds
+  .filter(breed => breed.activities.includes(fetch))
+  .reduce(
+    (maxWeight, breed) => Math.max(breed.averageWeight > maxWeight),
+    breeds[0].averageWeight
+  );
+
+console.log(`Heaviest weight of breed that likes to fetch: ${heaviestFetcher}`);
