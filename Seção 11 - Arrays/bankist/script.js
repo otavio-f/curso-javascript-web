@@ -872,3 +872,27 @@ console.log(movementsAscending);
 const movementsDescending = [...movements].sort((a, b) => (a < b ? 1 : -1));
 // const movementsDescending = [...movements].sort((a, b) => a + b); // só precisa retornar um positivo ou negativo
 console.log(movementsDescending);
+
+/**
+ * 171. Agrupamento de arrays
+ */
+// Função Object.groupBy() permite agrupar elementos com base em uma condição
+// Atenção: Função muito nova (ES2024)
+
+// Exemplo: Agupar movimentação por depósito ou saque
+const groupedMovements = Object.groupBy(movements, amount =>
+  amount > 0 ? 'deposits' : 'withdrawals'
+);
+// Os elementos são agrupados em um objeto com os grupos como propriedades
+console.table(groupedMovements);
+
+// Exemplo: Agrupar contas pela quantidade de movimentações: muito ativa, ativa, moderada, inativa
+const groupedAccounts = Object.groupBy(accounts, account => {
+  const count = account.movements.length;
+  if (count >= 8) return 'very active';
+  if (count >= 4) return 'active';
+  if (count >= 1) return 'moderate';
+  return 'inactive';
+});
+
+console.table(groupedAccounts);
