@@ -941,3 +941,32 @@ labelBalance.addEventListener('click', function () {
     `The sum of all is ${movementsUI.reduce((sum, value) => sum + value, 0)}.`
   );
 });
+
+/**
+ * 173. Alternativas não destrutivas de alguns métodos
+ */
+
+// .toReversed(): Alternativa a .reverse()
+const movementsCopy = Array.from(movements);
+console.log(movements.toReversed(), movements);
+
+// .toSorted(): Alternativa a .sort()
+console.log(
+  movements.toSorted((a, b) => a - b), // ordem ascendente
+  movements
+);
+
+// .toSpliced(): Alternativa a .splice()
+// .splice() modifica o array e retorna os elementos removidos, enquanto .toSpliced() só retorna o array modificado
+console.log(
+  movements.toSpliced(1, 2), // Remove dois elementos a partir do segundo
+  movements
+);
+
+// .with(): Alternativa a atribuição de índice
+// Recebe dois argumentos: o índice e o novo valor
+// Retorna o novo array
+console.log(
+  movements.with(1, 9000), // substitui o segundo elemento por '9000'
+  movements
+);
