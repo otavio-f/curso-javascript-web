@@ -69,11 +69,15 @@ const inputClosePin = document.querySelector('.form__input--pin');
  * Insere a movimentação da conta na página
  * @param {[Number]} movements A lista com a movimentação da conta do usuário
  */
-function displayMovements(movements) {
+function displayMovements(movements, sort = false) {
   // limpa o elemento
   containerMovements.innerHTML = '';
+
+  // ordena o array se for necessário
+  const arr = sort ? [...movements].sort((a, b) => a - b) : movements;
+
   // insere valores
-  movements.forEach(function (amount, i) {
+  arr.forEach(function (amount, i) {
     const type = amount > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${
@@ -87,8 +91,6 @@ function displayMovements(movements) {
     containerMovements.insertAdjacentHTML('afterBegin', html);
   });
 }
-
-// displayMovements(account1.movements); //movido
 
 /**
  * 156. Computing Usernames
@@ -140,8 +142,6 @@ function calcDisplaySummary(account) {
     .reduce((total, amount) => total + amount, 0); // soma ganhos
   labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
 }
-
-// calcDisplaySummary(account1.movements);
 
 /**
  * 163. Implementando login
@@ -302,6 +302,19 @@ btnLoan.addEventListener('click', function (event) {
   displayMovements(currentAccount.movements);
   calcDisplayBalance(currentAccount.movements);
   calcDisplaySummary(currentAccount);
+});
+
+/**
+ * 170. Ordenando arrays parte 2
+ */
+// Mudar a classe do botão ao invés de usar variáveis parece melhor
+// Por outro lado, adicionar dois event listeners pra mesma função não parece bom
+let sortMovements = false;
+
+btnSort.addEventListener('click', function (event) {
+  event.preventDefault();
+  sortMovements = !sortMovements; // inverte o valor
+  displayMovements(currentAccount.movements, sortMovements);
 });
 
 /////////////////////////////////////////////////
@@ -834,3 +847,28 @@ const heaviestFetcher = breeds
   );
 
 console.log(`Heaviest weight of breed that likes to fetch: ${heaviestFetcher}`);
+
+/**
+ * 170. Ordenando arrays
+ */
+
+// Ordena um array, mutando o array original e retornando o array ordenado
+const owners = ['Jonas', 'Zack', 'Adam', 'Anna'];
+console.log(owners.sort());
+
+// .sort() ordena arrays baseado em strings
+// cada valor é convertido para string e então comparado
+// isso significa que arrays com números podem acabar com a ordem errada
+const movementsWrongOrder = [...movements].sort();
+console.log(movementsWrongOrder);
+
+// para ordenar outros tipos corretamente, a função recebe uma função comparadora
+// a função comparadora por sua vez recebe dois argumentos: um elemento e o elemento imediatamente posterior a ele
+// a função deve retornar um valor negativo ou um positivo similar ao .compareTo() do java
+const movementsAscending = [...movements].sort((a, b) => (a > b ? 1 : -1));
+// const movementsAscending = [...movements].sort((a, b) => a - b); // só precisa retornar um positivo ou negativo
+console.log(movementsAscending);
+
+const movementsDescending = [...movements].sort((a, b) => (a < b ? 1 : -1));
+// const movementsDescending = [...movements].sort((a, b) => a + b); // só precisa retornar um positivo ou negativo
+console.log(movementsDescending);
