@@ -81,171 +81,260 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+/**
+ * 152. Criando elementos DOM
+ */
+
+/**
+ * Insere a movimentação da conta na página
+ * @param {[Number]} movements A lista com a movimentação da conta do usuário
+ */
+function displayMovements(movements, sort = false) {
+  // limpa o elemento
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  // ordena o array se for necessário
+  const arr = sort ? [...movements].sort((a, b) => a - b) : movements;
 
-  movs.forEach(function (mov, i) {
-    const type = mov > 0 ? 'deposit' : 'withdrawal';
-
-    const html = `
-      <div class="movements__row">
-        <div class="movements__type movements__type--${type}">${
+  // insere valores
+  arr.forEach(function (amount, i) {
+    const type = amount > 0 ? 'deposit' : 'withdrawal';
+    const html = `<div class="movements__row">
+          <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
-      </div>
-    `;
-
-    containerMovements.insertAdjacentHTML('afterbegin', html);
+          <div class="movements__date">3 days ago</div>
+          <div class="movements__value">${amount}€</div>
+        </div>
+`;
+    // insere elemento dentro do elemento, na primeira posição
+    containerMovements.insertAdjacentHTML('afterBegin', html);
   });
-};
+}
 
-const calcDisplayBalance = function (acc) {
-  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
-};
+/**
+ * 156. Computing Usernames
+ */
 
-const calcDisplaySummary = function (acc) {
-  const incomes = acc.movements
-    .filter(mov => mov > 0)
-    .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
-
-  const out = acc.movements
-    .filter(mov => mov < 0)
-    .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
-
-  const interest = acc.movements
-    .filter(mov => mov > 0)
-    .map(deposit => (deposit * acc.interestRate) / 100)
-    .filter((int, i, arr) => {
-      // console.log(arr);
-      return int >= 1;
-    })
-    .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
-};
-
-const createUsernames = function (accs) {
-  accs.forEach(function (acc) {
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(' ')
-      .map(name => name[0])
-      .join('');
+/**
+ * Cria um nome de usuário em cada conta
+ * @param {[Object]} accounts
+ */
+function createUsernames(accounts) {
+  accounts.forEach(function (acc, index, arr) {
+    const initials = acc.owner.split(' ').map(name => name[0]); // separa palavras e pega a primeira letra
+    acc.username = initials.join('').toLowerCase(); // junta as letras e coloca em caixa baixa
   });
-};
+}
+
 createUsernames(accounts);
 
-const updateUI = function (acc) {
-  // Display movements
-  displayMovements(acc.movements);
+/**
+ * 158. Método .reduce() parte 2
+ */
 
-  // Display balance
-  calcDisplayBalance(acc);
+function calcDisplayBalance(movements) {
+  const balance = movements.reduce((acc, amount) => acc + amount, 0); // calcula o balanço
+  labelBalance.textContent = `${balance}€`;
+}
 
-  // Display summary
-  calcDisplaySummary(acc);
-};
+// calcDisplayBalance(account1.movements);
 
-///////////////////////////////////////
-// Event handlers
+/**
+ * 160. A mágica de encadear métodos parte 2
+ */
+function calcDisplaySummary(account) {
+  const totalIn = account.movements
+    .filter(amount => amount > 0) // filtra depósitos
+    .reduce((total, amount) => total + amount, 0); // soma tudo
+  labelSumIn.textContent = `${totalIn}€`;
+
+  const totalOut = account.movements
+    .filter(amount => amount < 0) // filtra retiradas
+    .reduce((total, amount) => total + amount, 0); // soma tudo
+  labelSumOut.textContent = `${Math.abs(totalOut)}€`; // mostra sem o sinal
+
+  const interest = account.interestRate / 100;
+  const earnings = account.movements
+    .filter(amount => amount > 0) // filtra depósitos
+    .map(deposit => deposit * interest) // aplica taxa de juros
+    .filter(earning => earning >= 1) // só inclui ganhos maiores que 1
+    .reduce((total, amount) => total + amount, 0); // soma ganhos
+  labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
+}
+
+/**
+ * 163. Implementando login
+ */
+
 let currentAccount;
 
-btnLogin.addEventListener('click', function (e) {
-  // Prevent form from submitting
-  e.preventDefault();
+btnLogin.addEventListener('click', function (event) {
+  event.preventDefault(); // impede form de submeter e recarregar a página
 
+  // Confere usuário e pin
   currentAccount = accounts.find(
-    acc => acc.username === inputLoginUsername.value
+    account =>
+      account.username === inputLoginUsername.value &&
+      account.pin === Number(inputLoginPin.value)
   );
   console.log(currentAccount);
 
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    // Display UI and message
-    labelWelcome.textContent = `Welcome back, ${
-      currentAccount.owner.split(' ')[0]
-    }`;
-    containerApp.style.opacity = 100;
+  // Limpa os campos de entrada e tira o foco
+  inputLoginUsername.value = '';
+  inputLoginUsername.blur();
+  inputLoginPin.value = '';
+  inputLoginPin.blur();
 
-    // Clear input fields
-    inputLoginUsername.value = inputLoginPin.value = '';
-    inputLoginPin.blur();
-
-    // Update UI
-    updateUI(currentAccount);
+  // Login falhou, não continue
+  if (!currentAccount) {
+    // if (currentAccount === undefined) {
+    containerApp.style.opacity = 0; // esconde UI
+    return;
   }
+
+  // Mostra mensagem de boas vindas e UI
+  labelWelcome.textContent = `Welcome back, ${
+    currentAccount.owner.split(' ')[0]
+  }`;
+  containerApp.style.opacity = 100;
+
+  // Mostra movimentação
+  displayMovements(currentAccount.movements);
+
+  // Mostra extrato
+  calcDisplayBalance(currentAccount.movements);
+
+  // Mostra resumo
+  calcDisplaySummary(currentAccount);
 });
 
-btnTransfer.addEventListener('click', function (e) {
-  e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
-  const receiverAcc = accounts.find(
+/**
+ * 164. Implementando transferências
+ */
+
+btnTransfer.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  // Validar destino
+  const destinationAccount = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
-  inputTransferAmount.value = inputTransferTo.value = '';
+  inputTransferTo.value = ''; // limpa campo
+  inputTransferTo.blur();
+
+  // Validar quantidade
+  const amount = Number(inputTransferAmount.value);
+  inputTransferAmount.value = ''; // limpa campo
+  inputTransferAmount.blur();
+
+  // Validação
+  if (destinationAccount === undefined) {
+    // Destino não existe
+    console.log("Account doesn't exist");
+    return;
+  }
+  if (Number.isNaN(amount)) {
+    // Quantidade é inválida
+    console.log('Is not a valid amount.');
+    return;
+  }
 
   if (
-    amount > 0 &&
-    receiverAcc &&
-    currentAccount.balance >= amount &&
-    receiverAcc?.username !== currentAccount.username
+    amount <= 0 || // quantidade negativa
+    currentAccount.movements.reduce((acc, value) => value + acc, 0) < amount || // saldo insuficiente
+    destinationAccount.username === currentAccount.username // transferência pra mesma conta
   ) {
-    // Doing the transfer
-    currentAccount.movements.push(-amount);
-    receiverAcc.movements.push(amount);
-
-    // Update UI
-    updateUI(currentAccount);
+    console.log('Invalid amount, not enough balance or invalid destination.');
+    return;
   }
+
+  // Transferir
+  currentAccount.movements.push(-amount);
+  destinationAccount.movements.push(amount);
+
+  // Recarregar a interface com os novos valores
+  displayMovements(currentAccount.movements);
+  calcDisplayBalance(currentAccount.movements);
+  calcDisplaySummary(currentAccount);
 });
 
-btnLoan.addEventListener('click', function (e) {
-  e.preventDefault();
+/**
+ * 165. O método .findIndex()
+ */
 
+// Similar ao método .find(), mas retorna o índice do elemento achado
+btnClose.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  const user = inputCloseUsername.value;
+  inputCloseUsername.value = '';
+  inputCloseUsername.blur();
+
+  const pin = Number(inputClosePin.value);
+  inputClosePin.value = '';
+  inputClosePin.blur();
+
+  // Validação de campos de entrada
+  if (currentAccount.username !== user || currentAccount.pin !== pin) {
+    console.log('Invalid account or password!');
+    return;
+  }
+
+  // Deletar conta
+  const index = accounts.findIndex(
+    acc => acc.username === currentAccount.username
+  );
+  accounts.splice(index, 1);
+
+  // Esconde UI
+  currentAccount = null;
+  containerApp.style.opacity = 0;
+});
+
+/**
+ * 167. Métodos .some() e .every() parte 2
+ */
+btnLoan.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  // Obter quantidade
   const amount = Number(inputLoanAmount.value);
-
-  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
-
-    // Update UI
-    updateUI(currentAccount);
-  }
   inputLoanAmount.value = '';
-});
+  inputLoanAmount.blur();
 
-btnClose.addEventListener('click', function (e) {
-  e.preventDefault();
-
-  if (
-    inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === currentAccount.pin
-  ) {
-    const index = accounts.findIndex(
-      acc => acc.username === currentAccount.username
+  // Validar quantidade
+  if (Number.isNaN(amount) || amount <= 0) {
+    console.log('Invalid amount');
+    return;
+  }
+  if (!currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    console.log(
+      'You need to have a deposit with at least 10% of the requested loan.'
     );
-    console.log(index);
-    // .indexOf(23)
-
-    // Delete account
-    accounts.splice(index, 1);
-
-    // Hide UI
-    containerApp.style.opacity = 0;
+    return;
   }
 
-  inputCloseUsername.value = inputClosePin.value = '';
+  // Emprestar
+  currentAccount.movements.push(amount);
+
+  // Recarregar a interface com os novos valores
+  displayMovements(currentAccount.movements);
+  calcDisplayBalance(currentAccount.movements);
+  calcDisplaySummary(currentAccount);
 });
 
-let sorted = false;
-btnSort.addEventListener('click', function (e) {
-  e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
-  sorted = !sorted;
+/**
+ * 170. Ordenando arrays parte 2
+ */
+// Mudar a classe do botão ao invés de usar variáveis parece melhor
+// Por outro lado, adicionar dois event listeners pra mesma função não parece bom
+let sortMovements = false;
+
+btnSort.addEventListener('click', function (event) {
+  event.preventDefault();
+  sortMovements = !sortMovements; // inverte o valor
+  displayMovements(currentAccount.movements, sortMovements);
 });
 
 /////////////////////////////////////////////////
