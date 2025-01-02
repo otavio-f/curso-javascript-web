@@ -459,3 +459,28 @@ labelBalance.addEventListener('dblclick', function (event) {
     if (index % 2 === 0) row.style.backgroundColor = 'gainsboro'; //cinza clarinho
   });
 });
+
+/**
+ * 182. Separadores numéricos
+ */
+
+// Facilita a escrita de números grandes
+// Use underscore entre números. Javascript ignora.
+
+// Exemplo: Um bilhão
+const billion = 1_000_000_000;
+
+// coca cola de dez reais
+const cocacola2l = 10_00;
+
+// Atenção: Só use um underscore entre números!
+// Atenção: Não use no começo, nem no final, nem antes ou depois do ponto decimal! (heh, rimou)
+// const _E = 2._71828; // isso dá erro
+// const _E = 2_.71828; // isso dá erro
+// const _E = _2.71828; // isso dá erro
+// const _E = 2.71828_; // isso dá erro
+// const _E = 2.718__28; // isso dá erro
+const _E = 2.7_1_8_2_8; // não faz muito sentido, mas funciona
+
+// Atenção: Só use em literais numéricos! Conversão de literais string não vai funcionar!
+console.log(Number('69_900')); // NaN
