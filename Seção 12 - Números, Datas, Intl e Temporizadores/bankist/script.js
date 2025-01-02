@@ -442,3 +442,20 @@ console.log(Math.ceil(3.1)); // arredonda pra cima
 console.log(Math.PI.toFixed(2)); // Arredonda PI pra duas casas decimais
 console.log((2.7).toFixed(2)); // Adiciona zeros caso não tenha casas decimais suficientes
 console.log(+(1 / 3).toFixed(3)); // Pra ter um número, converta de volta
+
+/**
+ * 181. O operador restante
+ */
+
+console.log(5 % 4); // Retorna o restante de uma divisão
+
+const isEven = n => n % 2 === 0;
+console.log(isEven(180));
+
+// Exemplo: cores alternadas nas linhas de movimentação
+labelBalance.addEventListener('dblclick', function (event) {
+  event.preventDefault();
+  [...document.querySelectorAll('.movements__row')].forEach((row, index) => {
+    if (index % 2 === 0) row.style.backgroundColor = 'gainsboro'; //cinza clarinho
+  });
+});
