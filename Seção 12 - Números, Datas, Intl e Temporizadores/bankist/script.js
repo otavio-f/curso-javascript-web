@@ -484,3 +484,32 @@ const _E = 2.7_1_8_2_8; // não faz muito sentido, mas funciona
 
 // Atenção: Só use em literais numéricos! Conversão de literais string não vai funcionar!
 console.log(Number('69_900')); // NaN
+
+/**
+ * 183. Trabalhando com BigInt
+ */
+
+// Números são representados com 64 bits, nos quais 53 são usados para a parte inteira
+console.log(`The biggest integer is: ${Number.MAX_SAFE_INTEGER}`); // 2 ** 53 - 1
+
+// Números maiores podem não ser representados corretamente
+console.log(`MAX + 1: ${Number.MAX_SAFE_INTEGER + 1}`);
+console.log(`MAX + 2: ${Number.MAX_SAFE_INTEGER + 2}`);
+console.log(`MAX + 3: ${Number.MAX_SAFE_INTEGER + 3}`);
+
+// Para números maiores, use BigInt ou o sufixo n para literais
+console.log(`MAX * 2: ${BigInt(Number.MAX_SAFE_INTEGER) * 2n}`);
+
+// Atenção: Misturar números normais com BigInt não é permitido
+// const num = 2n * 2; // vai dar erro
+
+// Exceções são comparação e concatenação com string
+console.log(7 > 6n); // true
+console.log(10n === 10); // false, não são do mesmo tipo
+console.log(10n == 10); // true
+console.log(2n + ' is a BigInt');
+
+// Atenção: BigInt não possui casas decimais
+// Divisão sempre retorna números truncados
+console.log(10n / 3n); // 3n
+console.log(10 / 3);
