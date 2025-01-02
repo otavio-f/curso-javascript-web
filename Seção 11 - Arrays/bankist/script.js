@@ -1175,3 +1175,85 @@ console.log(
 );
 
 // Pulei aula 175 porque já fiz bastante prática na aula anterior
+
+/**
+ * 176. Desafio de código #5
+ */
+
+// DADOS
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John', 'Leo'] },
+  { weight: 18, curFood: 244, owners: ['Joe'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+// 1. Calcule a quantidade recomendada de comida para cada cachorro e adicione como uma nova propriedade
+dogs.forEach(dog => {
+  dog.recFood = dog.weight ** 0.75 * 28;
+});
+
+console.log(dogs);
+
+// 2. Ache o cachorro de Sarah e log se ele está comendo muito ou pouco
+const sarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
+const eatDiff = sarahDog.recFood - sarahDog.curFood;
+if (Math.abs(eatDiff) > 0.1 * sarahDog.recFood) {
+  console.log(`Sarah's dog is eating too ${eatDiff < 0 ? 'little' : 'much'}!`);
+} else {
+  console.log(`Sarah's dog is eating okay.`);
+}
+
+// 3. Arrays com donos de cachorros que comem demais e cachorros que comem pouco
+const ownersTooMuch = dogs
+  .filter(dog => dog.curFood > 1.1 * dog.recFood)
+  .flatMap(dog => dog.owners);
+
+console.log(ownersTooMuch);
+
+const ownersTooLittle = dogs
+  .filter(dog => dog.curFood < 0.9 * dog.recFood)
+  .flatMap(dog => dog.owners);
+
+console.log(ownersTooLittle);
+
+// 4. Formate e log para o console os arrays do exercício anterior
+console.log(ownersTooMuch.join(' and ') + "'s dogs eat too much!");
+
+console.log(ownersTooLittle.join(' and ') + "'s dogs eat too little!");
+
+// 5. Log para o console se há algum cachorro que coma a quantidade recomendada
+console.log(
+  dogs.some(dog => Math.abs(dog.recFood - dog.curFood) < 0.1 * dog.recFood)
+); // diferença absoluta de menos de 10%
+
+// 6. Log para o console se todos cachorros comem a quantidade recomendada
+console.log(
+  dogs.every(dog => Math.abs(dog.recFood - dog.curFood) < 0.1 * dog.recFood)
+); // diferença absoluta de menos de 10%
+
+// 7. Ache todos os cachorros que estão comendo a quantidade recomendada
+console.log(
+  dogs.filter(dog => Math.abs(dog.recFood - dog.curFood) < 0.1 * dog.recFood)
+); // diferença absoluta de menos de 10%
+
+// 8. Agrupe os cachorros em três grupos: 'exact', 'too little', 'too much'
+const dogsByFoodAmount = Object.groupBy(dogs, dog => {
+  if (dog.curFood > 1.1 * dog.recFood) return 'too-much';
+  if (dog.curFood < 0.9 * dog.recFood) return 'too-little';
+  return 'exact';
+});
+
+console.table(dogsByFoodAmount);
+
+// 9. Agrupe os cachorros pelo número de donos
+const dogsByOwnerAmount = Object.groupBy(dogs, dog => {
+  return String(dog.owners.length);
+});
+
+console.table(dogsByOwnerAmount);
+
+// 10. Ordene os cachorros pela quantidade recomendada de comida em ordem ascendente, sem modificar o array original
+const dogsAscendingFood = dogs.toSorted((a, b) => a.recFood - b.recFood);
+console.log(dogsAscendingFood);
