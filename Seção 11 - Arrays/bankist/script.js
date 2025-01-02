@@ -852,7 +852,7 @@ console.log(`Heaviest weight of breed that likes to fetch: ${heaviestFetcher}`);
  * 170. Ordenando arrays
  */
 
-// Ordena um array, mutando o array original e retornando o array ordenado
+// Ordena um array, modificando o array original e retornando o array ordenado
 const owners = ['Jonas', 'Zack', 'Adam', 'Anna'];
 console.log(owners.sort());
 
@@ -910,7 +910,7 @@ console.log(arrEmpty);
 // Arrays criados desta forma só podem ser preenchidos com o método .fill()
 // Nenhum outro método funciona
 
-// O método .fill() preenche o array com o argumento, mutando o array e retornando
+// O método .fill() preenche o array com o argumento, modificando o array e retornando
 arrEmpty.fill(7);
 console.log(arrEmpty);
 
@@ -969,4 +969,207 @@ console.log(
 console.log(
   movements.with(1, 9000), // substitui o segundo elemento por '9000'
   movements
+);
+
+/**
+ * 174. Resumo: Qual método usar
+ */
+
+const numbers = [0, -31, -1, -1, 40, 1996, 999];
+let result;
+
+// 1. Métodos para modificar arrays
+let numbers2 = Array.from(numbers);
+
+// .push(valor): Adiciona um elemento ao final do array
+numbers2.push(440);
+console.log(`.push(440): ${numbers2}`);
+
+// .unshift(valor): Adiciona um elemento no começo do array
+numbers2 = Array.from(numbers);
+numbers2.unshift(440);
+console.log(`.unshift(440): ${numbers2}`);
+
+// .pop(): Remove último elemento
+numbers2 = Array.from(numbers);
+result = numbers2.pop();
+console.log(`.pop(): ${numbers2} [${result}]`);
+
+// .shift(): Remove primeiro elemento
+numbers2 = Array.from(numbers);
+result = numbers2.shift();
+console.log(`.shift(): [${result}] ${numbers2}`);
+
+// .splice(início, quantidade): Remove alguns elementos seguidos
+numbers2 = Array.from(numbers);
+result = numbers2.splice(2, 2); // remove dois elementos a partir do terceiro (terceiro e quarto)
+console.log(`.splice(2, 2): [${result}] ${numbers2}`);
+
+// .reverse(): Inverte o array
+numbers2 = Array.from(numbers);
+numbers2.reverse();
+console.log(`.reverse(): ${numbers2}`);
+
+// .sort(callback(elemento, elemento2)): Ordena o array
+numbers2 = Array.from(numbers);
+numbers2.sort((a, b) => a - b); // ordem ascendente
+console.log(`.sort(ascending): ${numbers2}`);
+
+// .fill(valor, início, fim): Preenche com elemento
+numbers2 = Array.from(numbers);
+numbers2.fill('"2"', 2, -1); // Preenche com dois (string) dois elementos a partir do segundo elemento até o penúltimo
+console.log(`.fill("2", 2, -1): ${numbers2}`);
+
+// 2. Novo array baseado no original
+
+// .map(callback(elemento, índice, array)): Transforma cada elemento
+result = numbers.map(value => value * 2); // dobra o valor
+console.log(`.map(double): ${result}`);
+
+// .filter(callback(elemento, indice, array)): Filtra de elementos
+result = numbers.filter(value => value % 2 === 0); // somente pares
+console.log(`.filter(even): ${result}`);
+
+// .slice(início, fim): Copia uma seção do array
+result = numbers.slice(1, -1); // do segundo ao penúltimo
+console.log(`.slice(second to prev last): ${result}`);
+
+// .with(índice, valor): Copia o array, substituindo um valor
+result = numbers.with(0, 1_000_000); // substitui primeiro por um milhão
+console.log(`.with(first is million): ${result}`);
+
+// .flat(dimensões): Reduz arrays multidimensionais para unidimensionais
+result = [
+  [0, 1],
+  [2, 3],
+].flat();
+console.log(`[\n\t[0, 1],\n\t[2, 3]\n].flat(): [${result}]`);
+
+// .flatMap(callback(elemento, índice, array)): Aplica uma transformação e reduz as dimensões (deveria ser mapFlat então, não?)
+result = [
+  [0, 1],
+  [2, 3],
+].flatMap(([first, second]) => [first + 10, second * 10]);
+console.log(
+  `[\n\t[0, 1],\n\t[2, 3]\n].flatMap(add ten to first, ten times the second): [${result}]`
+);
+
+// .toReversed(): Inverte um array
+result = numbers.toReversed();
+console.log(`.toReversed(): ${result}`);
+
+// .sort(callback(elemento, elemento2)): Ordena o array
+result = numbers.toSorted((a, b) => a + b); // decrescente
+console.log(`.sort(descending): ${result}`);
+
+// .toSpliced(início, quantidade): Remove alguns elementos seguidos
+result = numbers.toSpliced(2, 2); // remove dois elementos a partir do terceiro (terceiro e quarto)
+console.log(`.toSpliced(2, 2): [${result}]`);
+
+// .concat(outro): Concatena dois arrays (primeiro + outro)
+result = numbers.concat([1, 2, 3]);
+console.log(`.concat([1, 2, 3]): [${result}]`);
+
+// 3. Encontrar índices
+
+// .indexOf(elemento): ìndice da primeira ocorrência de um elemento no array
+result = numbers.indexOf(40);
+console.log(`.indexOf(40): ${result} (${numbers[result]})`);
+
+// .findIndex(callback(valor, índice, array)): ìndice da primeira ocorrência de um elemento que obedece a condição
+result = numbers.findIndex(value => value % 2 == 1);
+console.log(`.findIndex(odd): ${result} (${numbers[result]})`);
+
+// .findLastIndex(callback(valor, índice, array)): ìndice da última ocorrência de um elemento que obedece a condição
+result = numbers.findLastIndex(value => value % 2 == 1);
+console.log(`.findLastIndex(odd): ${result} (${numbers[result]})`);
+
+// 4. Encontrar elementos
+
+// .at(índice): Elemento na posição do índice
+result = numbers.at(2); // tercero
+console.log(`.at(2): ${result}`);
+
+// .find(callback(valor, índice, array)): primeira ocorrência de um elemento que obedece a condição
+result = numbers.find(value => value < 0);
+console.log(`.find(negative): ${result}`);
+
+// .findLast(callback(valor, índice, array)): última ocorrência de um elemento que obedece a condição
+result = numbers.findLast(value => value < 0);
+console.log(`.findLast(negative): ${result}`);
+
+// 5. Testar condição
+
+// .includes(valor): Verifica se o array contém o valor
+result = numbers.includes(4000);
+console.log(`.includes(4000)? ${result ? 'Yes' : 'No'}.`);
+
+// .some(callback(valor, índice, array)): Verifica se pelo menos um elemento obedece a condição
+result = numbers.some(value => value > 1000); //algum valor maior que mil?
+console.log(`.some(bigger than a thousand)? ${result ? 'Yes' : 'No'}.`);
+
+// .every(callback(valor, índice, array)): Verifica se pelo menos um elemento obedece a condição
+result = numbers.every(value => value < 1_000_000); //todos são menores que um milhão?
+console.log(`.every(smaller than a million)? ${result ? 'Yes' : 'No'}.`);
+
+// 6. Resumir para outro tipo
+
+// .join(separador): Transforma para uma string usando o separador entre os elementos
+result = numbers.join('---');
+console.log(`.join("---"): ${result}`);
+
+// .reduce(
+//        callback(acumulador, valor, índice, array),
+//        valorInicialDoAcumulador): Reduz para um valor através de uma transformação
+result = numbers.reduce(
+  (max, value) => (value > max && value < 0 ? value : max),
+  -1
+); // valor máximo negativo
+console.log(`.reduce(maximum negative): ${result}`);
+
+// 7. Iterar
+
+// .forEach(callback(valor, índice, array)): Aplica uma função a cada elemento
+console.log(`.forEach(print each item, its index and the array):`);
+numbers.forEach((value, index, array) =>
+  console.log(`${value} at ${index} from [${array}]`)
+);
+
+// 8. Outras operações
+
+// Object.groupBy(array, callback(elemento, índice)): Agrupa elementos em um objeto
+result = Object.groupBy(numbers, (value, index) => {
+  if (value < 0) return 'negative';
+  if (value > 100) return 'high';
+  return 'normal';
+});
+
+console.log("Object.groupBy('negative', 'normal', 'high'):");
+console.table(result);
+
+// Array.from(tamanho): Cria um array de posições vazias
+result = Array.from(5);
+console.log(`Array.from(5): ${result}.`);
+
+// Array.from(iterável): Cria um array a partir do iterável
+result = Array.from('Sample Text');
+console.log(`Array.from("Sample Text"): ${result}.`);
+
+// Array.from({length: tamanho}, callback(_, índice)): Cria um array e preenche com uma função
+result = Array.from({ length: 10 }, (_, index) => 100 - index); // Contagem regressiva de 100
+console.log(`Array.from(length 10, countdown from a hundred): ${result}.`);
+
+// Operador spread: Espalha elementos como se fossem digitados um a um
+result = [...numbers, '---', ...numbers];
+console.log(`[...numbers, "---", ...numbers]: ${result}.`);
+
+// new Set pra Lista: Obtém valores únicos
+result = [...new Set(numbers)];
+console.log(`[...set of numbers]: ${result}.`);
+
+// interseção de new Set pra Lista: Obtém valores únicos comuns a duas listas
+numbers2 = [3131, 41, 0, 1996];
+result = [...new Set(numbers).intersection(new Set(numbers2))];
+console.log(
+  `[...set of numbers, intersection with [3131, 41, 0, 1996] ]: ${result}.`
 );
