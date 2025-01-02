@@ -104,7 +104,7 @@ function displayMovements(movements, sort = false) {
       i + 1
     } ${type}</div>
           <div class="movements__date">3 days ago</div>
-          <div class="movements__value">${amount}€</div>
+          <div class="movements__value">${amount.toFixed(2)}€</div>
         </div>
 `;
     // insere elemento dentro do elemento, na primeira posição
@@ -135,7 +135,7 @@ createUsernames(accounts);
 
 function calcDisplayBalance(movements) {
   const balance = movements.reduce((acc, amount) => acc + amount, 0); // calcula o balanço
-  labelBalance.textContent = `${balance}€`;
+  labelBalance.textContent = `${balance.toFixed(2)}€`;
 }
 
 // calcDisplayBalance(account1.movements);
@@ -147,12 +147,12 @@ function calcDisplaySummary(account) {
   const totalIn = account.movements
     .filter(amount => amount > 0) // filtra depósitos
     .reduce((total, amount) => total + amount, 0); // soma tudo
-  labelSumIn.textContent = `${totalIn}€`;
+  labelSumIn.textContent = `${totalIn.toFixed(2)}€`;
 
   const totalOut = account.movements
     .filter(amount => amount < 0) // filtra retiradas
     .reduce((total, amount) => total + amount, 0); // soma tudo
-  labelSumOut.textContent = `${Math.abs(totalOut)}€`; // mostra sem o sinal
+  labelSumOut.textContent = `${Math.abs(totalOut).toFixed(2)}€`; // mostra sem o sinal
 
   const interest = account.interestRate / 100;
   const earnings = account.movements
@@ -299,7 +299,8 @@ btnLoan.addEventListener('click', function (event) {
   event.preventDefault();
 
   // Obter quantidade
-  const amount = Number(inputLoanAmount.value);
+  // const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value); // arredonda pra baixo (Aula 180)
   inputLoanAmount.value = '';
   inputLoanAmount.blur();
 
@@ -395,3 +396,49 @@ console.log(Number.isInteger('abcd')); // false, nem é um número!
 console.log(Number.isInteger(0 / 0)); // false
 console.log(Number.isInteger(1 / 0)); // false
 console.log(Number.isInteger(+'abcd')); // false
+
+/**
+ * 180. Matemática e arredondamento
+ */
+
+// Raiz quadrada
+console.log(Math.sqrt(2));
+console.log(2 ** (1 / 2)); // Potência fracionária também funciona
+
+// Máximo e mínimo
+console.log(Math.max(-Infinity, 26 / 31, 9, 41, 0.12, '991', -1)); // Cada valor é um argumento, e faz coerção de tipo
+console.log(Math.max(1 / 4, 26 / 31, 9, 41, 0.12, '991a', -1)); // Se a conversão de algum valor não foi possível, retorna NaN (toda operação involvendo NaN resulta em NaN)
+console.log(Math.max(1 / 4, 26 / 31, 9, 41, 0.12, NaN, -1)); // Se ocorrer algum NaN, retorna NaN (toda operação involvendo NaN resulta em NaN)
+
+console.log(Math.min(32, 0x41, 0b110, '1', 0.99, 327 / 17, 8 / 9)); // Mesmas regras de Math.max()
+
+// Constantes
+console.log(Math.PI * 9 ** 2); // pirraio ao quadrado, fórmula da área do círculo
+
+// Números Aleatórios
+console.log(Math.random()); // Número aleatório entre 0 e 1
+
+/**
+ * Gera um número aleatório no intervalo
+ * @param {Number} from Valor mínimo
+ * @param {Number} to Valor máximo
+ * @returns Um número aleatório no intervalo from-to (inclusivo)
+ */
+function randInt(from, to) {
+  return from + Math.trunc(Math.random() * (1 + to - from));
+}
+
+console.log(randInt(5, 10));
+console.log(randInt(5, 10));
+
+// Arredondamento
+console.log(Math.trunc(23.3)); // remove a parte fracionária
+console.log(Math.floor(23.3)); // rarredonda pra baixo. Decrementa números negativos, enquanto trunc não decrementa
+console.log(Math.round(1.5)); // arredondamento normal
+console.log(Math.ceil(3.1)); // arredonda pra cima
+
+// Arredondamento ponto flutuante
+// Atenção: .toFixed() retorna string!!!
+console.log(Math.PI.toFixed(2)); // Arredonda PI pra duas casas decimais
+console.log((2.7).toFixed(2)); // Adiciona zeros caso não tenha casas decimais suficientes
+console.log(+(1 / 3).toFixed(3)); // Pra ter um número, converta de volta
