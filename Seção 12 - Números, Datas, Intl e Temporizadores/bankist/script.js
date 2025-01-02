@@ -340,3 +340,58 @@ btnSort.addEventListener('click', function (event) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+/**
+ * 179. Convertendo e verificando números
+ */
+
+// números são sempre ponto flutuante, formato binário de 64 bits
+console.log(23.0 === 23);
+
+// a representação binária pode introduzir erro de arredondamento
+console.log(0.1 + 0.2); //deveria ser 0.3, não 0.30000000000000004
+console.log(0.1 + 0.2 === 0.3); // deveria ser verdadeiro
+
+// convertendo strings para números
+console.log(Number('222')); // Maneira padrão usando conversor explícito
+console.log(+'222'); // Maneira alternativa usando coerção de tipo
+// No projeto, não vou substituir pela versão curta
+
+console.log(Number.parseInt('222')); // Outra maneira usando a função
+console.log(Number.parseInt('310$999')); // Para no primeiro símbolo que não consegue converter e descarta o resto: 310
+console.log(Number.parseInt('a913')); // não consegue converter se o primeiro símbolo não for válido, retorna NaN
+
+// Também é possível especificar uma base alternativa pelo segundo argumento
+console.log(Number.parseInt('0xff', 16)); //255
+console.log(Number.parseInt('77', 8)); // também funciona sem o prefixo: 255
+
+// Versão para ponto flutuante: Number.parseFloat()
+console.log(Number.parseFloat('0.111'));
+console.log(Number.parseFloat('.111')); // iniciando com ponto é equivalente a iniciar com zero
+console.log(Number.parseFloat('1.0')); // Inteiro
+console.log(Number.parseFloat('0.41x0.35')); // Para no primeiro símbolo que não consegue converter e descarta o resto: 0.41
+console.log(Number.parseFloat('a.913')); // não consegue converter se o primeiro símbolo não for válido, retorna NaN
+
+// Number.isNaN(): verifica se o valor é um número
+console.log(Number.isNaN(42)); // false, é um número
+console.log(Number.isNaN('abcd')); // false, não é um número válido
+console.log(Number.isNaN(0 / 0)); // true, 0/0 === NaN
+console.log(Number.isNaN(1 / 0)); // false, qualquer coisa/0 === Infinite
+console.log(Number.isNaN(Number('abcd'))); // true, Number() retorna NaN quando a conversão falha
+
+// Number.isFinite(): verifica se o valor é um número finito (não Infinite nem NaN)
+console.log(Number.isFinite(1)); // true
+console.log(Number.isFinite(1 / 3)); // true
+console.log(Number.isFinite('abcd')); // false, nem é um número!
+console.log(Number.isFinite(0 / 0)); // false
+console.log(Number.isFinite(1 / 0)); // false
+console.log(Number.isFinite(+'abcd')); // false
+
+// Number.isInteger(): verifica se o valor é um inteiro
+console.log(Number.isInteger(1)); // true
+console.log(Number.isInteger(1 / 3)); // false
+console.log(Number.isInteger('1')); // false, ainda não é número!
+console.log(Number.isInteger('abcd')); // false, nem é um número!
+console.log(Number.isInteger(0 / 0)); // false
+console.log(Number.isInteger(1 / 0)); // false
+console.log(Number.isInteger(+'abcd')); // false
