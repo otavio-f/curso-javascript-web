@@ -1173,3 +1173,5 @@ result = [...new Set(numbers).intersection(new Set(numbers2))];
 console.log(
   `[...set of numbers, intersection with [3131, 41, 0, 1996] ]: ${result}.`
 );
+
+// Pulei aula 175 porque já fiz bastante prática na aula anterior
