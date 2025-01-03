@@ -513,3 +513,37 @@ console.log(2n + ' is a BigInt');
 // Divisão sempre retorna números truncados
 console.log(10n / 3n); // 3n
 console.log(10 / 3);
+
+/**
+ * 184. Criando datas
+ */
+
+// Criar uma data do momento atual
+console.log(new Date()); // data e hora nesse exato momento
+
+// A partir de uma data e hora
+console.log(new Date('Jan 03 2025 19:25:00')); // string com data e hora como argumento
+console.log(new Date('January 03, 2025')); // outra forma
+console.log(new Date('2025-03-01T19:25:00.000Z')); // forma mais confiável (ISO time)
+console.log(new Date(2025, 3, 1, 19, 25, 0, 0)); // cada membro como um argumento
+console.log(new Date(0)); // ms desde Epoch
+
+// Métodos de Date
+const now = new Date();
+
+console.log(now.getFullYear()); // ano
+// console.log(now.getYear()); // não use!
+console.log(now.getMonth()); // mês
+console.log(now.getDate()); // dia do mês
+console.log(now.getDay()); // dia da semana
+console.log(now.getHours()); // hora
+console.log(now.getMinutes()); // minuto
+console.log(now.getSeconds()); // segundo
+console.log(now.getTime()); // ms desde Epoch
+
+console.log(now.toISOString()); // formato ISO
+
+// Observação: Todos os métodos acima também possuem os respectivos set...()
+
+// Para recuperar o timestamp, não é necessário criar um objeto Date
+console.log(Date.now()); // timestamp desse momento
