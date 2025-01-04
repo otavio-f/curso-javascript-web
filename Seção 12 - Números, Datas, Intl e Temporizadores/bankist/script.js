@@ -180,6 +180,10 @@ createUsernames(accounts);
  * 158. Método .reduce() parte 2
  */
 
+/**
+ * Calcula e mostra o saldo da conta
+ * @param {*} account
+ */
 function calcDisplayBalance(account) {
   const balance = account.movements.reduce((sum, amount) => sum + amount, 0); // calcula o balanço
   labelBalance.textContent = formatCurrency(
@@ -191,6 +195,10 @@ function calcDisplayBalance(account) {
 
 /**
  * 160. A mágica de encadear métodos parte 2
+ */
+/**
+ * Calcula e mostra o resumo de operações da parte de baixo da tela
+ * @param {Object} account
  */
 function calcDisplaySummary(account) {
   const totalIn = account.movements
@@ -227,6 +235,10 @@ function calcDisplaySummary(account) {
   );
 }
 
+/**
+ * Formata e mostra a data e hora
+ * @param {String} locale O local
+ */
 function displayLocalizedDateTime(locale = navigator.language) {
   const now = new Date();
   const options = {
@@ -260,10 +272,35 @@ function refreshUI(account) {
 }
 
 /**
+ * Inicia o timer de logout automático
+ * @param {Object} account
+ * @returns O id do timer criado
+ */
+function startLogoutTimer(account) {
+  let time = 600;
+  function tick() {
+    const minutes = `${Math.trunc(time / 60)}`.padStart(2, '0');
+    const seconds = `${time % 60}`.padStart(2, '0');
+    labelTimer.textContent = `${minutes}:${seconds}`;
+    if (time <= 0) {
+      clearInterval(timerId);
+      labelWelcome.textContent = 'Log in to get started.';
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  }
+
+  tick();
+  const timerId = setInterval(tick, 1000);
+  return timerId;
+}
+
+/**
  * 163. Implementando login
  */
 
 let currentAccount;
+let currentTimer;
 
 btnLogin.addEventListener('click', function (event) {
   event.preventDefault(); // impede form de submeter e recarregar a página
@@ -293,6 +330,10 @@ btnLogin.addEventListener('click', function (event) {
     currentAccount.owner.split(' ')[0]
   }`;
   containerApp.style.opacity = 100;
+
+  // Inicia o timer de inatividade
+  clearInterval(currentTimer);
+  currentTimer = startLogoutTimer(currentAccount);
 
   refreshUI(currentAccount);
 });
@@ -343,6 +384,10 @@ btnTransfer.addEventListener('click', function (event) {
   currentAccount.movementsDates.push(new Date().toISOString());
   destinationAccount.movementsDates.push(new Date().toISOString());
 
+  // Reinicia o timer de inatividade
+  clearInterval(currentTimer);
+  currentTimer = startLogoutTimer(currentAccount);
+
   // Recarregar a interface com os novos valores
   refreshUI(currentAccount);
 });
@@ -378,6 +423,9 @@ btnClose.addEventListener('click', function (event) {
   // Esconde UI
   currentAccount = null;
   containerApp.style.opacity = 0;
+
+  // Para timer de logout
+  clearInterval(currentTimer);
 });
 
 /**
@@ -412,6 +460,10 @@ btnLoan.addEventListener('click', function (event) {
 
     // Recarregar a interface com os novos valores
     refreshUI(currentAccount);
+
+    // Reiniciar temporizador de inatividade
+    clearInterval(currentTimer);
+    currentTimer = startLogoutTimer(currentAccount);
   }, 5000); // cinco segundos de espera
 });
 
@@ -427,15 +479,6 @@ btnSort.addEventListener('click', function (event) {
   sortMovements = !sortMovements; // inverte o valor
   displayMovements(currentAccount, sortMovements);
 });
-
-/**
- * 185. Adicionando datas no aplicativo Bankist
- */
-
-// LOG IN PERMANENTE PARA TESTES
-currentAccount = accounts[0];
-containerApp.style.opacity = 100;
-refreshUI(currentAccount);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
