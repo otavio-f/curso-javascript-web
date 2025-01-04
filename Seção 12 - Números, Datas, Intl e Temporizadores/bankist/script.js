@@ -184,14 +184,6 @@ function refreshUI(account) {
 
 let currentAccount;
 
-/**
- * Faz log-in da conta
- * @param {Object} account
- */
-function logIn(account) {
-  if (account !== undefined) currentAccount = account;
-}
-
 btnLogin.addEventListener('click', function (event) {
   event.preventDefault(); // impede form de submeter e recarregar a página
 
@@ -350,7 +342,9 @@ btnSort.addEventListener('click', function (event) {
 });
 
 // LOG IN PERMANENTE PARA TESTES
-logIn(accounts[0]);
+currentAccount = accounts[0];
+containerApp.style.opacity = 100;
+refreshUI(currentAccount);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
