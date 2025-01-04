@@ -86,6 +86,27 @@ const inputClosePin = document.querySelector('.form__input--pin');
  */
 
 /**
+ * Formata a data da transação
+ * @param {Date} date
+ * @returns uma string no formato "dd/mm/yyyy" ou "dd days ago"
+ */
+function formatMovementDate(date) {
+  const daysPassed = Math.floor(
+    Math.abs(date - Date.now()) / (1000 * 60 * 60 * 24)
+  );
+
+  if (daysPassed === 0) return 'today';
+  if (daysPassed === 1) return 'yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+
+  const day = `${date.getDate()}`.padStart(2, '0');
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+/**
  * Insere a movimentação da conta na página
  * @param {[Number]} account A conta do usuário
  */
@@ -103,16 +124,13 @@ function displayMovements(account, sort = false) {
 
   // insere valores
   movements.forEach(function (mov, i) {
-    const day = `${mov.date.getDate()}`.padStart(2, '0');
-    const month = `${mov.date.getMonth() + 1}`.padStart(2, '0');
-    const year = mov.date.getFullYear();
-
+    const date = formatMovementDate(mov.date);
     const type = mov.amount > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__date">${day}/${month}/${year}</div>
+          <div class="movements__date">${date}</div>
           <div class="movements__value">${mov.amount.toFixed(2)}€</div>
         </div>
 `;
@@ -587,3 +605,22 @@ console.log(now.toISOString()); // formato ISO
 
 // Para recuperar o timestamp, não é necessário criar um objeto Date
 console.log(Date.now()); // timestamp desse momento
+
+/**
+ * 186. Operações com datas
+ */
+
+// Datas podem ser convertidas para números
+// Atenção: Em operações, datas são convertidas para timestamp desde Epoch
+const millenium = new Date(2000, 1, 1, 0, 0, 0, 0); // exatamente 2000
+console.log(`01/01/2000: ${+millenium}`); // Epoch timestamp
+
+// Exemplo: calcular dias passados entre duas datas
+const calcDaysPassed = (dateA, dateB) =>
+  Math.abs(dateA - dateB) / (1000 * 60 * 60 * 24);
+
+console.log(
+  `${calcDaysPassed(Date.now(), millenium).toFixed(
+    2
+  )} days passed since 01/01/2000.`
+);
