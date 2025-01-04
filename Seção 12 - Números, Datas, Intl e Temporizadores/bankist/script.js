@@ -93,29 +93,30 @@ function displayMovements(account, sort = false) {
   // limpa o elemento
   containerMovements.innerHTML = '';
 
-  // ordena o array se for necessário
-  const movements = sort
-    ? [...account.movements].sort((a, b) => a - b)
-    : account.movements;
+  const movements = account.movements.map((_, index) => ({
+    amount: account.movements[index],
+    date: new Date(account.movementsDates[index]),
+  }));
+
+  // ordena o array se necessário
+  if (sort) movements.sort((a, b) => a.amount - b.amount);
 
   // insere valores
-  movements.forEach(function (amount, i) {
-    const date = new Date(account.movementsDates[i]);
+  movements.forEach(function (mov, i) {
+    const day = `${mov.date.getDate()}`.padStart(2, '0');
+    const month = `${mov.date.getMonth() + 1}`.padStart(2, '0');
+    const year = mov.date.getFullYear();
 
-    const day = `${date.getDate()}`.padStart(2, '0');
-    const month = `${date.getMonth() + 1}`.padStart(2, '0');
-    const year = date.getFullYear();
-
-    const type = amount > 0 ? 'deposit' : 'withdrawal';
+    const type = mov.amount > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
           <div class="movements__date">${day}/${month}/${year}</div>
-          <div class="movements__value">${amount.toFixed(2)}€</div>
+          <div class="movements__value">${mov.amount.toFixed(2)}€</div>
         </div>
 `;
-    // insere elemento dentro do elemento, na primeira posição
+    // insere elemento dentro do elemento pai, na primeira posição
     containerMovements.insertAdjacentHTML('afterBegin', html);
   });
 }
