@@ -87,23 +87,31 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /**
  * Insere a movimentação da conta na página
- * @param {[Number]} movements A lista com a movimentação da conta do usuário
+ * @param {[Number]} account A conta do usuário
  */
-function displayMovements(movements, sort = false) {
+function displayMovements(account, sort = false) {
   // limpa o elemento
   containerMovements.innerHTML = '';
 
   // ordena o array se for necessário
-  const arr = sort ? [...movements].sort((a, b) => a - b) : movements;
+  const movements = sort
+    ? [...account.movements].sort((a, b) => a - b)
+    : account.movements;
 
   // insere valores
-  arr.forEach(function (amount, i) {
+  movements.forEach(function (amount, i) {
+    const date = new Date(account.movementsDates[i]);
+
+    const day = `${date.getDate()}`.padStart(2, '0');
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const year = date.getFullYear();
+
     const type = amount > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__date">3 days ago</div>
+          <div class="movements__date">${day}/${month}/${year}</div>
           <div class="movements__value">${amount.toFixed(2)}€</div>
         </div>
 `;
@@ -163,19 +171,35 @@ function calcDisplaySummary(account) {
   labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
 }
 
+function displayCurrentDateTime() {
+  const now = new Date();
+
+  const day = `${now.getDate()}`.padStart(2, '0');
+  const month = `${now.getMonth() + 1}`.padStart(2, '0');
+  const year = now.getFullYear();
+
+  const hour = `${now.getHours()}`.padStart(2, '0');
+  const minute = `${now.getMinutes()}`.padStart(2, '0');
+
+  labelDate.textContent = `${day}/${month}/${year}, ${hour}:${minute}`;
+}
+
 /**
  * Recarrega os dados da conta na interface principal
  * @param {*} account
  */
 function refreshUI(account) {
   // Mostra movimentação
-  displayMovements(account.movements);
+  displayMovements(account);
 
   // Mostra extrato
   calcDisplayBalance(account.movements);
 
   // Mostra resumo
   calcDisplaySummary(account);
+
+  // Mostra data e hora
+  displayCurrentDateTime();
 }
 
 /**
@@ -259,6 +283,8 @@ btnTransfer.addEventListener('click', function (event) {
   // Transferir
   currentAccount.movements.push(-amount);
   destinationAccount.movements.push(amount);
+  currentAccount.movementsDates.push(new Date().toISOString());
+  destinationAccount.movementsDates.push(new Date().toISOString());
 
   // Recarregar a interface com os novos valores
   refreshUI(currentAccount);
@@ -323,6 +349,7 @@ btnLoan.addEventListener('click', function (event) {
 
   // Emprestar
   currentAccount.movements.push(amount);
+  currentAccount.movementsDates.push(new Date().toISOString());
 
   // Recarregar a interface com os novos valores
   refreshUI(currentAccount);
@@ -338,8 +365,12 @@ let sortMovements = false;
 btnSort.addEventListener('click', function (event) {
   event.preventDefault();
   sortMovements = !sortMovements; // inverte o valor
-  displayMovements(currentAccount.movements, sortMovements);
+  displayMovements(currentAccount, sortMovements);
 });
+
+/**
+ * 185. Adicionando datas no aplicativo Bankist
+ */
 
 // LOG IN PERMANENTE PARA TESTES
 currentAccount = accounts[0];
@@ -541,7 +572,7 @@ const now = new Date();
 
 console.log(now.getFullYear()); // ano
 // console.log(now.getYear()); // não use!
-console.log(now.getMonth()); // mês
+console.log(now.getMonth()); // mês (0-11)
 console.log(now.getDate()); // dia do mês
 console.log(now.getDay()); // dia da semana
 console.log(now.getHours()); // hora
@@ -555,7 +586,3 @@ console.log(now.toISOString()); // formato ISO
 
 // Para recuperar o timestamp, não é necessário criar um objeto Date
 console.log(Date.now()); // timestamp desse momento
-
-/**
- * 185. Adicionando datas no aplicativo Bankist
- */
