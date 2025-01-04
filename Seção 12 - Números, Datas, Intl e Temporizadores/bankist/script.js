@@ -164,10 +164,33 @@ function calcDisplaySummary(account) {
 }
 
 /**
+ * Recarrega os dados da conta na interface principal
+ * @param {*} account
+ */
+function refreshUI(account) {
+  // Mostra movimentação
+  displayMovements(account.movements);
+
+  // Mostra extrato
+  calcDisplayBalance(account.movements);
+
+  // Mostra resumo
+  calcDisplaySummary(account);
+}
+
+/**
  * 163. Implementando login
  */
 
 let currentAccount;
+
+/**
+ * Faz log-in da conta
+ * @param {Object} account
+ */
+function logIn(account) {
+  if (account !== undefined) currentAccount = account;
+}
 
 btnLogin.addEventListener('click', function (event) {
   event.preventDefault(); // impede form de submeter e recarregar a página
@@ -189,7 +212,6 @@ btnLogin.addEventListener('click', function (event) {
   // Login falhou, não continue
   if (!currentAccount) {
     // if (currentAccount === undefined) {
-    containerApp.style.opacity = 0; // esconde UI
     return;
   }
 
@@ -199,14 +221,7 @@ btnLogin.addEventListener('click', function (event) {
   }`;
   containerApp.style.opacity = 100;
 
-  // Mostra movimentação
-  displayMovements(currentAccount.movements);
-
-  // Mostra extrato
-  calcDisplayBalance(currentAccount.movements);
-
-  // Mostra resumo
-  calcDisplaySummary(currentAccount);
+  refreshUI(currentAccount);
 });
 
 /**
@@ -254,9 +269,7 @@ btnTransfer.addEventListener('click', function (event) {
   destinationAccount.movements.push(amount);
 
   // Recarregar a interface com os novos valores
-  displayMovements(currentAccount.movements);
-  calcDisplayBalance(currentAccount.movements);
-  calcDisplaySummary(currentAccount);
+  refreshUI(currentAccount);
 });
 
 /**
@@ -320,9 +333,7 @@ btnLoan.addEventListener('click', function (event) {
   currentAccount.movements.push(amount);
 
   // Recarregar a interface com os novos valores
-  displayMovements(currentAccount.movements);
-  calcDisplayBalance(currentAccount.movements);
-  calcDisplaySummary(currentAccount);
+  refreshUI(currentAccount);
 });
 
 /**
@@ -337,6 +348,9 @@ btnSort.addEventListener('click', function (event) {
   sortMovements = !sortMovements; // inverte o valor
   displayMovements(currentAccount.movements, sortMovements);
 });
+
+// LOG IN PERMANENTE PARA TESTES
+logIn(accounts[0]);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -547,3 +561,7 @@ console.log(now.toISOString()); // formato ISO
 
 // Para recuperar o timestamp, não é necessário criar um objeto Date
 console.log(Date.now()); // timestamp desse momento
+
+/**
+ * 185. Adicionando datas no aplicativo Bankist
+ */
