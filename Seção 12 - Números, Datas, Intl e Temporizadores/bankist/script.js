@@ -404,12 +404,15 @@ btnLoan.addEventListener('click', function (event) {
     return;
   }
 
-  // Emprestar
-  currentAccount.movements.push(amount);
-  currentAccount.movementsDates.push(new Date().toISOString());
+  // Simular tempo de análise
+  setTimeout(() => {
+    // Emprestar
+    currentAccount.movements.push(amount);
+    currentAccount.movementsDates.push(new Date().toISOString());
 
-  // Recarregar a interface com os novos valores
-  refreshUI(currentAccount);
+    // Recarregar a interface com os novos valores
+    refreshUI(currentAccount);
+  }, 5000); // cinco segundos de espera
 });
 
 /**
@@ -749,3 +752,33 @@ unitOptions.style = 'currency';
 unitOptions.currency = 'EUR';
 
 console.log('UK:', new Intl.NumberFormat('en-GB', unitOptions).format(Math.PI));
+
+/**
+ * 190. Timers
+ */
+
+// dois tipos de timers
+// setTimeout() aceita uma função callback como argumento, sem argumentos e o tempo em milissegundos
+// a função callback é executada após a pausa
+setTimeout(() => console.log('Three seconds passed.'), 3000);
+
+// Atenção: A função não bloqueia a execução. A função é assíncrona
+
+// Se for necessário passar argumentos para o callback, adicione como argumentos adicionais para setTimeout()
+setTimeout(
+  (one, two) =>
+    console.log(
+      `Three seconds passed and I got the arguments \"${one}\" and \"${two}\".`
+    ),
+  3000,
+  1,
+  2
+);
+
+// Para cancelar o timer use a função clearTimeout(), passando o id do timer como argumento
+const timer = setTimeout(() => console.log('Boo!'), 5000); // Armazenando o id do timer em uma variável
+clearTimeout(timer);
+
+// setInterval() executa a função múltiplas vezes em um intervalo
+// aceita dois argumentos: a função callback e o intervalo, opcionalmente argumentos extras serão passados para a função callback
+setInterval(() => console.log(new Date()), 3000);
