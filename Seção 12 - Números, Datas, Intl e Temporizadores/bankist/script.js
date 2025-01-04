@@ -99,11 +99,6 @@ function formatMovementDate(date, locale) {
   if (daysPassed === 1) return 'yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
 
-  // const day = `${date.getDate()}`.padStart(2, '0');
-  // const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  // const year = date.getFullYear();
-
-  // return `${day}/${month}/${year}`;
   const options = {
     day: 'numeric',
     month: 'numeric',
@@ -111,6 +106,23 @@ function formatMovementDate(date, locale) {
   };
 
   return new Intl.DateTimeFormat(locale, options).format(date);
+}
+
+/**
+ * Formata a transação de acordo com os parâmetros de local
+ * @param {Number} amount quantidade
+ * @param {String} locale
+ * @param {String} currency
+ * @returns uma string formatada
+ */
+function formatCurrency(amount, locale, currency) {
+  const options = {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 2,
+  };
+
+  return new Intl.NumberFormat(locale, options).format(amount);
 }
 
 /**
@@ -132,13 +144,14 @@ function displayMovements(account, sort = false) {
   // insere valores
   movements.forEach(function (mov, i) {
     const date = formatMovementDate(mov.date, account.locale);
+    const money = formatCurrency(mov.amount, account.locale, account.currency);
     const type = mov.amount > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
           <div class="movements__date">${date}</div>
-          <div class="movements__value">${mov.amount.toFixed(2)}€</div>
+          <div class="movements__value">${money}</div>
         </div>
 `;
     // insere elemento dentro do elemento pai, na primeira posição
@@ -167,12 +180,14 @@ createUsernames(accounts);
  * 158. Método .reduce() parte 2
  */
 
-function calcDisplayBalance(movements) {
-  const balance = movements.reduce((acc, amount) => acc + amount, 0); // calcula o balanço
-  labelBalance.textContent = `${balance.toFixed(2)}€`;
+function calcDisplayBalance(account) {
+  const balance = account.movements.reduce((sum, amount) => sum + amount, 0); // calcula o balanço
+  labelBalance.textContent = formatCurrency(
+    balance,
+    account.locale,
+    account.currency
+  ); //`${balance.toFixed(2)}€`;
 }
-
-// calcDisplayBalance(account1.movements);
 
 /**
  * 160. A mágica de encadear métodos parte 2
@@ -181,12 +196,22 @@ function calcDisplaySummary(account) {
   const totalIn = account.movements
     .filter(amount => amount > 0) // filtra depósitos
     .reduce((total, amount) => total + amount, 0); // soma tudo
-  labelSumIn.textContent = `${totalIn.toFixed(2)}€`;
+  // labelSumIn.textContent = `${totalIn.toFixed(2)}€`;
+  labelSumIn.textContent = formatCurrency(
+    totalIn,
+    account.locale,
+    account.currency
+  );
 
   const totalOut = account.movements
     .filter(amount => amount < 0) // filtra retiradas
     .reduce((total, amount) => total + amount, 0); // soma tudo
-  labelSumOut.textContent = `${Math.abs(totalOut).toFixed(2)}€`; // mostra sem o sinal
+  // labelSumOut.textContent = `${Math.abs(totalOut).toFixed(2)}€`; // mostra sem o sinal
+  labelSumOut.textContent = formatCurrency(
+    Math.abs(totalOut),
+    account.locale,
+    account.currency
+  );
 
   const interest = account.interestRate / 100;
   const earnings = account.movements
@@ -194,7 +219,12 @@ function calcDisplaySummary(account) {
     .map(deposit => deposit * interest) // aplica taxa de juros
     .filter(earning => earning >= 1) // só inclui ganhos maiores que 1
     .reduce((total, amount) => total + amount, 0); // soma ganhos
-  labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
+  //labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCurrency(
+    earnings,
+    account.locale,
+    account.currency
+  );
 }
 
 function displayLocalizedDateTime(locale = navigator.language) {
@@ -211,19 +241,6 @@ function displayLocalizedDateTime(locale = navigator.language) {
   labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(now);
 }
 
-function displayCurrentDateTime() {
-  const now = new Date();
-
-  const day = `${now.getDate()}`.padStart(2, '0');
-  const month = `${now.getMonth() + 1}`.padStart(2, '0');
-  const year = now.getFullYear();
-
-  const hour = `${now.getHours()}`.padStart(2, '0');
-  const minute = `${now.getMinutes()}`.padStart(2, '0');
-
-  labelDate.textContent = `${day}/${month}/${year}, ${hour}:${minute}`;
-}
-
 /**
  * Recarrega os dados da conta na interface principal
  * @param {*} account
@@ -233,13 +250,12 @@ function refreshUI(account) {
   displayMovements(account);
 
   // Mostra extrato
-  calcDisplayBalance(account.movements);
+  calcDisplayBalance(account);
 
   // Mostra resumo
   calcDisplaySummary(account);
 
   // Mostra data e hora
-  // displayCurrentDateTime();
   displayLocalizedDateTime(account.locale);
 }
 
@@ -705,3 +721,31 @@ console.log(
   `Now is (${lang}, took from the browser):`,
   new Intl.DateTimeFormat(lang, options).format(timeNow)
 );
+
+/**
+ * 189. Internacionalizando números
+ */
+
+console.log('US:', new Intl.NumberFormat('en-US').format(Math.PI));
+console.log('BR:', new Intl.NumberFormat('pt-BR').format(Math.PI));
+console.log('AR:', new Intl.NumberFormat('es-AR').format(Math.PI));
+console.log('RU:', new Intl.NumberFormat('ru-RU').format(Math.PI));
+console.log('JP:', new Intl.NumberFormat('ja-JP').format(Math.PI));
+console.log('ES:', new Intl.NumberFormat('es-ES').format(Math.PI));
+console.log(
+  `Browser (${navigator.language}):`,
+  new Intl.NumberFormat(navigator.language).format(Math.PI)
+);
+
+// Para usar opções, forneça um objeto como segundo argumento
+const unitOptions = {
+  style: 'unit',
+  unit: 'mile-per-hour',
+};
+
+console.log('MX:', new Intl.NumberFormat('es-MX', unitOptions).format(Math.PI));
+
+unitOptions.style = 'currency';
+unitOptions.currency = 'EUR';
+
+console.log('UK:', new Intl.NumberFormat('en-GB', unitOptions).format(Math.PI));
