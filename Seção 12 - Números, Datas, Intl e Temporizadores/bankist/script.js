@@ -90,7 +90,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
  * @param {Date} date
  * @returns uma string no formato "dd/mm/yyyy" ou "dd days ago"
  */
-function formatMovementDate(date) {
+function formatMovementDate(date, locale) {
   const daysPassed = Math.floor(
     Math.abs(date - Date.now()) / (1000 * 60 * 60 * 24)
   );
@@ -99,11 +99,18 @@ function formatMovementDate(date) {
   if (daysPassed === 1) return 'yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
 
-  const day = `${date.getDate()}`.padStart(2, '0');
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const year = date.getFullYear();
+  // const day = `${date.getDate()}`.padStart(2, '0');
+  // const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  // const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`;
+  // return `${day}/${month}/${year}`;
+  const options = {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  };
+
+  return new Intl.DateTimeFormat(locale, options).format(date);
 }
 
 /**
@@ -124,7 +131,7 @@ function displayMovements(account, sort = false) {
 
   // insere valores
   movements.forEach(function (mov, i) {
-    const date = formatMovementDate(mov.date);
+    const date = formatMovementDate(mov.date, account.locale);
     const type = mov.amount > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${
@@ -190,6 +197,20 @@ function calcDisplaySummary(account) {
   labelSumInterest.textContent = `${earnings.toFixed(2)}€`;
 }
 
+function displayLocalizedDateTime(locale = navigator.language) {
+  const now = new Date();
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    // weekday: 'long',
+  };
+
+  labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(now);
+}
+
 function displayCurrentDateTime() {
   const now = new Date();
 
@@ -218,7 +239,8 @@ function refreshUI(account) {
   calcDisplaySummary(account);
 
   // Mostra data e hora
-  displayCurrentDateTime();
+  // displayCurrentDateTime();
+  displayLocalizedDateTime(account.locale);
 }
 
 /**
@@ -623,4 +645,63 @@ console.log(
   `${calcDaysPassed(Date.now(), millenium).toFixed(
     2
   )} days passed since 01/01/2000.`
+);
+
+/**
+ * 188. Internacionalizando datas
+ */
+// API de internacionalização (Intl) permite ajustar a diferentes idiomas
+// Exemplo: formatar datas
+const timeNow = new Date();
+
+console.log(
+  'Today is (en-us):',
+  new Intl.DateTimeFormat('en-us').format(timeNow)
+);
+console.log(
+  'Today is (ja-jp):',
+  new Intl.DateTimeFormat('ja-jp').format(timeNow)
+);
+console.log(
+  'Today is (pt-br):',
+  new Intl.DateTimeFormat('pt-br').format(timeNow)
+);
+console.log(
+  'Today is (es-ar):',
+  new Intl.DateTimeFormat('es-ar').format(timeNow)
+);
+console.log(
+  'Today is (fr-fr):',
+  new Intl.DateTimeFormat('fr-fr').format(timeNow)
+);
+console.log(
+  'Today is (ru-ru):',
+  new Intl.DateTimeFormat('ru-ru').format(timeNow)
+);
+console.log(
+  'Today is (zh-HK):',
+  new Intl.DateTimeFormat('zh-hk').format(timeNow)
+);
+
+// É possível passar um objeto de opções como segundo argumento para o construtor
+const options = {
+  hour: 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  weekday: 'long',
+};
+
+console.log(
+  'Now is (en-GB):',
+  new Intl.DateTimeFormat('en-GB', options).format(timeNow)
+);
+
+// Para obter o idioma usado no browser use a propriedade navigator.language
+const lang = navigator.language;
+
+console.log(
+  `Now is (${lang}, took from the browser):`,
+  new Intl.DateTimeFormat(lang, options).format(timeNow)
 );
