@@ -143,3 +143,35 @@ logo.classList.contains('sample-class'); // verifica se contém uma classe
 // Também é possível alterar classe pelo atributo .className, porém não é recomendado
 // .className vai substituir todas as classes!
 // logo.className = 'sample-class';
+
+/**
+ * 198. Implementando rolagem suave
+ */
+
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+btnScrollTo.addEventListener('click', function (event) {
+  const coords = section1.getBoundingClientRect(); // pega coordenadas do elemento
+  console.log(coords);
+  console.log(event.target.getBoundingClientRect()); // event.target é o elemento que disparou o evento
+  // console.log(`Current scroll position: ${window.pageXOffset}, ${window.pageYOffset}`); // window.pageXOffset é obsoleto
+  console.log(`Current scroll position: ${window.scrollX}, ${window.scrollY}`);
+  console.log(
+    `Viewport size: ${document.documentElement.clientWidth}, ${document.documentElement.clientHeight}`
+  );
+
+  // Role para a primeira seção
+  // .top armazena a posição relativa ao viewport, tem que adicionar a posição de rolagem da página pra descobrir a posição absoluta de um elemento relativo ao topo da página
+  // window.scrollTo(coords.left + window.scrollX, coords.top + window.scrollY); // suave igual um porco-espinho descarregando um caminhão de brita
+
+  // Para rolagem suave, passe como argumento um objeto com propriedades left, top e behavior
+  // window.scrollTo({
+  //   left: coords.left + window.scrollX,
+  //   top: coords.top + window.scrollY,
+  //   behavior: 'smooth',
+  // });
+
+  // Versão mais moderna (Praticamente aceita em tudo exceto IE)
+  section1.scrollIntoView({ behavior: 'smooth' }); // Pronto! Só precisa dessa linha
+});
