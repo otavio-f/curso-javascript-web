@@ -201,8 +201,82 @@ const h1 = document.querySelector('h1');
 // .addEventListener permite múltiplas funções reagindo a um único evento
 // também é possível remover a função, basta chamar .removeEventListener, passando os mesmos argumentos usados para adicionar
 function alertOnMouse(event) {
-  alert('Oh no! A mice!');
+  alert("Oh no! There's mice!");
   h1.removeEventListener('mouseenter', alertOnMouse);
 }
 
 h1.addEventListener('mouseenter', alertOnMouse); // vai funcionar somente uma vez
+
+/**
+ * 201. Propagação de evento na prática
+ */
+
+// gerador de cor aleatória
+
+/**
+ * Cria um número aleatório em um intervalo
+ * @param {Number} min O valor mínimo
+ * @param {Number} max O valor máximo
+ * @returns Um número entre o valor mínimo e máximo, incluindo os dois
+ */
+function randInt(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+/**
+ * Gera uma cor rgb aleatória
+ * @returns Uma cor no formato rgb
+ */
+function randomColor() {
+  const randColor = () => randInt(0, 255);
+  return `rgb(${randColor()}, ${randColor()}, ${randColor()})`;
+}
+
+document
+  .querySelector('.nav__link')
+  .addEventListener('click', function (event) {
+    // espera por clique no primeiro link do topo da página
+    this.style.backgroundColor = randomColor();
+    // event.target é o elemento onde se originou o evento
+    // this é esse elemento
+    // event.currentTarget é o elemento atrelado ao evento
+    console.log(event.target === this);
+    console.log(event.currentTarget === this);
+    console.log(this);
+    console.log(event.target);
+    console.log(event.currentTarget);
+
+    // Pra parar a propagação do evento use o método a seguir
+    // event.stopPropagation();
+  });
+
+document
+  .querySelector('.nav__links')
+  .addEventListener('click', function (event) {
+    // espera por clique na área de links (a área com os links rápidos)
+    this.style.backgroundColor = randomColor();
+    console.log(event.target === this);
+    console.log(event.currentTarget === this);
+    console.log(this);
+    console.log(event.target);
+    console.log(event.currentTarget);
+  });
+
+// Para esperar por eventos na fase de captura, mude o terceiro argumento de .addEventListener para true
+// Quando false, os eventos são tratados na fase de borbulha (bubbling)
+// Quando true, os eventos são tratados na fase de captura
+document.querySelector('.nav').addEventListener(
+  'click',
+  function (event) {
+    // espera por clique na área de navegação (a área com o logo e os links)
+    this.style.backgroundColor = randomColor();
+    console.log(event.target === this);
+    console.log(event.currentTarget === this);
+    console.log(this);
+    console.log(event.target);
+    console.log(event.currentTarget);
+  },
+  true
+); // quando true, o evento é capturado nos elementos pais primeiro
+
+// Observação: Parece que event.currentTarget === this, segundo https://stackoverflow.com/questions/5125926/javascript-event-currenttarget-vs-this
