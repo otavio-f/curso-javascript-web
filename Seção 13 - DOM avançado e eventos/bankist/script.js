@@ -67,8 +67,8 @@ message.innerHTML =
   'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it</button>';
 const header = document.querySelector('.header');
 
-header.prepend(message); // adiciona como primeiro elemento filho
-// header.apppend(message); // adiciona como último elemento filho
+// header.prepend(message); // adiciona como primeiro elemento filho
+header.append(message); // adiciona como último elemento filho
 // Atenção: Somente um pode ser usado com o mesmo elemento. Usando mais que um vai mover o elemento, não copiar
 
 // header.append(message.cloneNode(true)); // use .cloneNode(true) pra copiar o elemento
@@ -83,3 +83,63 @@ document
     // message.remove(); // deleta o elemento, maneira nova
     message.parentElement.removeChild(message); // maneira mais antiga, só se pode remover um elemento filho
   });
+
+/**
+ * 197. Estilos, atributos e classes
+ */
+
+//// Estilos ////
+// Para configurar o estilo de um elemento, use a propriedade .style seguida pelo atributo
+
+// Atenção: Troque o separador-dash por camelCase no atributo CSS
+// Atenção: Não esqueça da unidade de medida
+// Atenção: O estilo adicionado via Javascript se comporta como estilo inline, tendo prioridade sobre arquivos CSS
+
+message.style.backgroundColor = '#37383d'; // (background-color -> backgroundColor)
+message.style.width = '120%'; // sempre adicione a unidade de medida
+
+// Atenção: Leitura do .style só funciona para propriedades que foram configuradas via Javascript
+console.log(message.style.height); // retorna string vazia porque não foi configurado via js
+console.log(message.style.backgroundColor); // retorna a cor que foi configurada mais acima
+
+// Para obter a folha de estilos final, use o método getComputedStyle(), passando o elemento como argumento
+console.log(getComputedStyle(message)); // retorna o estilo do elemento como está sendo mostrado na tela
+
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height) + 30 + 'px';
+
+// Para mudar variáveis CSS, use o método setProperty(), passando o nome da variável e o valor como argumentos
+document.documentElement.style.setProperty('--color-primary', 'cadetblue');
+
+//// Atributos ////
+
+// os atributos dos elementos estão disponíveis como propriedades
+const logo = document.querySelector('.nav__logo');
+console.log(logo.alt); // lendo atributo alt=""
+logo.alt = 'Minimalist logo.'; // atribuindo atributo alt=""
+console.log(logo.src); // atributo src="", caminho absoluto da imagem
+console.log(logo.className); // atributo class="". Não é logo.class por compatibilidade
+
+// Atenção: Atributos que não fazem parte dos atributos padrão retornam undefined, mesmo se tiverem sido configurados no html!
+//          Setar atributos não-padrão também não funciona.
+
+// Para ler atributos fora do padrão ou do mesmo modo como foram definidos no html, use .getAttribute(), passando o nome do atributo como argumento
+console.log(logo.getAttribute('designer'));
+console.log(logo.getAttribute('src')); // caminho relativo, diferente de logo.src
+
+// Para atribuir atributos fora do padrão, use .setAttribute() com o nome do atributo e o valor como argumentos
+logo.setAttribute('company', 'bankist');
+
+// Existem atributos especiais que começam com 'data-'.
+// Esses atributos estão disponíveis na propriedade .dataset
+console.log(logo.dataset.versionNumber); // lembre de trocar separador-dash por camelCase!
+
+//// Classes ////
+logo.classList.add('sample-class'); // adiciona classe a lista de classes. Pode adicionar múltiplas
+logo.classList.remove('sample-class'); // remove classe da lista de classes. Pode adicionar múltiplas e se a classe não estiver presente, não faz nada
+logo.classList.toggle('sample-class'); // adiciona se não existir ou remove se existir
+logo.classList.contains('sample-class'); // verifica se contém uma classe
+
+// Também é possível alterar classe pelo atributo .className, porém não é recomendado
+// .className vai substituir todas as classes!
+// logo.className = 'sample-class';
