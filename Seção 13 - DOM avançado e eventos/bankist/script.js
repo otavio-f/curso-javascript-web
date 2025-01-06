@@ -175,3 +175,34 @@ btnScrollTo.addEventListener('click', function (event) {
   // Versão mais moderna (Praticamente aceita em tudo exceto IE)
   section1.scrollIntoView({ behavior: 'smooth' }); // Pronto! Só precisa dessa linha
 });
+
+/**
+ * 199. Tipos de eventos e handlers
+ */
+
+// Evento é um sinal emitido por um nó DOM
+
+const h1 = document.querySelector('h1');
+
+// Maneira tradicional de reagir a um evento
+// h1.addEventListener('mouseenter', function (event) {
+//   console.log('Mouse In! Mouse In!');
+// });
+
+// Outro modo de adicionar uma função a um evento é usar a propriedade .on... do elemento
+// h1.onmouseenter = function (event) { // não use isso! somente para referência!
+//   console.log('Mouse In! Mouse In!');
+// };
+
+// Uma terceira maneira é adicionar o evento no html, através do atributo on...
+// Mas não é recomendado usar essa maneira
+// <h1 onmouseenter="alert('Mouse In!')">...</h1>
+
+// .addEventListener permite múltiplas funções reagindo a um único evento
+// também é possível remover a função, basta chamar .removeEventListener, passando os mesmos argumentos usados para adicionar
+function alertOnMouse(event) {
+  alert('Oh no! A mice!');
+  h1.removeEventListener('mouseenter', alertOnMouse);
+}
+
+h1.addEventListener('mouseenter', alertOnMouse); // vai funcionar somente uma vez
