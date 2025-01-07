@@ -1,12 +1,16 @@
 'use strict';
 
-///////////////////////////////////////
-// Modal window
-
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+//=============================================================================
+//-| Modal window |----------------------------------------------------
+//=============================================================================
 
 const openModal = function (event) {
   event.preventDefault();
@@ -30,6 +34,83 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+//=============================================================================
+//-| Navegação de página |-----------------------------------------------------
+//=============================================================================
+
+/**
+ * 198. Implementando rolagem suave
+ */
+
+btnScrollTo.addEventListener('click', function (event) {
+  // const coords = section1.getBoundingClientRect(); // pega coordenadas do elemento
+  // console.log(coords);
+  // console.log(event.target.getBoundingClientRect()); // event.target é o elemento que disparou o evento
+  // console.log(`Current scroll position: ${window.pageXOffset}, ${window.pageYOffset}`); // window.pageXOffset é obsoleto
+  // console.log(`Current scroll position: ${window.scrollX}, ${window.scrollY}`);
+  // console.log(
+  //   `Viewport size: ${document.documentElement.clientWidth}, ${document.documentElement.clientHeight}`
+  // );
+
+  // Role para a primeira seção
+  // .top armazena a posição relativa ao viewport, tem que adicionar a posição de rolagem da página pra descobrir a posição absoluta de um elemento relativo ao topo da página
+  // window.scrollTo(coords.left + window.scrollX, coords.top + window.scrollY); // suave igual um porco-espinho descarregando um caminhão de brita
+
+  // Para rolagem suave, passe como argumento um objeto com propriedades left, top e behavior
+  // window.scrollTo({
+  //   left: coords.left + window.scrollX,
+  //   top: coords.top + window.scrollY,
+  //   behavior: 'smooth',
+  // });
+
+  // Versão mais moderna (Praticamente aceita em tudo exceto IE)
+  section1.scrollIntoView({ behavior: 'smooth' }); // Pronto! Só precisa dessa linha
+});
+
+/**
+ * 202. Delegação de eventos
+ */
+// Navegação de pelos links do topo da página
+
+// document.querySelectorAll('.nav__link').forEach(function (element) {
+//   element.addEventListener('click', function (event) {
+//     // Âncoras são um tipo especial de href (atributo do elemento <a>) que apontam para um outro elemento da página
+//     // por exemplo, o primeiro link possui href="#section--1", então quando for clicado ele vai redirecionar para o elemento que possui esse id
+
+//     event.preventDefault(); // impede navegação por âncora
+
+//     const anchor = this.getAttribute('href'); // pega o atributo como está no html
+//     // this.href retornaria a url absoluta
+//     document.querySelector(anchor).scrollIntoView({ behavior: 'smooth' });
+//   });
+// });
+
+// Problema: é muito ineficiente pq cria uma função para cada elemento (pode impactar negativamente a performance)
+// Solução: Delegar os eventos de clique para um elemento pai comum
+
+// Adicionando evento a um elemento comum
+document
+  .querySelector('.nav__links')
+  .addEventListener('click', function (event) {
+    // escolhendo links baseado nas classes
+    if (!event.target.classList.contains('nav__link')) {
+      return; // saída adiantada
+    }
+
+    event.preventDefault();
+    const anchor = event.target.getAttribute('href');
+    if (anchor === '#') {
+      return; // saída adiantada
+    }
+
+    const target = document.querySelector(anchor);
+    target.scrollIntoView({ behavior: 'smooth' });
+  });
+
+//=============================================================================
+//-| Experimentos e aulas |----------------------------------------------------
+//=============================================================================
+
 /**
  * 196. Selecionando, criando e deletando elementos
  */
@@ -38,22 +119,22 @@ document.addEventListener('keydown', function (e) {
 
 // use propriedades do objeto document pra selecionar elementos mais gerais da página
 
-console.log('Document:', document.documentElement); // O documento inteiro
+// console.log('Document:', document.documentElement); // O documento inteiro
 
-console.log('Head:', document.head); // o cabeçalho <head>
+// console.log('Head:', document.head); // o cabeçalho <head>
 
-console.log('Body:', document.body); // o corpo <body>
+// console.log('Body:', document.body); // o corpo <body>
 
 // pra selecionar elementos mais específicos, é possível usar outros métodos
 
-console.log('class="header":', document.querySelector('.header')); // O primeiro elemento com class="header"
-console.log('All class="section":', document.querySelectorAll('.section')); // Todos os elementos com class="section"
+// console.log('class="header":', document.querySelector('.header')); // O primeiro elemento com class="header"
+// console.log('All class="section":', document.querySelectorAll('.section')); // Todos os elementos com class="section"
 // Atenção: O argumento deve seguir o mesmo padrão de seleção de elementos em CSS!!
 // Atenção: querySelectorAll retorna uma NodeList, que --não-- acompanha as alterações feitas na página
 
-console.log('class="section--1":', document.getElementById('section--1')); // Só retorna um elemento
-console.log('All <button>:', document.getElementsByTagName('button')); // Todos os <button> da página
-console.log('All class="btn":', document.getElementsByClassName('btn')); // Todos os elementos com class="btn"
+// console.log('class="section--1":', document.getElementById('section--1')); // Só retorna um elemento
+// console.log('All <button>:', document.getElementsByTagName('button')); // Todos os <button> da página
+// console.log('All class="btn":', document.getElementsByClassName('btn')); // Todos os elementos com class="btn"
 // Atenção: getElements... retorna HTMLCollection, que acompanha as alterações feitas na página
 
 //// Criando e adicionando elementos ////
@@ -95,86 +176,54 @@ document
 // Atenção: Não esqueça da unidade de medida
 // Atenção: O estilo adicionado via Javascript se comporta como estilo inline, tendo prioridade sobre arquivos CSS
 
-message.style.backgroundColor = '#37383d'; // (background-color -> backgroundColor)
-message.style.width = '120%'; // sempre adicione a unidade de medida
+// message.style.backgroundColor = '#37383d'; // (background-color -> backgroundColor)
+// message.style.width = '120%'; // sempre adicione a unidade de medida
 
 // Atenção: Leitura do .style só funciona para propriedades que foram configuradas via Javascript
-console.log(message.style.height); // retorna string vazia porque não foi configurado via js
-console.log(message.style.backgroundColor); // retorna a cor que foi configurada mais acima
+// console.log(message.style.height); // retorna string vazia porque não foi configurado via js
+// console.log(message.style.backgroundColor); // retorna a cor que foi configurada mais acima
 
 // Para obter a folha de estilos final, use o método getComputedStyle(), passando o elemento como argumento
-console.log(getComputedStyle(message)); // retorna o estilo do elemento como está sendo mostrado na tela
+// console.log(getComputedStyle(message)); // retorna o estilo do elemento como está sendo mostrado na tela
 
-message.style.height =
-  Number.parseFloat(getComputedStyle(message).height) + 30 + 'px';
+// message.style.height =
+//   Number.parseFloat(getComputedStyle(message).height) + 30 + 'px';
 
 // Para mudar variáveis CSS, use o método setProperty(), passando o nome da variável e o valor como argumentos
-document.documentElement.style.setProperty('--color-primary', 'cadetblue');
+// document.documentElement.style.setProperty('--color-primary', 'cadetblue');
 
 //// Atributos ////
 
 // os atributos dos elementos estão disponíveis como propriedades
-const logo = document.querySelector('.nav__logo');
-console.log(logo.alt); // lendo atributo alt=""
-logo.alt = 'Minimalist logo.'; // atribuindo atributo alt=""
-console.log(logo.src); // atributo src="", caminho absoluto da imagem
-console.log(logo.className); // atributo class="". Não é logo.class por compatibilidade
+// const logo = document.querySelector('.nav__logo');
+// console.log(logo.alt); // lendo atributo alt=""
+// logo.alt = 'Minimalist logo.'; // atribuindo atributo alt=""
+// console.log(logo.src); // atributo src="", caminho absoluto da imagem
+// console.log(logo.className); // atributo class="". Não é logo.class por compatibilidade
 
 // Atenção: Atributos que não fazem parte dos atributos padrão retornam undefined, mesmo se tiverem sido configurados no html!
 //          Setar atributos não-padrão também não funciona.
 
 // Para ler atributos fora do padrão ou do mesmo modo como foram definidos no html, use .getAttribute(), passando o nome do atributo como argumento
-console.log(logo.getAttribute('designer'));
-console.log(logo.getAttribute('src')); // caminho relativo, diferente de logo.src
+// console.log(logo.getAttribute('designer'));
+// console.log(logo.getAttribute('src')); // caminho relativo, diferente de logo.src
 
 // Para atribuir atributos fora do padrão, use .setAttribute() com o nome do atributo e o valor como argumentos
-logo.setAttribute('company', 'bankist');
+// logo.setAttribute('company', 'bankist');
 
 // Existem atributos especiais que começam com 'data-'.
 // Esses atributos estão disponíveis na propriedade .dataset
-console.log(logo.dataset.versionNumber); // lembre de trocar separador-dash por camelCase!
+// console.log(logo.dataset.versionNumber); // lembre de trocar separador-dash por camelCase!
 
 //// Classes ////
-logo.classList.add('sample-class'); // adiciona classe a lista de classes. Pode adicionar múltiplas
-logo.classList.remove('sample-class'); // remove classe da lista de classes. Pode adicionar múltiplas e se a classe não estiver presente, não faz nada
-logo.classList.toggle('sample-class'); // adiciona se não existir ou remove se existir
-logo.classList.contains('sample-class'); // verifica se contém uma classe
+// logo.classList.add('sample-class'); // adiciona classe a lista de classes. Pode adicionar múltiplas
+// logo.classList.remove('sample-class'); // remove classe da lista de classes. Pode adicionar múltiplas e se a classe não estiver presente, não faz nada
+// logo.classList.toggle('sample-class'); // adiciona se não existir ou remove se existir
+// logo.classList.contains('sample-class'); // verifica se contém uma classe
 
 // Também é possível alterar classe pelo atributo .className, porém não é recomendado
 // .className vai substituir todas as classes!
 // logo.className = 'sample-class';
-
-/**
- * 198. Implementando rolagem suave
- */
-
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
-
-btnScrollTo.addEventListener('click', function (event) {
-  const coords = section1.getBoundingClientRect(); // pega coordenadas do elemento
-  console.log(coords);
-  console.log(event.target.getBoundingClientRect()); // event.target é o elemento que disparou o evento
-  // console.log(`Current scroll position: ${window.pageXOffset}, ${window.pageYOffset}`); // window.pageXOffset é obsoleto
-  console.log(`Current scroll position: ${window.scrollX}, ${window.scrollY}`);
-  console.log(
-    `Viewport size: ${document.documentElement.clientWidth}, ${document.documentElement.clientHeight}`
-  );
-
-  // Role para a primeira seção
-  // .top armazena a posição relativa ao viewport, tem que adicionar a posição de rolagem da página pra descobrir a posição absoluta de um elemento relativo ao topo da página
-  // window.scrollTo(coords.left + window.scrollX, coords.top + window.scrollY); // suave igual um porco-espinho descarregando um caminhão de brita
-
-  // Para rolagem suave, passe como argumento um objeto com propriedades left, top e behavior
-  // window.scrollTo({
-  //   left: coords.left + window.scrollX,
-  //   top: coords.top + window.scrollY,
-  //   behavior: 'smooth',
-  // });
-
-  // Versão mais moderna (Praticamente aceita em tudo exceto IE)
-  section1.scrollIntoView({ behavior: 'smooth' }); // Pronto! Só precisa dessa linha
-});
 
 /**
  * 199. Tipos de eventos e handlers
@@ -182,7 +231,7 @@ btnScrollTo.addEventListener('click', function (event) {
 
 // Evento é um sinal emitido por um nó DOM
 
-const h1 = document.querySelector('h1');
+// const h1 = document.querySelector('h1');
 
 // Maneira tradicional de reagir a um evento
 // h1.addEventListener('mouseenter', function (event) {
@@ -200,12 +249,12 @@ const h1 = document.querySelector('h1');
 
 // .addEventListener permite múltiplas funções reagindo a um único evento
 // também é possível remover a função, basta chamar .removeEventListener, passando os mesmos argumentos usados para adicionar
-function alertOnMouse(event) {
-  alert("Oh no! There's mice!");
-  h1.removeEventListener('mouseenter', alertOnMouse);
-}
+// function alertOnMouse(event) {
+//   alert("Oh no! There's mice!");
+//   h1.removeEventListener('mouseenter', alertOnMouse);
+// }
 
-h1.addEventListener('mouseenter', alertOnMouse); // vai funcionar somente uma vez
+// h1.addEventListener('mouseenter', alertOnMouse); // vai funcionar somente uma vez
 
 /**
  * 201. Propagação de evento na prática
@@ -232,51 +281,51 @@ function randomColor() {
   return `rgb(${randColor()}, ${randColor()}, ${randColor()})`;
 }
 
-document
-  .querySelector('.nav__link')
-  .addEventListener('click', function (event) {
-    // espera por clique no primeiro link do topo da página
-    this.style.backgroundColor = randomColor();
-    // event.target é o elemento onde se originou o evento
-    // this é esse elemento
-    // event.currentTarget é o elemento atrelado ao evento
-    console.log(event.target === this);
-    console.log(event.currentTarget === this);
-    console.log(this);
-    console.log(event.target);
-    console.log(event.currentTarget);
+// document
+//   .querySelector('.nav__link')
+//   .addEventListener('click', function (event) {
+//     // espera por clique no primeiro link do topo da página
+//     this.style.backgroundColor = randomColor();
+//     // event.target é o elemento onde se originou o evento
+//     // this é esse elemento
+//     // event.currentTarget é o elemento atrelado ao evento
+//     console.log(event.target === this);
+//     console.log(event.currentTarget === this);
+//     console.log(this);
+//     console.log(event.target);
+//     console.log(event.currentTarget);
 
-    // Pra parar a propagação do evento use o método a seguir
-    // event.stopPropagation();
-  });
+//     // Pra parar a propagação do evento use o método a seguir
+//     // event.stopPropagation();
+//   });
 
-document
-  .querySelector('.nav__links')
-  .addEventListener('click', function (event) {
-    // espera por clique na área de links (a área com os links rápidos)
-    this.style.backgroundColor = randomColor();
-    console.log(event.target === this);
-    console.log(event.currentTarget === this);
-    console.log(this);
-    console.log(event.target);
-    console.log(event.currentTarget);
-  });
+// document
+//   .querySelector('.nav__links')
+//   .addEventListener('click', function (event) {
+//     // espera por clique na área de links (a área com os links rápidos)
+//     this.style.backgroundColor = randomColor();
+//     console.log(event.target === this);
+//     console.log(event.currentTarget === this);
+//     console.log(this);
+//     console.log(event.target);
+//     console.log(event.currentTarget);
+//   });
 
 // Para esperar por eventos na fase de captura, mude o terceiro argumento de .addEventListener para true
 // Quando false, os eventos são tratados na fase de borbulha (bubbling)
 // Quando true, os eventos são tratados na fase de captura
-document.querySelector('.nav').addEventListener(
-  'click',
-  function (event) {
-    // espera por clique na área de navegação (a área com o logo e os links)
-    this.style.backgroundColor = randomColor();
-    console.log(event.target === this);
-    console.log(event.currentTarget === this);
-    console.log(this);
-    console.log(event.target);
-    console.log(event.currentTarget);
-  },
-  true
-); // quando true, o evento é capturado nos elementos pais primeiro
+// document.querySelector('.nav').addEventListener(
+//   'click',
+//   function (event) {
+//     // espera por clique na área de navegação (a área com o logo e os links)
+//     this.style.backgroundColor = randomColor();
+//     console.log(event.target === this);
+//     console.log(event.currentTarget === this);
+//     console.log(this);
+//     console.log(event.target);
+//     console.log(event.currentTarget);
+//   },
+//   true // quando true, o evento é capturado nos elementos pais primeiro
+// );
 
 // Observação: Parece que event.currentTarget === this, segundo https://stackoverflow.com/questions/5125926/javascript-event-currenttarget-vs-this
