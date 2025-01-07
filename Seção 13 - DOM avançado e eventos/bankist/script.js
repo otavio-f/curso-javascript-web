@@ -329,3 +329,43 @@ function randomColor() {
 // );
 
 // Observação: Parece que event.currentTarget === this, segundo https://stackoverflow.com/questions/5125926/javascript-event-currenttarget-vs-this
+
+/**
+ * 203. DOM Traversing
+ */
+
+// Selecionar elementos baseados em outros elementos, ou selecionar elementos desconhecidos
+
+const h1 = document.querySelector('h1');
+
+//// Indo pra baixo, selecionando elementos filhos
+
+console.log(h1.querySelectorAll('.highlight')); // .querySelector(All) pode ser usado em qualquer elemento
+// quando usado em um elemento, .querySelector(All) só busca nos nós filhos do elemento
+
+console.log(h1.childNodes); // retorna todos os nós filhos desse elemento, incluindo textos e comentários
+console.log(h1.children); // retorna somente os elementos HTML filhos diretos desse elemento
+
+// firstElementChild/lastElementChild retorna o primeiro/último elemento filho
+console.log(h1.firstElementChild);
+console.log(h1.lastElementChild);
+
+//// Indo para cima, selecionando elemento pai
+console.log(h1.parentNode); // retorna o nó pai
+console.log(h1.parentElement); // retorna o elemento HTML pai
+
+console.log(h1.closest('.header')); // retorna o elemento mais próximo que obedece à query, como .querySelector()
+// Atenção: pode .closest() vai retornar o próprio elemento se ele atender à query!
+// Atenção: .closest() só percorre a árvore DOM para cima (filho -> pai), ao contrário de .querySelector() (pai->filho)
+
+//// Indo de lado igual caranguejo, selecionando elementos irmãos
+
+// Só é possível acessar o elemento irmão mais próximo
+console.log(h1.previousSibling); // pode ser qualquer coisa, incluindo texto, elemento HTML ou comentário
+console.log(h1.nextSibling); // pode ser qualquer coisa, incluindo texto, elemento HTML ou comentário
+console.log(h1.previousElementSibling); // que nomão
+console.log(h1.nextElementSibling); // que nomão
+
+// Para selecionar todos elementos irmãos, é necessário "andar" para o elemento pai e selecionar todos os elementos filhos
+
+console.log([...h1.parentElement.children].filter(element => element !== h1));
