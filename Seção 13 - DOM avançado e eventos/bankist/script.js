@@ -8,6 +8,12 @@ const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+const nav = document.querySelector('.nav');
+
 //=============================================================================
 //-| Modal window |----------------------------------------------------
 //=============================================================================
@@ -126,12 +132,8 @@ document
   });
 
 /**
- * 203. Construindo um componente tabulado
+ * 204. Construindo um componente tabulado
  */
-
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
 
 tabsContainer.addEventListener('click', function (event) {
   const clickedTab = event.target.closest('.operations__tab'); // seleciona aba
@@ -153,6 +155,36 @@ tabsContainer.addEventListener('click', function (event) {
   ); // seleciona o conteúdo da aba clicada
   content.classList.add('operations__content--active'); // mostre o conteúdo da aba clicada
 });
+
+/**
+ * 205. Passando argumentos para tratadores de eventos
+ */
+
+/**
+ * Muda a opacidade dos links do topo da página
+ * @param {HTMLElement} targetLink o elemento sendo focado
+ * @param {Number} outOfFocusOpacity a opacidade dos elementos irmãos
+ * @returns
+ */
+function changeLinksOpacity(targetLink, outOfFocusOpacity) {
+  if (!targetLink.classList.contains('nav__link')) {
+    // não clicou em um link
+    return;
+  }
+  const parent = targetLink.closest('.nav');
+  const siblings = parent.querySelectorAll('.nav__link');
+  const logo = parent.querySelector('img');
+
+  siblings.forEach(element => {
+    if (element !== targetLink) {
+      element.style.opacity = outOfFocusOpacity;
+      logo.style.opacity = outOfFocusOpacity;
+    }
+  });
+}
+
+nav.addEventListener('mouseover', e => changeLinksOpacity(e.target, 0.5));
+nav.addEventListener('mouseout', e => changeLinksOpacity(e.target, 1));
 
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
