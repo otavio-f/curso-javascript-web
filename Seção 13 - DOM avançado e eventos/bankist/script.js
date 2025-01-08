@@ -34,6 +34,24 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+// Cookies popup
+const cookieMessage = document.createElement('div'); // cria um <div> (ainda não está na página!)
+cookieMessage.classList.add('cookie-message');
+cookieMessage.innerHTML =
+  'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it</button>';
+
+const header = document.querySelector('.header');
+// header.prepend(message); // adiciona como primeiro elemento filho
+header.append(cookieMessage); // adiciona como último elemento filho
+
+document
+  .querySelector('.btn--close-cookie')
+  .addEventListener('click', function (event) {
+    event.preventDefault();
+    // message.remove(); // deleta o elemento, maneira nova
+    cookieMessage.parentElement.removeChild(cookieMessage); // maneira mais antiga, só se pode remover um elemento filho
+  });
+
 //=============================================================================
 //-| Navegação de página |-----------------------------------------------------
 //=============================================================================
@@ -107,6 +125,35 @@ document
     target.scrollIntoView({ behavior: 'smooth' });
   });
 
+/**
+ * 203. Construindo um componente tabulado
+ */
+
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (event) {
+  const clickedTab = event.target.closest('.operations__tab'); // seleciona aba
+  console.log(clickedTab);
+  if (!clickedTab) {
+    // condição de guarda
+    // se não foi clicado em uma aba, ignore o clique
+    return;
+  }
+
+  tabs.forEach(t => t.classList.remove('operations__tab--active')); // desative todas abas
+  clickedTab.classList.add('operations__tab--active'); // ative a aba clicada
+
+  tabsContent.forEach(cont =>
+    cont.classList.remove('operations__content--active')
+  ); // esconda o conteúdo de todas as abas
+  const content = document.querySelector(
+    `.operations__content--${clickedTab.dataset.tab}`
+  ); // seleciona o conteúdo da aba clicada
+  content.classList.add('operations__content--active'); // mostre o conteúdo da aba clicada
+});
+
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
 //=============================================================================
@@ -140,16 +187,16 @@ document
 //// Criando e adicionando elementos ////
 
 // .insertAdjacentHTML // adiciona um elemento em uma posição relativa a outro
-const message = document.createElement('div'); // cria um <div> (ainda não está na página!)
-message.classList.add('cookie-message');
+// const message = document.createElement('div'); // cria um <div> (ainda não está na página!)
+// message.classList.add('cookie-message');
 // message.textContent =
 // 'We use cookies for improved functionality and analytics.';
-message.innerHTML =
-  'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it</button>';
-const header = document.querySelector('.header');
+// message.innerHTML =
+//   'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it</button>';
+// const header = document.querySelector('.header');
 
 // header.prepend(message); // adiciona como primeiro elemento filho
-header.append(message); // adiciona como último elemento filho
+// header.append(message); // adiciona como último elemento filho
 // Atenção: Somente um pode ser usado com o mesmo elemento. Usando mais que um vai mover o elemento, não copiar
 
 // header.append(message.cloneNode(true)); // use .cloneNode(true) pra copiar o elemento
@@ -157,13 +204,13 @@ header.append(message); // adiciona como último elemento filho
 // header.after(message); // adiciona depois do elemento
 
 //// Deletar elementos ////
-document
-  .querySelector('.btn--close-cookie')
-  .addEventListener('click', function (event) {
-    event.preventDefault();
-    // message.remove(); // deleta o elemento, maneira nova
-    message.parentElement.removeChild(message); // maneira mais antiga, só se pode remover um elemento filho
-  });
+// document
+//   .querySelector('.btn--close-cookie')
+//   .addEventListener('click', function (event) {
+//     event.preventDefault();
+//     // message.remove(); // deleta o elemento, maneira nova
+//     message.parentElement.removeChild(message); // maneira mais antiga, só se pode remover um elemento filho
+//   });
 
 /**
  * 197. Estilos, atributos e classes
@@ -268,18 +315,18 @@ document
  * @param {Number} max O valor máximo
  * @returns Um número entre o valor mínimo e máximo, incluindo os dois
  */
-function randInt(min, max) {
-  return min + Math.floor(Math.random() * (max - min + 1));
-}
+// function randInt(min, max) {
+//   return min + Math.floor(Math.random() * (max - min + 1));
+// }
 
 /**
  * Gera uma cor rgb aleatória
  * @returns Uma cor no formato rgb
  */
-function randomColor() {
-  const randColor = () => randInt(0, 255);
-  return `rgb(${randColor()}, ${randColor()}, ${randColor()})`;
-}
+// function randomColor() {
+//   const randColor = () => randInt(0, 255);
+//   return `rgb(${randColor()}, ${randColor()}, ${randColor()})`;
+// }
 
 // document
 //   .querySelector('.nav__link')
@@ -336,36 +383,36 @@ function randomColor() {
 
 // Selecionar elementos baseados em outros elementos, ou selecionar elementos desconhecidos
 
-const h1 = document.querySelector('h1');
+// const h1 = document.querySelector('h1');
 
 //// Indo pra baixo, selecionando elementos filhos
 
-console.log(h1.querySelectorAll('.highlight')); // .querySelector(All) pode ser usado em qualquer elemento
+// console.log(h1.querySelectorAll('.highlight')); // .querySelector(All) pode ser usado em qualquer elemento
 // quando usado em um elemento, .querySelector(All) só busca nos nós filhos do elemento
 
-console.log(h1.childNodes); // retorna todos os nós filhos desse elemento, incluindo textos e comentários
-console.log(h1.children); // retorna somente os elementos HTML filhos diretos desse elemento
+// console.log(h1.childNodes); // retorna todos os nós filhos desse elemento, incluindo textos e comentários
+// console.log(h1.children); // retorna somente os elementos HTML filhos diretos desse elemento
 
 // firstElementChild/lastElementChild retorna o primeiro/último elemento filho
-console.log(h1.firstElementChild);
-console.log(h1.lastElementChild);
+// console.log(h1.firstElementChild);
+// console.log(h1.lastElementChild);
 
 //// Indo para cima, selecionando elemento pai
-console.log(h1.parentNode); // retorna o nó pai
-console.log(h1.parentElement); // retorna o elemento HTML pai
+// console.log(h1.parentNode); // retorna o nó pai
+// console.log(h1.parentElement); // retorna o elemento HTML pai
 
-console.log(h1.closest('.header')); // retorna o elemento mais próximo que obedece à query, como .querySelector()
+// console.log(h1.closest('.header')); // retorna o elemento mais próximo que obedece à query, como .querySelector()
 // Atenção: pode .closest() vai retornar o próprio elemento se ele atender à query!
 // Atenção: .closest() só percorre a árvore DOM para cima (filho -> pai), ao contrário de .querySelector() (pai->filho)
 
 //// Indo de lado igual caranguejo, selecionando elementos irmãos
 
 // Só é possível acessar o elemento irmão mais próximo
-console.log(h1.previousSibling); // pode ser qualquer coisa, incluindo texto, elemento HTML ou comentário
-console.log(h1.nextSibling); // pode ser qualquer coisa, incluindo texto, elemento HTML ou comentário
-console.log(h1.previousElementSibling); // que nomão
-console.log(h1.nextElementSibling); // que nomão
+// console.log(h1.previousSibling); // pode ser qualquer coisa, incluindo texto, elemento HTML ou comentário
+// console.log(h1.nextSibling); // pode ser qualquer coisa, incluindo texto, elemento HTML ou comentário
+// console.log(h1.previousElementSibling); // que nomão
+// console.log(h1.nextElementSibling); // que nomão
 
 // Para selecionar todos elementos irmãos, é necessário "andar" para o elemento pai e selecionar todos os elementos filhos
 
-console.log([...h1.parentElement.children].filter(element => element !== h1));
+// console.log([...h1.parentElement.children].filter(element => element !== h1));
