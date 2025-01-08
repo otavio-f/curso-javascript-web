@@ -186,6 +186,23 @@ function changeLinksOpacity(targetLink, outOfFocusOpacity) {
 nav.addEventListener('mouseover', e => changeLinksOpacity(e.target, 0.5));
 nav.addEventListener('mouseout', e => changeLinksOpacity(e.target, 1));
 
+/**
+ * 206. Implementando uma barra de navegação "sticky"
+ */
+
+//// versão 1: usando o evento "scroll"
+const scrollPos = section1.getBoundingClientRect();
+window.addEventListener('scroll', function () {
+  // evento 'scroll' só está disponível em window.
+  // Atenção: Evite usar esse evento por questão de performance
+  console.log(window.scrollY, scrollPos);
+  if (window.scrollY > scrollPos.top) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+});
+
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
 //=============================================================================
