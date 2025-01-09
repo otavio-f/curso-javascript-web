@@ -265,6 +265,39 @@ allSections.forEach(section => {
   sectionObserver.observe(section);
 });
 
+/**
+ * 210. Imagens lazy loading
+ */
+
+// Especifica dois atributos na tag <img>: src e data-src
+// src é uma versão de baixa resolução
+// a imagem normalmente seria pixelada pela baixa resolução, uma classe aplica um filtro blur
+// data-src corresponde ao atributo dataset.src que vai ser carregado aqui
+// Ajuda bastante na performance!
+
+// seleciona tags img que contém o atributo 'data-src'
+const lazyImages = document.querySelectorAll('img[data-src]');
+
+function loadImage(entries, observer) {
+  // const [entry] = entries;
+  const entry = entries[0];
+  if (!entry.isIntersecting) return;
+  const target = entry.target;
+  // substitui src por data-src
+  target.src = target.dataset.src;
+  // remove filtro
+  // img solta um evento 'load' quando carrega a imagem totalmente
+  target.addEventListener('load', () => target.classList.remove('lazy-img'));
+  observer.unobserve(target);
+}
+
+const imageObserver = new IntersectionObserver(loadImage, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+
+lazyImages.forEach(img => imageObserver.observe(img));
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
 //=============================================================================
