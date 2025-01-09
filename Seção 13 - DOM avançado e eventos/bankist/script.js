@@ -13,6 +13,7 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 
 const nav = document.querySelector('.nav');
+const header = document.querySelector('.header');
 
 //=============================================================================
 //-| Modal window |----------------------------------------------------
@@ -46,7 +47,6 @@ cookieMessage.classList.add('cookie-message');
 cookieMessage.innerHTML =
   'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it</button>';
 
-const header = document.querySelector('.header');
 // header.prepend(message); // adiciona como primeiro elemento filho
 header.append(cookieMessage); // adiciona como último elemento filho
 
@@ -191,17 +191,50 @@ nav.addEventListener('mouseout', e => changeLinksOpacity(e.target, 1));
  */
 
 //// versão 1: usando o evento "scroll"
-const scrollPos = section1.getBoundingClientRect();
-window.addEventListener('scroll', function () {
-  // evento 'scroll' só está disponível em window.
-  // Atenção: Evite usar esse evento por questão de performance
-  console.log(window.scrollY, scrollPos);
-  if (window.scrollY > scrollPos.top) {
-    nav.classList.add('sticky');
-  } else {
+// const scrollPos = section1.getBoundingClientRect();
+// window.addEventListener('scroll', function () {
+//   // evento 'scroll' só está disponível em window.
+//   // Atenção: Evite usar esse evento por questão de performance
+//   // console.log(window.scrollY, scrollPos);
+//   if (window.scrollY > scrollPos.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });
+
+/**
+ * 207. Uma maneira melhor: API de observação de intersecção
+ */
+// function obsCallback(entries, observer) {
+//   entries.forEach(ent => console.log(ent));
+// }
+
+// const obsOptions = {
+//   root: null, // A janela inteira
+//   threshold: [0, 0.2], //quando não estiver visível e quando estiver visível 20%
+// };
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+// observer.observe(section1);
+
+function stickyNav(entries) {
+  // const [entry] = entries;
+  const entry = entries[0];
+  if (entry.isIntersecting) {
     nav.classList.remove('sticky');
+  } else {
+    nav.classList.add('sticky');
   }
-});
+}
+
+const stickyNavOptions = {
+  root: null, // a janela toda
+  threshold: 0, // toda vez que a visibilidade for 0, ou seja sair ou entrar na tela
+  rootMargin: `-${nav.getBoundingClientRect().height}px`, // quando a barra couber entre o topo da tela e a segunda seção
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, stickyNavOptions);
+headerObserver.observe(header);
 
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
