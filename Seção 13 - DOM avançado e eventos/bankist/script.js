@@ -15,6 +15,8 @@ const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
 const header = document.querySelector('.header');
 
+const allSections = document.querySelectorAll('section');
+
 //=============================================================================
 //-| Modal window |----------------------------------------------------
 //=============================================================================
@@ -235,6 +237,32 @@ const stickyNavOptions = {
 
 const headerObserver = new IntersectionObserver(stickyNav, stickyNavOptions);
 headerObserver.observe(header);
+
+/**
+ * 208. Revelando elementos na rolagem
+ */
+
+// Não vou modificar o html
+// Adicionando a classe "section--hidden" nas seções
+
+function revealSection(entries, observer) {
+  // const [entry] = entries;
+  const entry = entries[0];
+  if (!entry.isIntersecting) return;
+  const section = entry.target; // use entry.target para selecionar o elemento que está sendo observado
+  section.classList.remove('section--hidden'); // torne a seção visível
+  observer.unobserve(section); // deixe de observar a seção visível (ajuda na performance)
+}
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(section => {
+  section.classList.add('section--hidden');
+  sectionObserver.observe(section);
+});
 
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
