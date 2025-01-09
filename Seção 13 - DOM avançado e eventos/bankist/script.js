@@ -247,11 +247,12 @@ headerObserver.observe(header);
 
 function revealSection(entries, observer) {
   // const [entry] = entries;
-  const entry = entries[0];
-  if (!entry.isIntersecting) return;
-  const section = entry.target; // use entry.target para selecionar o elemento que está sendo observado
-  section.classList.remove('section--hidden'); // torne a seção visível
-  observer.unobserve(section); // deixe de observar a seção visível (ajuda na performance)
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const section = entry.target; // use entry.target para selecionar o elemento que está sendo observado
+    section.classList.remove('section--hidden'); // torne a seção visível
+    observer.unobserve(section); // deixe de observar a seção visível (ajuda na performance)
+  });
 }
 
 const sectionObserver = new IntersectionObserver(revealSection, {
