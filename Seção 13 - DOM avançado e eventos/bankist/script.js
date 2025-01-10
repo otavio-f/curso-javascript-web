@@ -20,6 +20,7 @@ const allSections = document.querySelectorAll('section');
 const slides = document.querySelectorAll('.slide');
 const btnLeftSlide = document.querySelector('.slider__btn--left');
 const btnRightSlide = document.querySelector('.slider__btn--right');
+const dots = document.querySelector('.dots');
 
 //=============================================================================
 //-| Modal window |----------------------------------------------------
@@ -304,48 +305,83 @@ const imageObserver = new IntersectionObserver(loadImage, {
 lazyImages.forEach(img => imageObserver.observe(img));
 
 /**
- * 211. Construindo um componente deslizante 1
+ * 211 e 212. Construindo um componente deslizante
  */
 
 // Cada slide está ao lado do outro
 // Quando a seta é clicada, o atributo CSS "translateX" muda para o próximo/anterior ser centralizado e os outros moverem de acordo
 // O atributo CSS "overflow" é alterado para "hidden" para esconder os slides não centralizados
 
-/**
- * Move os slides da parte de baixo da página e configura os botões prox/anterior de necessário
- * @param {Number} current O slide atual
- */
-function moveSlides(current) {
-  slides.forEach(
-    (slide, index) =>
-      (slide.style.transform = `translateX(${100 * (index + current)}%)`)
-  );
+// IIFE cria componente deslizante
+(function () {
+  let currentSlide = 0; // índice do slide atual
 
-  // se estiver no primeiro slide esconda o botão anterior
-  btnLeftSlide.style.display = current === 0 ? 'none' : '';
+  /**
+   * Move os slides da parte de baixo da página e configura os botões prox/anterior de necessário
+   * @param {Number} current O slide atual
+   */
+  function moveSlides(current) {
+    makeDots(-current);
+    slides.forEach(
+      (slide, index) =>
+        (slide.style.transform = `translateX(${100 * (index + current)}%)`)
+    );
 
-  // se estiver no último slide esconda o botão próximo
-  btnRightSlide.style.display = current === -(slides.length - 1) ? 'none' : '';
-}
+    // se estiver no primeiro slide esconda o botão anterior
+    btnLeftSlide.style.display = current === 0 ? 'none' : '';
 
-let currentSlide = 0; // índice do slide atual
+    // se estiver no último slide esconda o botão próximo
+    btnRightSlide.style.display =
+      current === -(slides.length - 1) ? 'none' : '';
+  }
 
-// move slides para as posições iniciais
-moveSlides(0);
+  /**
+   * Cria o indicador de página
+   * @param {Number} activeDot O índice do indicador ativo
+   */
+  function makeDots(activeDot) {
+    dots.innerHTML = '';
+    slides.forEach((_, index) => {
+      const activeClass = activeDot === index ? ' dots__dot--active' : '';
+      dots.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot${activeClass}" data-slide="${index}"></button>`
+      );
+    });
+  }
 
-// clique slide anterior
-btnLeftSlide.addEventListener('click', function () {
-  //if (currentSlide === 0) return; // não tem slide anterior!
-  currentSlide++;
-  moveSlides(currentSlide);
-});
+  // clique slide anterior
+  btnLeftSlide.addEventListener('click', function () {
+    currentSlide++;
+    moveSlides(currentSlide);
+  });
 
-// clique próximo slide
-btnRightSlide.addEventListener('click', function () {
-  currentSlide--;
-  moveSlides(currentSlide);
-});
+  // clique próximo slide
+  btnRightSlide.addEventListener('click', function () {
+    currentSlide--;
+    moveSlides(currentSlide);
+  });
 
+  //// Navegação com setas do teclado
+  document.addEventListener('keydown', function (e) {
+    // if (e.key === 'ArrowLeft' && currentSlide < 0) btnLeftSlide.click();
+    e.key === 'ArrowLeft' && currentSlide < 0 && btnLeftSlide.click(); // move para a esquerda
+
+    // if (e.key === 'ArrowRight' && currentSlide > -(slides.length - 1)) btnRightSlide.click();
+    e.key === 'ArrowRight' &&
+      currentSlide > -(slides.length - 1) &&
+      btnRightSlide.click(); // move para a direita
+  });
+
+  dots.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('dots__dot')) return;
+    currentSlide = -e.target.dataset.slide; // implicitamente converte pra número
+    moveSlides(currentSlide);
+  });
+
+  // move slides para as posições iniciais
+  moveSlides(0);
+})();
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
 //=============================================================================
