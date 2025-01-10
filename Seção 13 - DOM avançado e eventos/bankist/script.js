@@ -17,6 +17,10 @@ const header = document.querySelector('.header');
 
 const allSections = document.querySelectorAll('section');
 
+const slides = document.querySelectorAll('.slide');
+const btnLeftSlide = document.querySelector('.slider__btn--left');
+const btnRightSlide = document.querySelector('.slider__btn--right');
+
 //=============================================================================
 //-| Modal window |----------------------------------------------------
 //=============================================================================
@@ -298,6 +302,50 @@ const imageObserver = new IntersectionObserver(loadImage, {
 });
 
 lazyImages.forEach(img => imageObserver.observe(img));
+
+/**
+ * 211. Construindo um componente deslizante 1
+ */
+
+// Cada slide está ao lado do outro
+// Quando a seta é clicada, o atributo CSS "translateX" muda para o próximo/anterior ser centralizado e os outros moverem de acordo
+// O atributo CSS "overflow" é alterado para "hidden" para esconder os slides não centralizados
+
+/**
+ * Move os slides da parte de baixo da página e configura os botões prox/anterior de necessário
+ * @param {Number} current O slide atual
+ */
+function moveSlides(current) {
+  slides.forEach(
+    (slide, index) =>
+      (slide.style.transform = `translateX(${100 * (index + current)}%)`)
+  );
+
+  // se estiver no primeiro slide esconda o botão anterior
+  btnLeftSlide.style.display = current === 0 ? 'none' : '';
+
+  // se estiver no último slide esconda o botão próximo
+  btnRightSlide.style.display = current === -(slides.length - 1) ? 'none' : '';
+}
+
+let currentSlide = 0; // índice do slide atual
+
+// move slides para as posições iniciais
+moveSlides(0);
+
+// clique slide anterior
+btnLeftSlide.addEventListener('click', function () {
+  //if (currentSlide === 0) return; // não tem slide anterior!
+  currentSlide++;
+  moveSlides(currentSlide);
+});
+
+// clique próximo slide
+btnRightSlide.addEventListener('click', function () {
+  currentSlide--;
+  moveSlides(currentSlide);
+});
+
 //=============================================================================
 //-| Experimentos e aulas |----------------------------------------------------
 //=============================================================================
