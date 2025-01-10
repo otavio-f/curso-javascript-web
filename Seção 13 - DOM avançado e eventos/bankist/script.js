@@ -644,3 +644,32 @@ lazyImages.forEach(img => imageObserver.observe(img));
 // Para selecionar todos elementos irmãos, é necessário "andar" para o elemento pai e selecionar todos os elementos filhos
 
 // console.log([...h1.parentElement.children].filter(element => element !== h1));
+
+/**
+ * 213. Eventos do ciclo de vida do DOM
+ */
+
+//// DOMContentLoaded: Disparado quando o html e javascript foram baixados e a árvore DOM foi construída
+// Atenção: Não leva em conta imagens e outras mídias!
+// Use quando houver código que depende da DOM para ser executado, quando o script for carregado no head, etc.
+document.addEventListener('DOMContentLoaded', e =>
+  console.log('HTML parsed and DOMTree built!', e)
+);
+// Nesse caso não é necessário, pois a tag <script> é a última tag do <body>
+//     ou seja, o script só vai ser executado depois do html ser carregado
+
+//// load: Disparado pela janela quando a página foi carregada completamente
+// Inclui tudo que estiver no html
+window.addEventListener('load', e => console.log('Page fully loaded', e));
+
+//// beforeunload: Disparado pela janela antes da página ser fechada
+// Atenção: Não abuse desse evento, pois pode ser bem intrusivo e irritante para o usuário!
+let confirm = false;
+window.addEventListener('beforeunload', function (e) {
+  if (!confirm) {
+    e.preventDefault(); // impede janela de fechar e mostra confirmação de saída
+    confirm = true;
+    e.returnValue = ''; // mostra confirmação de saída
+  }
+  console.log(e);
+});
