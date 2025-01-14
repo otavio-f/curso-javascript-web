@@ -83,3 +83,32 @@ console.log(
   jonas.hasOwnProperty('firstName')
 );
 console.log('Is species a owned property?', jonas.hasOwnProperty('species'));
+
+/**
+ * 222. Herança prototipal em objetos padrão
+ */
+
+//// Cadeia de protótipos
+console.log(jonas.__proto__); // protótipo de jonas: Person.prototype
+console.log(jonas.__proto__.__proto__); // protótipo do protótipo: protótipo de Object
+console.log(jonas.__proto__.__proto__.__proto__); // Object é o topo da cadeia, o protótipo é null
+
+//// Arrays
+const arr = [1, 2, 3, 4, 5];
+console.log(
+  '[] prototype is the same as new Array?',
+  arr.__proto__ === Array.prototype
+); // sintaxe [...] é mesma coisa que new Array(...)
+
+// É possível estender a funcionalidade ao adicionar funções ao protótipo
+// Atenção: Não é recomendado mudar objetos padrão
+Array.prototype.unique = function () {
+  return [...new Set(this)];
+};
+
+arr.push(1, 3, 99, -1, 4, 4, 4, 4, 4, 4, 6); // adicionando elementos duplicados
+
+console.log(arr.unique());
+
+//// Funções também são objetos
+console.dir(x => x + 1);
