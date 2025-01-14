@@ -112,3 +112,47 @@ console.log(arr.unique());
 
 //// Funções também são objetos
 console.dir(x => x + 1);
+
+/**
+ * 223. Desafio de código #1
+ */
+
+/**
+ * Construtor de um carro
+ * @param {String} maker Fabricante do carro
+ * @param {*} model Modelo específico do carro
+ * @param {*} year Ano de lançamento
+ * @param {*} speed Velocidade inicial
+ */
+function Car(maker, model, year, speed) {
+  this.maker = maker;
+  this.model = model;
+  this.year = year;
+  this.speed = speed;
+}
+
+/**
+ * Aumenta a velocidade em 10km/h
+ */
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(`${this.model} >> ${this.speed}`);
+};
+
+/**
+ * Diminui a velocidade em 5km/h
+ */
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`${this.model} || ${this.speed}`);
+};
+
+const uno = new Car('Fiat', 'Uno Turbo i.e.', 1994, 120);
+const omega = new Car('Chevrolet', 'Omega CD 4.1i', 1997, 180);
+
+uno.accelerate();
+uno.accelerate();
+uno.brake();
+
+omega.accelerate();
+omega.brake();
