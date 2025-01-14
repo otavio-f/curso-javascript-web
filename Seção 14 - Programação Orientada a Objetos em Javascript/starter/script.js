@@ -186,6 +186,14 @@ class PersonCl {
   get age() {
     return this.calcAge();
   }
+
+  /**
+   * Diz oi
+   * @returns Oi
+   */
+  static hi() {
+    return "Hello, I'm a person!";
+  }
 }
 
 const jessica = new PersonCl('Jessica', 1996);
@@ -248,3 +256,19 @@ console.log(account.latest);
 // Getter age() foi adicionado na classe PersonCl
 
 console.log("Jessica's age:", jessica.age);
+
+/**
+ * 226. Métodos estáticos
+ */
+// Para criar um método estático em uma função construtora, simplesmente adicione como uma propriedade
+Person.hi = function () {
+  return "Hello, I'm a person.";
+};
+
+// Diferença entre um método estático e um método é que o estático está atrelado à função, não ao objeto
+// jonas.hi(); isso dá erro (lembrete: jonas é instância de Person)
+
+console.log(Person.hi());
+
+// Para criar um método estático em uma classe, adicione o método com a preposição class (feito mais em cima)
+PersonCl.hi();
