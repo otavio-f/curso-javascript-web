@@ -308,3 +308,70 @@ const sarah = Object.create(PersonProto);
 sarah.firstName = 'Sarah';
 sarah.birthYear = 1997;
 console.log('Sarah age is:', sarah.getAge(), sarah.age);
+
+/**
+ * 228. Desafio de código #2
+ */
+
+/**
+ * Um carro
+ */
+class CarCl {
+  /**
+   * Construtor de um carro
+   * @param {String} maker Fabricante do carro
+   * @param {*} model Modelo específico do carro
+   * @param {*} year Ano de lançamento
+   * @param {*} speed Velocidade inicial
+   */
+  constructor(maker, model, year, speed) {
+    this.maker = maker;
+    this.model = model;
+    this.year = year;
+    this.speed = speed;
+  }
+
+  /**
+   * Aumenta a velocidade em 10km/h
+   */
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.model} >> ${this.speed.toFixed(0)}`);
+  }
+
+  /**
+   * Diminui a velocidade em 5km/h
+   */
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.model} || ${this.speed.toFixed(0)}`);
+  }
+
+  /**
+   * Velocidade em mph
+   */
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  /**
+   * Velocidade em mph
+   */
+  set speedUS(mph) {
+    this.speed = mph * 1.6;
+  }
+}
+
+const golf = new CarCl('Volkswagen', 'Gol 1.8 Mi', 2002, 140);
+const corolla = new CarCl('Toyota', 'Corolla 1.8 XEI', 2001, 100);
+
+golf.accelerate();
+console.log(golf.speedUS);
+golf.speedUS = 60;
+golf.accelerate();
+
+corolla.brake();
+console.log(corolla.speedUS);
+corolla.speedUS = 5;
+corolla.accelerate();
+corolla.accelerate();
