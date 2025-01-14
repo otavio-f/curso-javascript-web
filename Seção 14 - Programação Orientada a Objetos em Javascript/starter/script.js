@@ -156,3 +156,46 @@ uno.brake();
 
 omega.accelerate();
 omega.brake();
+
+/**
+ * 224. Classes ES6
+ */
+
+// Classes em ES6 são syntatic sugar sobre objetos
+//// Existem duas formas de declarar classes
+
+// Class Expression
+// const PersonCl = class {};
+
+// Class declaration
+class PersonCl {
+  // construtor (tem que ter esse nome)
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  // métodos vão ser adicionados automaticamente ao protótipo
+  calcAge() {
+    return new Date().getFullYear() - this.birthYear;
+  }
+}
+
+const jessica = new PersonCl('Jessica', 1996);
+console.log(jessica);
+console.log(jessica.calcAge());
+console.log(
+  "Is jessica's proto equal to PersonCl's prototype?",
+  jessica.__proto__ === PersonCl.prototype
+);
+
+PersonCl.prototype.greet = function () {
+  return `Hello, ${jessica.firstName}`;
+};
+
+console.log(jessica.greet());
+
+//// Outras considerações sobre classes:
+// Classes não são hoisted. Só podem ser usadas após declarar
+// Classes são primeira classe, como funções
+// Classes são executadas em modo estrito 'use strict';
