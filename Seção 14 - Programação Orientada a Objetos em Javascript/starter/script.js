@@ -179,6 +179,13 @@ class PersonCl {
   calcAge() {
     return new Date().getFullYear() - this.birthYear;
   }
+
+  /**
+   * Idade atual
+   */
+  get age() {
+    return this.calcAge();
+  }
 }
 
 const jessica = new PersonCl('Jessica', 1996);
@@ -199,3 +206,45 @@ console.log(jessica.greet());
 // Classes não são hoisted. Só podem ser usadas após declarar
 // Classes são primeira classe, como funções
 // Classes são executadas em modo estrito 'use strict';
+
+/**
+ * 225. Getters e setters
+ */
+
+// Todo objeto possui propriedades setters e getters
+// Getters e setters são acessor properties, e outras são data properties
+// Getters e setters são funções que controlam atribuição e obtenção de valor por propriedades
+
+// Exemplo: conta banco
+const account = {
+  owner: 'jonas',
+  movements: [100, 115, 330, -1, 1000],
+
+  /**
+   * Retorna a última movimentação
+   */
+  // Para fazer um get, adicione a palavra chave get a um método dentro do objeto
+  get latest() {
+    return this.movements.at(-1);
+  },
+
+  /**
+   * Cria uma nova movimentação
+   */
+  // Para fazer um set, adicione a palavra chave set a um método dentro do objeto
+  // O primeiro argumento vai ser o valor atribuído
+  set latest(value) {
+    this.movements.push(value);
+  },
+};
+
+console.log(account.latest);
+
+account.latest = 3500;
+
+console.log(account.latest);
+
+// Para adicionar getters e setters em uma classe é igual ao objeto literal
+// Getter age() foi adicionado na classe PersonCl
+
+console.log("Jessica's age:", jessica.age);
