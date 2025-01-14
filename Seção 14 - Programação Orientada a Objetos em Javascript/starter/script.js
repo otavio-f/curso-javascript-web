@@ -272,3 +272,39 @@ console.log(Person.hi());
 
 // Para criar um método estático em uma classe, adicione o método com a preposição class (feito mais em cima)
 PersonCl.hi();
+
+/**
+ * 227. Object.create
+ */
+
+// Uma terceira forma de implementar objetos
+
+// Primeiro, defina os métodos do protótipo em um objeto literal
+const PersonProto = {
+  getAge() {
+    return new Date().getFullYear() - this.birthYear;
+  },
+  get age() {
+    return this.getAge();
+  },
+};
+
+// Segundo, crie o objeto, atribuindo o protótipo ao objeto
+const steven = Object.create(PersonProto); // O protótipo dessa instância é PersonProto
+
+// Terceiro, adicione as propriedades
+steven.firstName = 'Steven';
+steven.birthYear = 2002;
+
+console.log(
+  "Is steven's proto equal to PersonProto?",
+  steven.__proto__ === PersonProto
+);
+
+console.log(steven);
+console.log('Steven age is:', steven.getAge(), steven.age);
+
+const sarah = Object.create(PersonProto);
+sarah.firstName = 'Sarah';
+sarah.birthYear = 1997;
+console.log('Sarah age is:', sarah.getAge(), sarah.age);
