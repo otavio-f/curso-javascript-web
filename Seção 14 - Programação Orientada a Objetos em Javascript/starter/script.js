@@ -555,3 +555,73 @@ saveiro.unload(400);
 // pra frente de novo
 saveiro.accelerate();
 saveiro.accelerate();
+
+/**
+ * 231. Herança entre classes: Classes ES6
+ */
+
+// Para implementar herança com classes, basta usar a palavra chave 'extends' e 'super'
+// Esconde bastante coisa por trás dos panos, mas é muito mais prático!
+
+/**
+ * Uma classe estudante
+ */
+class StudentCl extends PersonCl {
+  /**
+   * Cria um novo estudante
+   * @param {String} firstName
+   * @param {String} birthYear
+   * @param {String} course
+   * @return {Student} um objeto estudante
+   */
+  constructor(firstName, birthYear, course) {
+    // chama a superclasse
+    super(firstName, birthYear); // deve ser chamado primeiro!
+    this.course = course;
+  }
+
+  /**
+   * Greets
+   * @return {String} a greeting
+   */
+  introduce() {
+    return `My name is ${
+      this.firstName
+    } and I study ${this.course.toLowerCase()}.`;
+  }
+}
+
+// Pronto pra criar instâncias!
+const martha = new StudentCl('Martha', 2001, 'Archictecture');
+
+// __proto__ deve ser Student
+console.log(
+  "Is martha's prototype StudentCl?",
+  martha.__proto__ === StudentCl.prototype
+);
+
+// __proto__.__proto__ deve ser Person
+console.log(
+  "Is the prototype of martha's prototype PersonCl?",
+  martha.__proto__.__proto__ === PersonCl.prototype
+);
+
+// __proto__.__proto__.__proto__ deve ser Object
+console.log(
+  "Is the prototype of the prototype of martha's prototype Object?",
+  martha.__proto__.__proto__.__proto__ === Object.prototype
+);
+
+// __proto__.__proto__.__proto__.__proto__ deve ser null
+console.log(
+  "Is the prototype of the prototype of the prototype of martha's prototype null?",
+  martha.__proto__.__proto__.__proto__.__proto__ === null
+);
+
+console.log('Is martha an instance of StudentCl?', martha instanceof StudentCl);
+console.log('Is martha an instance of PersonCl?', martha instanceof PersonCl);
+console.log('Is martha an instance of Object?', martha instanceof Object);
+
+console.log(martha.introduce());
+console.log("martha's age:", martha.calcAge()); // função de PersonCl
+console.log("martha's age:", martha.age); // getter de PersonCl
