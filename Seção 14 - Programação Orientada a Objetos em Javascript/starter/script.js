@@ -680,3 +680,75 @@ console.log(jay);
 console.log(jay.introduce());
 console.log("jay's age:", jay.getAge()); // função de PersonProto
 console.log("jay's age:", jay.age); // getter de PersonProto
+
+/**
+ * 233. Exemplo de classe
+ */
+
+/**
+ * Representa uma conta bancária
+ */
+class Account {
+  /**
+   * Cria uma conta
+   * @param {String} owner
+   * @param {String} currency
+   * @param {Number} pin
+   */
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.pin = pin;
+
+    // É possível atribuir propriedades a valores que não vieram dos argumentos
+    this.movements = [];
+    this.locale = navigator.language;
+
+    // Também é possível executar qualquer código dentro do construtor
+    console.log('Thanks for opening a new account!');
+  }
+
+  /**
+   * Deposita um valor em conta
+   * @param {Number} value Um valor positivo a adicionar
+   */
+  deposit(value) {
+    if (value <= 0) {
+      console.error('Invalid value!');
+      return;
+    }
+    this.movements.push(value);
+  }
+
+  /**
+   * Retira um valor da conta
+   * @param {Number} value Um valor positivo a retirar
+   */
+  withdraw(value) {
+    if (value <= 0) {
+      console.error('Invalid value!');
+      return;
+    }
+    this.movements.push(-value);
+  }
+
+  /**
+   * Retorna o extrato
+   */
+  get balance() {
+    return this.movements.reduce((sum, val) => sum + val, 0);
+  }
+}
+
+const acc1 = new Account('Jonas', 'Euro', 1111);
+
+// É possível interagir com as propriedades diretamente, mas não é recomendado pq pode causar bugs
+// acc1.movements.push(250); // depósito
+// acc1.movements.push(-300); // retirada
+
+// Ao invés disso, crie e use métodos com objetivos específicos
+acc1.deposit(250);
+acc1.withdraw(300);
+
+acc1.withdraw(-300); // will error
+console.log(acc1);
