@@ -625,3 +625,58 @@ console.log('Is martha an instance of Object?', martha instanceof Object);
 console.log(martha.introduce());
 console.log("martha's age:", martha.calcAge()); // função de PersonCl
 console.log("martha's age:", martha.age); // getter de PersonCl
+
+/**
+ * 232. Herança entre classes: Object.create
+ */
+
+// reusando PersonProto acima
+
+// Crie um novo protótipo com Object.create
+const StudentProto = Object.create(PersonProto);
+
+// Adicione métodos do protótipo
+/**
+ * Cumprimenta
+ * @return {String} um cumprimento
+ */
+StudentProto.introduce = function () {
+  return `My name is ${
+    this.firstName
+  } and I study ${this.course.toLowerCase()}.`;
+};
+
+// Crie objetos com Object.create
+const jay = Object.create(StudentProto);
+
+// Adicione as propriedades
+jay.firstName = 'Jayce';
+jay.birthYear = 1981;
+jay.course = 'Biology';
+
+// __proto__ deve ser Student
+console.log("Is jay's prototype StudentProto?", jay.__proto__ === StudentProto);
+
+// __proto__.__proto__ deve ser Person
+console.log(
+  "Is the prototype of jay's prototype PersonProto?",
+  jay.__proto__.__proto__ === PersonProto
+);
+
+// __proto__.__proto__.__proto__ deve ser Object
+console.log(
+  "Is the prototype of the prototype of jay's prototype Object?",
+  jay.__proto__.__proto__.__proto__ === Object.prototype
+);
+
+// __proto__.__proto__.__proto__.__proto__ deve ser null
+console.log(
+  "Is the prototype of the prototype of the prototype of jay's prototype null?",
+  jay.__proto__.__proto__.__proto__.__proto__ === null
+);
+
+console.log(jay);
+
+console.log(jay.introduce());
+console.log("jay's age:", jay.getAge()); // função de PersonProto
+console.log("jay's age:", jay.age); // getter de PersonProto
