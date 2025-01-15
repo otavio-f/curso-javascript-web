@@ -446,3 +446,112 @@ console.log('Is mike an instance of Object?', mike instanceof Object);
 
 console.log(mike.introduce());
 console.log("Mike's age:", mike.getAge()); // função de Person
+
+/**
+ * 230. Desafio de código #3
+ */
+
+// Carro elétrico é chato demais, vou implementar uma caminhonete/ATV
+
+// Criar construtor chamando construtor da superclasse
+/**
+ * Construtor de uma caminhonete
+ * @param {String} maker Fabricante da caminhonete
+ * @param {String} model Modelo específico da caminhonete
+ * @param {Number} year Ano de lançamento
+ * @param {Number} speed Velocidade inicial em km/h
+ * @param {Number} capacity Capacidade de carga em kg
+ */
+function Truck(maker, model, year, speed, capacity) {
+  Car.call(this, maker, model, year, speed);
+  this.capacity = capacity;
+  this._load = 0;
+}
+
+// Atribuir protótipo
+Truck.prototype = Object.create(Car.prototype);
+
+// Consertar construtor
+Truck.prototype.constructor = Truck;
+
+// Adicionar métodos da caminhonete
+// Ao invés de adicionar 'chargeBatt' vou adicionar load/unload que recebe o peso e só funciona quando parado
+
+/**
+ * Carrega a caminhonete.
+ * @param {Number} weight Peso a ser carregado
+ * @return {Boolean} se a caminhonete foi carregada com o peso
+ */
+Truck.prototype.load = function (weight) {
+  if (this.speed !== 0) {
+    console.log("Can't load while the truck is moving!");
+    return false;
+  }
+  if (this.capacity - (this._load + weight) < 0) {
+    console.log('There is too much weight already! Unload something before.');
+    return false;
+  }
+
+  this._load += weight;
+  return true;
+};
+
+/**
+ * Descarrega a caminhonete.
+ * @param {Number} weight Peso a ser descarregado
+ * @return {Boolean} se a caminhonete foi descarregada
+ */
+Truck.prototype.unload = function (weight) {
+  if (this.speed !== 0) {
+    console.log("Can't unload while the truck is moving!");
+    return false;
+  }
+  if (this._load - weight < 0) {
+    console.log('There is not enough weight already! Load something before.');
+    return false;
+  }
+
+  this._load -= weight;
+  return true;
+};
+
+/**
+ * Diminui a velocidade em 2km/h
+ */
+Truck.prototype.brake = function () {
+  this.speed -= 2;
+  console.log(`${this.model} [${this._load}] || ${this.speed}`);
+};
+
+const saveiro = new Truck('Volkswagen', 'Saveiro CL 1.8', 1995, 60, 990);
+
+// tenta carregar mas está em movimento
+saveiro.load(100);
+
+// freia até parar
+while (saveiro.speed > 0) {
+  saveiro.brake();
+}
+
+// tenta carregar
+saveiro.load(1000);
+// agora com peso certo
+saveiro.load(875);
+
+// acelera
+saveiro.accelerate();
+saveiro.accelerate();
+
+// para
+while (saveiro.speed > 0) {
+  saveiro.brake();
+}
+
+// descarrega
+saveiro.unload(900);
+saveiro.unload(475);
+saveiro.unload(400);
+
+// pra frente de novo
+saveiro.accelerate();
+saveiro.accelerate();
