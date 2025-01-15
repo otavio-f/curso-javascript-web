@@ -752,3 +752,99 @@ acc1.withdraw(300);
 
 acc1.withdraw(-300); // will error
 console.log(acc1);
+
+/**
+ * 235. Encadeando métodos
+ */
+
+// Encadear métodos permite chamar métodos em sequência enquanto modifica o objeto
+// Em cada operação o objeto é retornado
+// Mesmo mecanismo usado para encadear listas, sets, etc.
+
+/**
+ * Representa uma conta bancária com métodos encadeados
+ */
+class ChainedAccount extends Account {
+  /**
+   * Cria uma conta
+   * @param {String} owner
+   * @param {String} currency
+   * @param {Number} pin
+   */
+  constructor(owner, currency, pin) {
+    super(owner, currency, pin);
+  }
+
+  /**
+   * Deposita um valor em conta
+   * @param {Number} value Um valor positivo a adicionar
+   * @return {ChainedAccount} Essa conta ou null se ocorrer um erro na operação
+   */
+  deposit(value) {
+    if (value <= 0) {
+      console.error('Invalid value!');
+      return null;
+    }
+    this.movements.push(value);
+    return this;
+  }
+
+  /**
+   * Retira um valor da conta
+   * @param {Number} value Um valor positivo a retirar
+   * @return {ChainedAccount} Essa conta ou null se ocorrer erro na operação
+   */
+  withdraw(value) {
+    if (value <= 0) {
+      console.error('Invalid value!');
+      return null;
+    }
+    this.movements.push(-value);
+    return this;
+  }
+
+  /**
+   * Verifica um empréstimo
+   * @param {Number} value O valor a ser emprestado
+   * @return {Boolean} Se o maior depósito é maior que 10% do valor do empréstimo
+   */
+  approveLoan(value) {
+    const max = this.movements.reduce(
+      (max, val) => Math.max(max, val),
+      this.movements[0]
+    );
+    return max > value;
+  }
+  /**
+   * Solicita um empréstimo
+   * @param {Number} value Um valor positivo
+   * @return {ChainedAccount} Essa conta ou null se ocorrer erro na operação
+   */
+  requestLoan(value) {
+    if (this.approveLoan(value));
+    this.deposit(value);
+    return this;
+  }
+
+  /**
+   * Retorna o extrato
+   */
+  get balance() {
+    return this.movements.reduce((sum, val) => sum + val, 0);
+  }
+}
+
+const chainAcc = new ChainedAccount('Ellie', 'USD', 2222);
+
+console.log(chainAcc.balance);
+
+console.log(
+  chainAcc
+    .deposit(300)
+    .withdraw(100)
+    .deposit(50)
+    .requestLoan(25000)
+    .withdraw(4000).balance
+);
+
+console.log(chainAcc.movements);
