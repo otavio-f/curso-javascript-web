@@ -375,3 +375,74 @@ console.log(corolla.speedUS);
 corolla.speedUS = 5;
 corolla.accelerate();
 corolla.accelerate();
+
+/**
+ * 229. Herança entre classes: funções construtoras
+ */
+// Reusando função Person() mais acima
+
+/**
+ * Cria um novo estudante
+ * @param {String} firstName
+ * @param {String} birthYear
+ * @param {String} course
+ * @return {Student} um objeto estudante
+ */
+function Student(firstName, birthYear, course) {
+  // Se lembre que chamar função construtora sem new, o this será undefined
+  // Chame a superclasse, passando o this dessa
+  Person.call(this, firstName, birthYear);
+  // Atribua as outras propriedades
+  this.course = course;
+}
+
+// Mude o protótipo antes de adicionar métodos ao protótipo novo
+Student.prototype = Object.create(Person.prototype); // .__proto__ do objeto vai ser igual ao .prototype da superclasse
+
+// Corrija o protótipo do construtor
+Student.prototype.constructor = Student;
+
+// Adicione métodos do protótipo
+/**
+ * Greets
+ * @return {String} a greeting
+ */
+Student.prototype.introduce = function () {
+  return `My name is ${
+    this.firstName
+  } and I study ${this.course.toLowerCase()}.`;
+};
+
+// Pronto pra criar instâncias!
+const mike = new Student('Michael', 1900, 'Medicine');
+
+// __proto__ deve ser Student
+console.log(
+  "Is mike's prototype Student?",
+  mike.__proto__ === Student.prototype
+);
+
+// __proto__.__proto__ deve ser Person
+console.log(
+  "Is the prototype of mike's prototype Person?",
+  mike.__proto__.__proto__ === Person.prototype
+);
+
+// __proto__.__proto__.__proto__ deve ser Object
+console.log(
+  "Is the prototype of the prototype of mike's prototype Object?",
+  mike.__proto__.__proto__.__proto__ === Object.prototype
+);
+
+// __proto__.__proto__.__proto__.__proto__ deve ser null
+console.log(
+  "Is the prototype of the prototype of the prototype of mike's prototype null?",
+  mike.__proto__.__proto__.__proto__.__proto__ === null
+);
+
+console.log('Is mike an instance of Student?', mike instanceof Student);
+console.log('Is mike an instance of Person?', mike instanceof Person);
+console.log('Is mike an instance of Object?', mike instanceof Object);
+
+console.log(mike.introduce());
+console.log("Mike's age:", mike.getAge()); // função de Person
