@@ -924,3 +924,106 @@ accEnc.withdraw(300);
 
 accEnc.withdraw(-300); // will error out
 console.log(accEnc);
+
+/**
+ * 237. Desafio de código #4
+ */
+
+// Carro elétrico é chato demais, vou implementar uma caminhonete/ATV
+
+class TruckCl extends CarCl {
+  #load = 0;
+
+  /**
+   * Construtor de uma caminhonete
+   * @param {String} maker Fabricante da caminhonete
+   * @param {String} model Modelo específico da caminhonete
+   * @param {Number} year Ano de lançamento
+   * @param {Number} speed Velocidade inicial em km/h
+   * @param {Number} capacity Capacidade de carga em kg
+   */
+  constructor(maker, model, year, speed, capacity) {
+    super(maker, model, year, speed);
+    this.capacity = capacity;
+  }
+
+  /**
+   * A quantidade de carga em kg
+   */
+  get load() {
+    return this.#load;
+  }
+
+  /**
+   * Carrega a caminhonete.
+   * @param {Number} weight Peso a ser carregado
+   * @return {Boolean} se a caminhonete foi carregada com o peso
+   */
+  load(weight) {
+    if (this.speed !== 0) {
+      console.log("Can't load while the truck is moving!");
+      return false;
+    }
+    if (this.capacity - (this.#load + weight) < 0) {
+      console.log('There is too much weight already! Unload something before.');
+      return false;
+    }
+
+    this.#load += weight;
+    console.log(`${this.maker} ${this.model} [[${this.#load} (+${weight})]]`);
+    return true;
+  }
+
+  /**
+   * Descarrega a caminhonete.
+   * @param {Number} weight Peso a ser descarregado
+   * @return {Boolean} se a caminhonete foi descarregada
+   */
+  unload(weight) {
+    if (this.speed !== 0) {
+      console.log("Can't unload while the truck is moving!");
+      return false;
+    }
+    if (this.#load - weight < 0) {
+      console.log('There is not enough weight already! Load something before.');
+      return false;
+    }
+
+    this.#load -= weight;
+    console.log(`${this.maker} ${this.model} [[${this.#load} (-${weight})]]`);
+    return true;
+  }
+
+  /**
+   * Diminui a velocidade em 2km/h
+   */
+  brake() {
+    this.speed -= 2;
+    console.log(`${this.model} [${this.#load}] || ${this.speed}`);
+  }
+}
+
+const hilux = new TruckCl('Toyota', 'Hilux 2.8GD', 2023, 90, 1080);
+
+while (hilux.speed > 0) {
+  hilux.brake();
+}
+
+hilux.load(30);
+hilux.load(60);
+hilux.load(400);
+hilux.load(110);
+hilux.load(210);
+
+while (hilux.speed < 60) {
+  hilux.accelerate();
+}
+
+while (hilux.speed > 0) {
+  hilux.brake();
+}
+
+hilux.unload(210);
+hilux.unload(400);
+
+console.log(hilux);
