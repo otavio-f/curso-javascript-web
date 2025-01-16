@@ -848,3 +848,79 @@ console.log(
 );
 
 console.log(chainAcc.movements);
+
+/**
+ * 234. Encapsulamento
+ */
+
+// Atenção: ES2022
+
+/**
+ * Representa uma conta bancária
+ */
+class AccountEncapsulated {
+  // para um campo público, adicione ele antes do construtor
+  locale = navigator.language;
+
+  // campos privados começam com #
+  // campos que começam com # só podem ser usados dentro da classe na qual foram declarados
+  #movements = []; // use this.#movements
+  #pin;
+
+  /**
+   * Cria uma conta encapsulada
+   * @param {String} owner
+   * @param {String} currency
+   * @param {Number} pin
+   */
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+
+    // É possível atribuir propriedades a valores que não vieram dos argumentos
+
+    // Também é possível executar qualquer código dentro do construtor
+    console.log('Thanks for opening a new account!');
+  }
+
+  // Métodos privados começam com #
+  #approveLoan(value) {
+    return true;
+  }
+
+  /**
+   * Deposita um valor em conta
+   * @param {Number} value Um valor positivo a adicionar
+   */
+  deposit(value) {
+    if (value <= 0) {
+      console.error('Invalid value!');
+      return;
+    }
+    this.#movements.push(value);
+  }
+
+  /**
+   * Retira um valor da conta
+   * @param {Number} value Um valor positivo a retirar
+   */
+  withdraw(value) {
+    this.deposit(-value);
+  }
+
+  /**
+   * Retorna o extrato
+   */
+  get balance() {
+    return this.#movements.reduce((sum, val) => sum + val, 0);
+  }
+}
+
+const accEnc = new AccountEncapsulated('Jonas', 'Euro', 1111);
+
+accEnc.deposit(250);
+accEnc.withdraw(300);
+
+accEnc.withdraw(-300); // will error out
+console.log(accEnc);
