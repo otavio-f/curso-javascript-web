@@ -190,4 +190,34 @@ function getCountryDataPromise(country) {
   });
 }
 
-getCountryDataPromise('portugal');
+// getCountryDataPromise('portugal');
+
+/**
+ * 263. Encadeando promises
+ */
+
+/**
+ * Mostra os dados de um país e o vizinho mais próximo
+ * A ordem não é mantida
+ * @param {String} country País
+ */
+function getCountryDataPromise2(country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(([data]) => {
+      showCountry(data);
+
+      const neighborCode = data.borders?.[0];
+      if (!neighborCode) return; // deve dar erro
+
+      // Atenção: não use .then imediatamente no fetch
+      // retorne promise e não encadeie .then pra evitar o inferno de callback!
+      return fetch(`https://restcountries.com/v2/alpha/${neighborCode}`);
+    })
+    .then(response => response.json())
+    .then(data => showCountry(data, 'neighbour'));
+}
+
+//// Atenção: .then() sempre retorna uma Promise!
+
+getCountryDataPromise2('portugal');
