@@ -61,7 +61,7 @@ function showCountryData(country) {
   `;
 
     countriesContainer.insertAdjacentHTML('beforeend', html);
-    countriesContainer.style.opacity = 1;
+    // countriesContainer.style.opacity = 1;
   });
 }
 
@@ -97,7 +97,7 @@ function showCountry(data, countryClass = '') {
     `;
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 }
 /**
  * Mostra os dados de um país e o vizinho mais próximo
@@ -220,4 +220,56 @@ function getCountryDataPromise2(country) {
 
 //// Atenção: .then() sempre retorna uma Promise!
 
-getCountryDataPromise2('portugal');
+// getCountryDataPromise2('portugal');
+
+/**
+ * 264. Lidando com promises rejeitadas
+ */
+
+// Uma promise na qual ocorreu um erro é uma promise rejected
+
+/**
+ * Mostra uma mensagem de erro
+ * @param {String} msg
+ */
+function showError(msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  // countriesContainer.style.opacity = 1;
+}
+
+/**
+ * Mostra os dados de um país e o vizinho mais próximo
+ * A ordem não é mantida
+ * @param {String} country País
+ */
+function getCountryDataPromise3(country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(
+      response => response.json()
+      // err => alert(err) // use o segundo argumento para tratar o erro em uma promise
+    )
+    .then(([data]) => {
+      showCountry(data);
+
+      const neighborCode = data.borders?.[0];
+      if (!neighborCode) return; // deve dar erro
+
+      // Atenção: não use .then imediatamente no fetch
+      // retorne promise e não encadeie .then pra evitar o inferno de callback!
+      return fetch(`https://restcountries.com/v2/alpha/${neighborCode}`);
+    })
+    .then(response => response.json())
+    .then(data => showCountry(data, 'neighbour'))
+    .catch(err => {
+      // use catch para pegar qualquer erro (rejected promise)
+      console.error(err);
+      showError(`Something went wrong. ${err.message} Try again later.`);
+    })
+    .finally(() => {
+      // executa após a promise ser rejeitada ou completada
+      countriesContainer.style.opacity = 1;
+      console.log('Ended!');
+    });
+}
+
+btn.addEventListener('click', () => getCountryDataPromise3('portugal'));
