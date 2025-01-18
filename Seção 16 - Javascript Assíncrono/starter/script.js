@@ -140,9 +140,9 @@ function getCountryAndNeighbor(country) {
  * 261. Promises e API Fetch
  */
 
-// Modo atualizado de fazer uma requisição GET
-const request = fetch('https://restcountries.com/v2/name/portugal'); // retorna uma Promise
-console.log(request);
+//// Modo atualizado de fazer uma requisição GET
+// const request = fetch('https://restcountries.com/v2/name/portugal'); // retorna uma Promise
+// console.log(request);
 
 // Promise é um objeto usado para armazenar o resultado de uma operação assíncrona
 // Várias promises podem ser encadeadas, o que evita callback hell
@@ -155,3 +155,39 @@ console.log(request);
  */
 
 // Promises tem que ser produzidas para serem consumidas
+
+/**
+ * 262. Consumindo promises
+ */
+
+/**
+ * Mostra os dados de um país e o vizinho mais próximo
+ * A ordem não é mantida
+ * @param {String} country País
+ */
+function getCountryDataPromise(country) {
+  const request = fetch(`https://restcountries.com/v2/name/${country}`); // retorna uma Promise
+  // Promises possuem um método .then() para o caso de a promessa ter sido fullfilled
+  // A função callback é executada
+  request.then(response => {
+    // código de status está em response.status
+    // corpo da resposta está em response.json()
+    const json = response.json();
+    console.log(json);
+
+    // response.json() retorna outra promise, então é necessário usar .then de novo
+    json.then(([data]) => {
+      showCountry(data);
+
+      const neighborCode = data.borders?.[0];
+      if (!neighborCode) return;
+
+      // Um exemplo de como encadear .then()
+      fetch(`https://restcountries.com/v2/alpha/${neighborCode}`)
+        .then(response => response.json())
+        .then(data => showCountry(data));
+    });
+  });
+}
+
+getCountryDataPromise('portugal');
