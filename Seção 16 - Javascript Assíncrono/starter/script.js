@@ -134,4 +134,24 @@ function getCountryAndNeighbor(country) {
   });
 }
 
-getCountryAndNeighbor('portugal');
+// getCountryAndNeighbor('portugal');
+
+/**
+ * 261. Promises e API Fetch
+ */
+
+// Modo atualizado de fazer uma requisição GET
+const request = fetch('https://restcountries.com/v2/name/portugal'); // retorna uma Promise
+console.log(request);
+
+// Promise é um objeto usado para armazenar o resultado de uma operação assíncrona
+// Várias promises podem ser encadeadas, o que evita callback hell
+
+/*
+ * Promises tem um ciclo de vida:
+ * - Pending: significa que o resultado ainda não está disponível;
+ * - Fullfilled: a Promise obteve o resultado de modo esperado;
+ * - Rejected: Um erro ocorreu e resultado não pôde ser produzido;
+ */
+
+// Promises tem que ser produzidas para serem consumidas
