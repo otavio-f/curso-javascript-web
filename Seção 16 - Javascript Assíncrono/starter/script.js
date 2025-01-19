@@ -370,17 +370,55 @@ console.log('Test start.');
 
 // Timer de zero segundos
 
-//// Atenção: Não use timeout para eventos de alta precisão
-// Garantido que vai executar pelo menos zero segundos depois, não zero segundos exatos
-setTimeout(() => console.log('Zero second timer.'), 0);
+// //// Atenção: Não use timeout para eventos de alta precisão
+// // Garantido que vai executar pelo menos zero segundos depois, não zero segundos exatos
+// setTimeout(() => console.log('Zero second timer.'), 0);
 
-// Promise vai ser executada primeiro pois tem prioridade
-Promise.resolve('Resolved promise 1').then(value => console.log(value));
+// // Promise vai ser executada primeiro pois tem prioridade
+// Promise.resolve('Resolved promise 1').then(value => console.log(value));
 
-// Promise que demora a executar
-Promise.resolve('Resolved promise 2').then(value => {
-  for (let i = 0; i < 1_000_000; i++) {}
-  console.log(value);
+// // Promise que demora a executar
+// Promise.resolve('Resolved promise 2').then(value => {
+//   for (let i = 0; i < 1_000_000; i++) {}
+//   console.log(value);
+// });
+
+// console.log('Test end.\n\n');
+
+/**
+ * 269. Construindo uma Promise
+ */
+
+// Construtor de Promise aceita uma função como argumento.
+// A função recebe dois argumentos, uma função que marca a promise como aceita, e a outra que marca a promise como rejeitada
+const lottery = new Promise(function (resolve, reject) {
+  console.log('Lottery draw!');
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('WIN!'); // marca como fullfilled
+    } else {
+      reject(new Error('You lose!')); // marca como rejected
+    }
+  }, 1500);
 });
 
-console.log('Test end.');
+lottery.then(won => console.log(won)).catch(lost => console.warn(lost));
+
+// Promisifying é transformar uma função assíncrona em uma promise
+
+// Promisifying setTimeout
+function wait(seconds) {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+}
+
+// espera dois segundos e espera um segundo
+wait(2)
+  .then(() => {
+    console.log('Waited for two seconds.');
+    return wait(1);
+  })
+  .then(() => console.log('Waited for another second.'));
+
+//// Para criar uma Promise já resolvida
+Promise.resolve('ok').then(res => console.info(res));
+Promise.reject(new Error('error')).catch(err => console.error(err));
