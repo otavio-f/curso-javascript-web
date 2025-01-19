@@ -361,3 +361,26 @@ window.addEventListener('keyup', event => {
       })
       .catch(err => console.log(err));
 });
+
+/**
+ * 268. O loop de eventos na prática
+ */
+
+console.log('Test start.');
+
+// Timer de zero segundos
+
+//// Atenção: Não use timeout para eventos de alta precisão
+// Garantido que vai executar pelo menos zero segundos depois, não zero segundos exatos
+setTimeout(() => console.log('Zero second timer.'), 0);
+
+// Promise vai ser executada primeiro pois tem prioridade
+Promise.resolve('Resolved promise 1').then(value => console.log(value));
+
+// Promise que demora a executar
+Promise.resolve('Resolved promise 2').then(value => {
+  for (let i = 0; i < 1_000_000; i++) {}
+  console.log(value);
+});
+
+console.log('Test end.');
