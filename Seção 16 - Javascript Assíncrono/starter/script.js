@@ -324,7 +324,7 @@ function getCountryDataPromise4(country) {
     });
 }
 
-btn.addEventListener('click', () => getCountryDataPromise4('australia'));
+// btn.addEventListener('click', () => getCountryDataPromise4('australia'));
 
 /**
  * 266. Desafio de código #1
@@ -422,3 +422,67 @@ wait(2)
 //// Para criar uma Promise já resolvida
 Promise.resolve('ok').then(res => console.info(res));
 Promise.reject(new Error('error')).catch(err => console.error(err));
+
+/**
+ * 270. Promisifying a API de geolocalização
+ */
+
+// Função pega a localização atual
+// Aceita duas funções callback como argumentos: uma em caso de sucesso, outra em caso de erro
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.error(err)
+// );
+
+/**
+ * Obtém a posição atual
+ * @returns {Promise<GeolocationPosition>} a localização atual
+ */
+function getCurrentPosition() {
+  // cria uma nova promise com o local atual
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(
+      // retorna a posição atual
+      position => resolve(position),
+      // retorna o erro
+      error => reject(new Error(error))
+    );
+
+    // chama automaticamente
+    // navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+}
+
+// getCurrentPosition()
+//   .then(position => console.log(position))
+//   .catch(err => console.log(err));
+
+/**
+ * Faz geocoding reverso da posição atual
+ * Busca um local pelas coordenadas atuais
+ */
+function realWhereAmI() {
+  return getCurrentPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: long } = pos.coords;
+      return fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}`
+      );
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(`An error occurred (${response.code}).`);
+      }
+    });
+}
+
+btn.addEventListener('click', () => {
+  realWhereAmI()
+    .then(geoData => {
+      getCountryDataPromise4(geoData.countryName);
+      console.log(`You are in ${geoData.city}, ${geoData.countryName}`);
+    })
+    .catch(err => console.error(err));
+});
