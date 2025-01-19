@@ -325,3 +325,39 @@ function getCountryDataPromise4(country) {
 }
 
 btn.addEventListener('click', () => getCountryDataPromise4('australia'));
+
+/**
+ * 266. Desafio de código #1
+ */
+
+/**
+ * Faz geocoding reverso.
+ * Busca um local pelas coordenadas.
+ * @param {String} lat A latitude
+ * @param {String} long A longitude
+ */
+function whereAmI(lat, long) {
+  // return fetch(`https://geocode.xyz/${lat},${long}?geoit=json`).then(
+  return fetch(
+    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}`
+  ).then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(`An error occurred (${response.code}).`);
+    }
+  });
+}
+
+window.addEventListener('keyup', event => {
+  if (event.code === 'Space')
+    //whereAmI('52.508', '13.381')
+    // whereAmI('19.037', '72.873')
+    whereAmI('-33.933', '18.474')
+      .then(geoData => {
+        console.log(geoData);
+        getCountryDataPromise4(geoData.countryName);
+        console.log(`You are in ${geoData.city}, ${geoData.countryName}`);
+      })
+      .catch(err => console.log(err));
+});
