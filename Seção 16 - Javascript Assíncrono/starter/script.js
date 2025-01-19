@@ -366,7 +366,7 @@ window.addEventListener('keyup', event => {
  * 268. O loop de eventos na prática
  */
 
-console.log('Test start.');
+// console.log('Test start.');
 
 // Timer de zero segundos
 
@@ -391,18 +391,18 @@ console.log('Test start.');
 
 // Construtor de Promise aceita uma função como argumento.
 // A função recebe dois argumentos, uma função que marca a promise como aceita, e a outra que marca a promise como rejeitada
-const lottery = new Promise(function (resolve, reject) {
-  console.log('Lottery draw!');
-  setTimeout(function () {
-    if (Math.random() >= 0.5) {
-      resolve('WIN!'); // marca como fullfilled
-    } else {
-      reject(new Error('You lose!')); // marca como rejected
-    }
-  }, 1500);
-});
+// const lottery = new Promise(function (resolve, reject) {
+//   setTimeout(function () {
+//     if (Math.random() >= 0.5) {
+//       resolve('WIN!'); // marca como fullfilled
+//     } else {
+//       reject(new Error('You lose!')); // marca como rejected
+//     }
+//   }, 1500);
+// });
 
-lottery.then(won => console.log(won)).catch(lost => console.warn(lost));
+// console.log('Lottery draw!');
+// lottery.then(won => console.log(won)).catch(lost => console.warn(lost));
 
 // Promisifying é transformar uma função assíncrona em uma promise
 
@@ -412,16 +412,16 @@ function wait(seconds) {
 }
 
 // espera dois segundos e espera um segundo
-wait(2)
-  .then(() => {
-    console.log('Waited for two seconds.');
-    return wait(1);
-  })
-  .then(() => console.log('Waited for another second.'));
+// wait(2)
+//   .then(() => {
+//     console.log('Waited for two seconds.');
+//     return wait(1);
+//   })
+//   .then(() => console.log('Waited for another second.'));
 
 //// Para criar uma Promise já resolvida
-Promise.resolve('ok').then(res => console.info(res));
-Promise.reject(new Error('error')).catch(err => console.error(err));
+// Promise.resolve('ok').then(res => console.info(res));
+// Promise.reject(new Error('error')).catch(err => console.error(err));
 
 /**
  * 270. Promisifying a API de geolocalização
@@ -486,3 +486,57 @@ btn.addEventListener('click', () => {
     })
     .catch(err => console.error(err));
 });
+
+/**
+ * 271. Desafio de código #2
+ */
+
+const imageContainer = document.querySelector('.images');
+
+//// 1. Crie uma função que recebe um caminho de imagem e retorna um elemento <img>
+
+/**
+ * Cria uma imagem
+ * @param {String} imgPath a fonte da imagem
+ * @returns {Promise<HTMLImageElement>} um elemento \<img\>
+ */
+function createImage(imgPath) {
+  return new Promise(function (resolve, reject) {
+    const result = document.createElement('img');
+    result.src = imgPath;
+    result.addEventListener('load', () => resolve(result));
+    result.addEventListener('error', ev => reject(new Error(ev.message)));
+  });
+}
+
+//// 2. Consuma a promise e adicione um tratador de erros
+(function () {
+  let currentImage;
+
+  createImage('img/img-1.jpg')
+    .then(imgEl => {
+      currentImage = imgEl;
+      imageContainer.insertAdjacentElement('beforeend', imgEl);
+    })
+    //// 3. Depois que a imagem carregou, espere dois segundos
+    .then(() => wait(2))
+    //// 4. Esconda a imagem e carregue a segunda depois de dois segundos
+    .then(() => {
+      currentImage.style.display = 'none';
+      return createImage('img/img-2.jpg');
+    })
+    //// 5. Depois que a segunda imagem carregou, pause por dois segundos
+    .then(imgEl => {
+      currentImage = imgEl;
+      imageContainer.insertAdjacentElement('beforeend', imgEl);
+    })
+    .then(() => wait(2))
+    //// 6. Depois que passaram os dois segundos, esconda a imagem
+    .then(() => (currentImage.style.display = 'none'))
+    //// Teste o erro passando uma imagem inexistente
+    .then(() => {
+      currentImage.style.display = 'none';
+      return createImage('dasjdanfopadjnfpdo'); // erro
+    })
+    .catch(err => console.error(err));
+})();
