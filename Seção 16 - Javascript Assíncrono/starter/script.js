@@ -272,4 +272,56 @@ function getCountryDataPromise3(country) {
     });
 }
 
-btn.addEventListener('click', () => getCountryDataPromise3('portugal'));
+/**
+ * 265. Disparando erros manualmente
+ */
+
+/**
+ * Fetches data from a url
+ * @param {String} url
+ * @return {Promise<JSON>} Promise for JSON data
+ */
+function fetchJSON(url, errorMsg = 'Something went wrong.') {
+  return fetch(url).then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(`${response.status}: ${errorMsg}`);
+    }
+  });
+}
+
+/**
+ * Mostra os dados de um país e o vizinho mais próximo
+ * A ordem não é mantida
+ * @param {String} country País
+ */
+function getCountryDataPromise4(country) {
+  fetchJSON(
+    `https://restcountries.com/v2/name/${country}`,
+    'Country not found.'
+  )
+    .then(([data]) => {
+      showCountry(data);
+
+      const neighborCode = data.borders?.[0];
+      if (!neighborCode) throw new Error('There is no neighbors.'); // deve dar erro
+
+      // Atenção: não use .then imediatamente no fetch
+      // retorne promise e não encadeie .then pra evitar o inferno de callback!
+      return fetchJSON(
+        `https://restcountries.com/v2/alpha/${neighborCode}`,
+        'Neighbor not found.'
+      );
+    })
+    .then(data => showCountry(data, 'neighbour'))
+    .catch(err => {
+      showError(`Something went wrong. ${err.message} Try again later.`);
+    })
+    .finally(() => {
+      // executa após a promise ser rejeitada ou completada
+      countriesContainer.style.opacity = 1;
+    });
+}
+
+btn.addEventListener('click', () => getCountryDataPromise4('australia'));
