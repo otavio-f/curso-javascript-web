@@ -557,6 +557,7 @@ async function whereAmIAsync() {
   const geo = await fetch(
     `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}`
   );
+  if (!geo.ok) throw new Error('Something went wrong.');
   const geoData = await geo.json();
 
   // Pega dados do país
@@ -569,6 +570,41 @@ async function whereAmIAsync() {
   countriesContainer.style.opacity = 1;
 }
 
-btn.addEventListener('click', whereAmIAsync);
+// btn.addEventListener('click', whereAmIAsync);
 
-console.log('FIRST!');
+/**
+ * 273. Lidando com erros usando try... catch
+ */
+
+// Use try/catch pra pegar erros antes que eles quebrem o programa
+// Try/catch também funciona pra async/await
+/**
+ * Mostra os dados de um país de modo assíncrono
+ * @param {String} country O país alvo
+ */
+async function whereAmIAsync2() {
+  try {
+    // Pega local atual
+    const pos = await getCurrentPosition();
+    const { latitude: lat, longitude: long } = pos.coords;
+
+    // Geocoding reverso
+    const geo = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}`
+    );
+    const geoData = await geo.json();
+
+    // Pega dados do país
+    const result = await fetch(
+      `https://restcountries.com/v2/name/${geoData.countryName}`
+    );
+    console.log(result);
+    const data = await result.json();
+    showCountry(data[0]);
+    countriesContainer.style.opacity = 1;
+  } catch (err) {
+    console.warn(err.message);
+  }
+}
+
+btn.addEventListener('click', whereAmIAsync2);
