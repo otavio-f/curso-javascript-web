@@ -626,6 +626,10 @@ btn.addEventListener('click', whereAmIAsync2);
  * 275. Rodando promises em paralelo
  */
 
+/**
+ * Obtém dados dos países
+ * @param  {...String} countries
+ */
 async function getCountriesData(...countries) {
   try {
     //// fazendo as chamadas à api em sequência
@@ -652,4 +656,64 @@ async function getCountriesData(...countries) {
   }
 }
 
-getCountriesData('portugal', 'france', 'spain');
+// getCountriesData('portugal', 'france', 'spain');
+
+/**
+ * 276. Outros combinadores de promises
+ */
+
+/**
+ * Retorna uma promise de erro após um tempo limite
+ * @param {Number} t Tempo máximo de espera
+ * @param {*} msg Mensagem de erro
+ */
+function timeout(t, msg) {
+  return new Promise((_, reject) => {
+    setTimeout(() => reject(new Error(msg)), 1000 * t);
+  });
+}
+/**
+ * Obtém dados de países
+ * @param  {...String} countries
+ */
+async function getCountriesCombinators(...countries) {
+  //// Promise.race
+  // Recebe um array de promises
+  // Retorna a primeira promise acabada (aceita ou rejeitada)
+  // Se adicionar uma promise que falha após
+  const race = await Promise.race([
+    ...countries.map(country =>
+      fetchJSON(`https://restcountries.com/v2/name/${country}`)
+    ),
+    timeout(5, 'Request took too long!'),
+  ]);
+  console.log('First one to finish Promise.race was', race[0].name);
+
+  //// Promise.allSettled (ES2020)
+  // Retorna todas as promises terminadas, sendo rejeitadas ou aceitas
+  const everyCountry = await Promise.allSettled(
+    countries.map(country =>
+      fetchJSON(`https://restcountries.com/v2/name/${country}`)
+    )
+  );
+
+  console.log(
+    'All countries with settled promises',
+    everyCountry.map(c => c.value[0].name)
+  );
+
+  //// Promise.any (ES2021)
+  // Retorna a primeira promise aceita ou todas rejeitadas se nenhuma for aceita
+  const anyCountry = await Promise.any([
+    ...countries.map(country =>
+      fetchJSON(`https://restcountries.com/v2/name/${country}`)
+    ),
+    timeout(5, 'Request took too long!'),
+  ]);
+  console.log(
+    'First one to be accepted by Promise.any was',
+    anyCountry[0].name
+  );
+}
+
+getCountriesCombinators('brazil', 'argentina', 'uruguay');
