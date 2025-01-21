@@ -716,4 +716,49 @@ async function getCountriesCombinators(...countries) {
   );
 }
 
-getCountriesCombinators('brazil', 'argentina', 'uruguay');
+// getCountriesCombinators('brazil', 'argentina', 'uruguay');
+
+/**
+ * 277. Desafio de código #3
+ */
+//// 1. Refazer desafio #2 com async/await
+(async function () {
+  async function loadNPause(src) {
+    let imgEl = await createImage(src);
+    imageContainer.insertAdjacentElement('beforeend', imgEl);
+
+    await wait(2);
+    imgEl.style.display = 'none';
+  }
+
+  try {
+    await loadNPause('img/img-1.jpg');
+    await loadNPause('img/img-2.jpg');
+    await loadNPause('img/img-3.jpg');
+    await loadNPause('img/asdjandfpoaijsn.jpg');
+  } catch (err) {
+    console.error(err.message);
+  }
+}); //();
+
+//// 2.
+async function loadAll(...imgArr) {
+  try {
+    // funções async retornam promises
+    let imgs = imgArr.map(async src => await createImage(src));
+
+    // Pra pegar o valor das promises, é possível fazer da seguinte forma
+    // console.log(imgs.map(imgPr => imgPr.value)); // sequencial
+
+    // Ou assim
+    const imgEls = await Promise.all(imgs); // paralelo
+    imgEls.forEach(imgEl => {
+      imgEl.classList.add('parallel');
+      imageContainer.insertAdjacentElement('beforeend', imgEl);
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+loadAll('img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg');
