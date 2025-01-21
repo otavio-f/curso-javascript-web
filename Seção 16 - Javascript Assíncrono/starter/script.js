@@ -621,3 +621,35 @@ btn.addEventListener('click', whereAmIAsync2);
 // Instruções await só podem estar dentro de funções async
 // então para converter código com .then(), .catch() e .finally() é necessário criar uma função async
 // é possível usar async IIFEs para esse propósito
+
+/**
+ * 275. Rodando promises em paralelo
+ */
+
+async function getCountriesData(...countries) {
+  try {
+    //// fazendo as chamadas à api em sequência
+    // const allData = [];
+    // for (let country of countries) {
+    //   const countryData = await fetchJSON(
+    //     `https://restcountries.com/v2/name/${country}`
+    //   );
+    //   allData.push(countryData[0]);
+    // }
+    // console.log(allData.map(c => c.capital));
+
+    // fazendo chamadas à api paralelamente com Promise.all
+    // Atenção: Em promise.all, se uma promise falha, todas falham
+    const allData = await Promise.all(
+      countries.map(country =>
+        fetchJSON(`https://restcountries.com/v2/name/${country}`)
+      )
+    );
+    console.log(allData.map(c => c[0].capital));
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+getCountriesData('portugal', 'france', 'spain');
