@@ -608,3 +608,16 @@ async function whereAmIAsync2() {
 }
 
 btn.addEventListener('click', whereAmIAsync2);
+
+/**
+ * 274. Retornando valores de funções async
+ */
+
+// Funções async retornam promises
+// Para usar valores retornados de funções async, use .then()
+// No exemplo acima a promise retornada pela função whereAmIAsync2() sempre será fullfilled porque qualquer erro é pego no bloco catch(err) {...}
+// Para usar .catch(), lance o erro de novo no bloco catch() {...}
+
+// Instruções await só podem estar dentro de funções async
+// então para converter código com .then(), .catch() e .finally() é necessário criar uma função async
+// é possível usar async IIFEs para esse propósito
