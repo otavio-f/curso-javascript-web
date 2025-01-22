@@ -133,3 +133,44 @@ console.log(ShoppingCart2);
 /**
  * 286. Introdução à linha de comando
  */
+
+/**
+ * 287. Introdução ao NPM
+ */
+
+// "npm -v" mostra a versão
+
+// "npm init" inicializa um novo projeto na pasta atual
+
+// "npm install leaflet" ou "npm i leaflet" instala o pacote leaflet no projeto atual
+// pacotes são instalados na pasta ./node_modules
+// o nome do pacote é adicionado ao campo "dependencies" no arquivo package.json
+
+// "npm install" ou "npm i" (sem nome de pacote) instala todas as dependências contidas no "package.json"
+
+// lodash é uma biblioteca que contém métodos úteis
+// para instalar a versão com módulos use "npm install lodash-es"
+
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+
+const state = {
+  cart: [
+    { product: 'beans', quantity: 1 },
+    { product: 'rice', quantity: 3 },
+    { product: 'pasta', quantity: 2 },
+    { product: 'bread', quantity: 3 },
+  ],
+  user: { logged: true },
+};
+
+// cria uma cópia, mas não verdadeiramente uma cópia
+const stateClone = Object.assign({}, state);
+
+// modificar o objeto original afeta essa cópia
+console.log(stateClone);
+
+// cria uma cópia verdadeira
+const stateDeepClone = cloneDeep(state);
+
+// modificações no original não causará mudanças nessa cópia e vice-versa
+console.log(stateDeepClone);
