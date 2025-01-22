@@ -109,3 +109,23 @@ ShoppingCart2.addToCart('apple', 2);
 ShoppingCart2.addToCart('frozen pizza', 8);
 
 console.log(ShoppingCart2);
+
+/**
+ * 285. Módulos CommonJS
+ */
+
+// Sistema de módulos usado em Node, incompatível com Javascript do browser
+
+// Para exportar funcionalidade, adicione propriedade ao objeto exports
+// /**
+//  * Adiciona itens ao carrinho
+//  * @param {*} product Produto a ser adicionado
+//  * @param {*} quantity Quantidade do produto
+//  */
+// export.addToCart = function (product, quantity) {
+//   while (quantity--) cart.push(product);
+//   console.log(`${quantity} ${product} added to cart.`);
+// };
+
+// Para importar funcionalidade, use o método require()
+// const { addToCart } = require('./shoppingCart.js');
