@@ -129,3 +129,7 @@ console.log(ShoppingCart2);
 
 // Para importar funcionalidade, use o método require()
 // const { addToCart } = require('./shoppingCart.js');
+
+/**
+ * 286. Introdução à linha de comando
+ */
