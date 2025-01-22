@@ -53,3 +53,59 @@ async function getLastUser() {
 
 // Atenção: se algum módulo tiver top-level await, só será importado após todo o código rodar!
 // e o código do módulo principal só irá rodar depois que todo o código de todos os imports rodar!
+
+/**
+ * 284. O padrão módulo
+ */
+
+// Padrão usado antes de módulos nativos em javascript
+
+// IIFE contém toda a funcionalidade de um módulo
+// Só será executado uma vez e vai exportar a funcionalidade
+const ShoppingCart2 = (function () {
+  // variáveis e funções declaradas aqui são "privadas"
+  // não podem ser acessadas pelo ambiente externo a não ser que sejam retornadas
+  const cart = [];
+  const shippingCost = 10;
+  const totalPrice = 237;
+  const totalQuantity = 23;
+
+  /**
+   * Adiciona itens ao carrinho
+   * @param {*} product Produto a ser adicionado
+   * @param {*} quantity Quantidade do produto
+   */
+  function addToCart(product, quantity) {
+    while (quantity--) cart.push(product);
+    console.log(`${quantity} ${product} added to cart.`);
+  }
+
+  /**
+   * Adiciona itens ao estoque
+   * @param {*} product Produto a ser adicionado
+   * @param {*} quantity Quantidade do produto
+   */
+  function orderStock(product, quantity) {
+    console.log(`${quantity} ${product} ordered from supplier.`);
+  }
+
+  // retorna a funcionalidade que queremos que seja vista
+  // funciona por causa de closure
+  return {
+    addToCart,
+    /**
+     * Retorna o carrinho
+     * @returns {[any]} uma cópia dos itens do carrinho
+     */
+    get cartItems() {
+      return [...cart];
+    },
+    totalPrice,
+    totalQuantity,
+  };
+})();
+
+ShoppingCart2.addToCart('apple', 2);
+ShoppingCart2.addToCart('frozen pizza', 8);
+
+console.log(ShoppingCart2);
