@@ -216,3 +216,22 @@ if (module.hot) {
 // É possível automatizar o comando para rodar o parcel
 // basta adicionar comandos (sem o npx) na chave "scripts" no arquivo ./package.json
 // use "npm run <nome do comando>" para rodar o comando
+
+/**
+ * 289. Configurando babel e polyfill
+ */
+
+// Babel "traduz" as chamadas de ES6 para ES5
+// Algumas sintaxes mais novas não é possível traduzir, então é necessário usar polyfill com a biblioteca core-js
+
+// polyfill recria sintaxes mais novas em versões mais antigas do JS, por exemplo métodos de array ou promises
+
+import 'core-js/stable'; // biblioteca de polyfill
+// é possível importar funcionalidade específica para diminuir o tamanho do código
+// import 'core-js/stable/promise';
+
+Promise.resolve('TEST OK').then(x => console.log(x));
+
+// Para aplicar polyfill em funções async, use a biblioteca regenerator
+// "npm install regenerator-runtime"
+import 'regenerator-runtime/runtime';
